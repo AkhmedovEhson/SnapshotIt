@@ -3,6 +3,6 @@
 
 ![image](https://github.com/AkhmedovEhson/SnapshotIt/blob/main/assets/iconforgithub.png)
 
-#Requirements
+# Requirements
 * .NET 7
 
