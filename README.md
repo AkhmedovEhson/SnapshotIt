@@ -1,5 +1,5 @@
 # SnapshotIt
-🎉 Snapshot It 1.0.0. Before change a Component, just snapshot the state of object.
+🎉 Snapshot It 1.0.0. Before changing the state of component, just snapshot the state of object to make it easy to recovery.
 
 ![image](https://github.com/AkhmedovEhson/SnapshotIt/blob/main/assets/iconforgithub.png)
 
