@@ -34,6 +34,6 @@ product.Name = "Gucci";
 
 // Now in program I want to get the previous state of product, and here we go !
 product = Snap<Product>.ClapOne();
-log.Information($"The previous product's name was {product.Name}");
+log.Information($"The previous product's name was {product.Name}"); // The previous product's name was Nike
 ```
 
