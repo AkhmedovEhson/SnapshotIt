@@ -1,3 +1,0 @@
-﻿
-
-using SnapshotIt.Common.Services;

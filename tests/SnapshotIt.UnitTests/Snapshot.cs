@@ -16,6 +16,7 @@ namespace SnapshotIt.UnitTests
         [Test]
         public void Pick()
         {
+
             var obj = new o { id = 123 };
             for(int i = 0; i < 100_000; i++)
             {
