@@ -13,15 +13,6 @@ namespace SnapshotIt.UnitTests
         public int id { get; set; }   
     }
 
-
-   
-
-public class Orange
-    {
-        public int id { get; set; }
-    }
-
-    
     public class Tests
     {
         [Test]
