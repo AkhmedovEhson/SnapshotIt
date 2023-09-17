@@ -25,10 +25,8 @@ namespace SnapshotIt.Domain.Utils
             return captures[0];
         }
 
-        public Snaps(T[] captures)
-        {
-            this.captures ??= captures;
-        }
+        public Snaps()
+        { }
     }
 
 
