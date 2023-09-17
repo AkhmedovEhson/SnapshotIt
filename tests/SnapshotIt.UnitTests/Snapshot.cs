@@ -1,40 +1,49 @@
 using SnapshotIt;
 using SnapshotIt.Common.Services;
 using FluentAssertions;
+using SnapshotIt.Domain;
+using SnapshotIt.Common;
+using BenchmarkDotNet.Running;
+using BenchmarkDotNet.Attributes;
+
 namespace SnapshotIt.UnitTests
 {
     public class o
     {
         public int id { get; set; }   
     }
+
+
+   
+
+public class Orange
+    {
+        public int id { get; set; }
+    }
+
+    
     public class Tests
     {
-        [OneTimeSetUp]
-        public void RunBeforeAnyTests() { }
-
-
         [Test]
         public void Pick()
         {
+            var data = new Snap<o>(new o() { id = 2});
+            data.Should().NotBeNull();
+            data.ClapOne().Should().NotBeNull();
+            data.ClapOne().Should().BeOfType<o>();
 
-            var obj = new o { id = 123 };
-            for(int i = 0; i < 100_000; i++)
-            {
-                Assert.DoesNotThrow(() => Snap<o>.Pick(obj));
-            }
-           
         }
 
         [Test]
-        public void Clap()
+        public void Pick2()
         {
-            var oj = new o() { id = 123 };
-            Snap<o>.Pick(oj);
+            var data = new Snap<o>(new o { id = 3 });
+            data.ClapOne()!.id.Should().Be(3);
 
-            var value = Snap<o>.ClapOne();
-
-            value.Should().NotBeNull();
-
+            o _ = new o() { id = 1 };
+            data.Pick(ref _);
+            data.ClapOne()!.id.Should().Be(1);
         }
+
     }
 }
