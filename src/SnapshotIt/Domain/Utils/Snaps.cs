@@ -12,8 +12,8 @@ namespace SnapshotIt.Domain.Utils
         private T[] captures = new T[1];
 
         
-        public void Push(ref T entity)
-        {
+        public void Push(in T entity)
+        {         
             captures[0] = entity;
         }
 

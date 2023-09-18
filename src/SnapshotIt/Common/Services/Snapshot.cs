@@ -11,25 +11,30 @@ namespace SnapshotIt.Common.Services
         private Snaps<T> snapshots = new Snaps<T>();
 
         /// <summary>
-        /// <seealso cref="Pick(T)"/> is method, pushes the snapshot to ( 'cache' )
+        /// <seealso cref="Pick(T)"/> pushes the snapshot to `heap`
         /// </summary>
-        public void Pick(ref T entity)
+        public void Pick(in T entity)
         {       
-            snapshots.Push(ref entity);
+            snapshots.Push(in entity);
         }
 
-        /// <summary><seealso cref="ClapOne"/> Method returns Entity if it's been snapshotted else <see cref="Exception"/></summary> 
+        /// <summary><seealso cref="ClapOne"/> gets snapshot</summary>
 #nullable enable
         public T? ClapOne()
         {
 
-            return snapshots.Get();
             
+            return snapshots.Get();
         }
 #nullable disable
+        /// <summary> <seealso cref="Clear"/> clears snapshots - history </summary>
         public void Clear()
         {
             snapshots = new Snaps<T>();
+        }
+        public Snap(in T entity)
+        {
+            snapshots.Push(in entity);
         }
     }
 }
