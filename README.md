@@ -29,8 +29,8 @@ product.Name = "Gucci";
 
 // Note: Get previous state of component
 product = Snap<Product>.ClapOne();
+
+// Note: Returns ` The previous product's name was Nike `
 log.Information($"The previous product's name was {product.Name}"); 
 ```
-Returns:
-- The previous product's name was Nike
 
