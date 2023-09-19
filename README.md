@@ -19,21 +19,18 @@ public class Product
 ```
 🐹 Let's do following steps....
 ```
-var product = new Product()
+var product = new Snap<Product>(new Product()
 {
     Id = 1,
     Name = "Nike"
-}
-// Let's Snapshot it 😜
-Snap<Product>.Pick(product);
+}).ClapOne();
 
-// |... Some logic ...| //
-
-// You changed name of `Product`
 product.Name = "Gucci";
 
-// Now in program I want to get the previous state of product, and here we go !
+// Note: Get previous state of component
 product = Snap<Product>.ClapOne();
 log.Information($"The previous product's name was {product.Name}"); 
 ```
+Returns:
+- The previous product's name was Nike
 
