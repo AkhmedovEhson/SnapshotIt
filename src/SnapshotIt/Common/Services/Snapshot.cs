@@ -1,7 +1,5 @@
 ﻿using SnapshotIt.Domain.Utils;
-using System.Collections.Concurrent;
-using System.Text.Json;
-
+using SnapshotIt.Domain.Common.Types;
 namespace SnapshotIt.Common.Services
 {
 
@@ -9,32 +7,42 @@ namespace SnapshotIt.Common.Services
     public class Snap<T> where T : class
     {
         private Snaps<T> snapshots = new Snaps<T>();
-
+        public T[] snapshot_collection => snapshots.captures;
         /// <summary>
         /// <seealso cref="Pick(T)"/> pushes the snapshot to `heap`
         /// </summary>
-        public void Pick(in T entity)
+        public void Pick(T entity)
         {       
             snapshots.Push(in entity);
         }
 
-        /// <summary><seealso cref="ClapOne"/> gets snapshot</summary>
+        /// <summary><seealso cref="ClapOne"/> gets snapshot</summary> 
 #nullable enable
-        public T? ClapOne()
+        public SValue<T?> ClapOne()
         {
+            return snapshots.Get();           
+        }
 
-            
-            return snapshots.Get();
+        public SValue<T?> ClapOne(int idx)
+        {
+            return snapshots.Get(idx);
         }
 #nullable disable
+
+
         /// <summary> <seealso cref="Clear"/> clears snapshots - history </summary>
         public void Clear()
         {
             snapshots = new Snaps<T>();
         }
-        public Snap(in T entity)
+        public Snap():this(null)
+        {
+
+        }
+        public Snap(T entity)
         {
             snapshots.Push(in entity);
+            
         }
     }
 }
