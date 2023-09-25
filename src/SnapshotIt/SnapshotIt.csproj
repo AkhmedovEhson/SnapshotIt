@@ -1,11 +1,13 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>warnings</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Title>SnapshotIt</Title>
+    <Title>SnapshotIt2</Title>
+	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	<Version>1.1.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
