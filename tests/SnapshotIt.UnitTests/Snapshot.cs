@@ -64,7 +64,13 @@ namespace SnapshotIt.UnitTests
             
            
         }
- 
+
+        [Test]
+        public void ClapThrowsException()
+        {
+            var snapshot = new Snap<o>();
+            Assert.Throws<IndexOutOfRangeException> (() => snapshot.ClapOne(10));
+        }
 
 
 
