@@ -22,7 +22,7 @@ namespace SnapshotIt.UnitTests
             var apple = data.ClapOne();
 
             apple.Should().NotBeNull();
-            apple.Should().BeOfType<o>();
+            apple.Value.id.Should().Be(1);
           
         }
 
@@ -31,20 +31,15 @@ namespace SnapshotIt.UnitTests
         {
             var snapshot = new Snap<o>();
 
-            for(int i = 1; i <= 5; i++)
+            for (int i = 0; i <= 100; i++)
             {
-                snapshot.Pick(new o { id = i });    
+                snapshot.Pick(new o { id = i });
             }
 
-            
-            snapshot.snapshot_collection.Should().NotBeNull();
-            snapshot.snapshot_collection.Should().HaveCount(5);
-            snapshot.snapshot_collection.Should().NotContainNulls();
+            snapshot.ClapOne(4).Value.Should().NotBeNull();
+            snapshot.ClapOne(4).Value?.id.Should().Be(100);
 
-            snapshot.ClapOne(3).Value.Should().NotBeNull();
-            snapshot.ClapOne(3).Value?.id.Should().Be(4);
-
-
+            Assert.Throws<IndexOutOfRangeException>(() => snapshot.ClapOne(12));
         }
 
         [Test]
