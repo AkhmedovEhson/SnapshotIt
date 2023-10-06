@@ -35,14 +35,14 @@ namespace SnapshotIt.Common.Services
         {
             snapshots = new Snaps<T>();
         }
-        public Snap():this(null)
+        public Snap()
         {
 
         }
         public Snap(T entity)
         {
-            snapshots.Push(in entity);
             
+            snapshots.Push(in entity); 
         }
     }
 }

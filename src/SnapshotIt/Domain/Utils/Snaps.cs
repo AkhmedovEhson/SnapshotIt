@@ -1,7 +1,9 @@
-﻿using SnapshotIt.Domain.Common.Types;
+﻿using SnapshotIt.Domain.Common.Reflection;
+using SnapshotIt.Domain.Common.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,22 +12,18 @@ namespace SnapshotIt.Domain.Utils
 
     public struct Snaps<T>
     {
-        public T[] captures = new T[5]; 
+        public T[] captures = new T[5];
+        private int index = 0;
 
         
         public void Push(in T entity)
         {
-            int idx = captures.Length - 1;
+            T instance = (T)Activator.CreateInstance(typeof(T));
+
+            PropertyReflection.SetProperties(entity,ref instance);
+
+            captures[index < captures.Length - 1 ? index++ : index] = instance;
             
-            for(int i = 0; i < captures.Length; i++)
-            {
-                if (captures[i] == null)
-                {
-                    idx = i;
-                    break;
-                }
-            }
-            captures[idx] = entity;
         }
 
         public SValue<T> Get()
