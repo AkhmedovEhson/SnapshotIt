@@ -19,16 +19,14 @@ public class Product
 ```
 🐹 Let's do following steps....
 ```
-var product = new Snap<Product>(new Product()
+var product = new Product() 
 {
-    Id = 1,
-    Name = "Nike"
-}).ClapOne();
-
-product.Name = "Gucci";
-
+    id = 1
+}
+var snapshots = new Snap<Product>(product);
+product.id = 2;
 // Note: Get previous state of component
-product = Snap<Product>.ClapOne();
+product = Snap<Product>.ClapOne(); // gets first snapshoted element
 
 // Note: Returns: The previous product's name was Nike 
 log.Information($"The previous product's name was {product.Name}"); 
