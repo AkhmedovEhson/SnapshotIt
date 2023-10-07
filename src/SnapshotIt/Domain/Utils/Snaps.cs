@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,13 +27,11 @@ namespace SnapshotIt.Domain.Utils
             
         }
 
-        public SValue<T> Get()
+        public SValue<T>? Get()
         {
-            if (captures[0]?.GetType().Name != typeof(T).Name)
-                return default(SValue<T>);
-
-            return new SValue<T>() { Value = captures[0] }; 
+            return new SValue<T?>() { Value = captures[index == 0 ? index : index - 1] };         
         }
+        
         public SValue<T> Get(int pos)
         {
             T captured;
@@ -48,8 +47,13 @@ namespace SnapshotIt.Domain.Utils
 
             return new SValue<T>() { Value = captured };
         }
-        public Snaps()
-        { }
+
+        public Snaps() { }
+
+        public Snaps(T entity)
+        {
+            this.Push(in entity);
+        }
     }
 
 
