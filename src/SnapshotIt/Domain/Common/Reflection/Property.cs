@@ -18,12 +18,10 @@ namespace SnapshotIt.Domain.Common.Reflection
             {
                 for(int i = 0; i < properties.Length; i++)
                 {
-                    if (properties[i].Name == properties2[i].Name)
-                    {
-                        properties2[i].SetValue(arg2, properties[i].GetValue(arg));
-                    }
+                    properties2[i].SetValue(arg2, properties[i].GetValue(arg));                
                 }
             }
         }
+
     }
 }
