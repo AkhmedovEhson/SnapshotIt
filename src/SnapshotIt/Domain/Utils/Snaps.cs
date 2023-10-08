@@ -1,9 +1,11 @@
-﻿using SnapshotIt.Domain.Common.Reflection;
+﻿using Microsoft.EntityFrameworkCore.Infrastructure;
+using SnapshotIt.Domain.Common.Reflection;
 using SnapshotIt.Domain.Common.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +13,7 @@ using System.Threading.Tasks;
 namespace SnapshotIt.Domain.Utils
 {
 
-    public struct Snaps<T>
+    public struct Snaps<T> where T : class, new()
     {
         public T[] captures = new T[5];
         private int index = 0;
@@ -19,7 +21,7 @@ namespace SnapshotIt.Domain.Utils
         
         public void Push(in T entity)
         {
-            T instance = (T)Activator.CreateInstance(typeof(T));
+            T instance = new();
 
             PropertyReflection.SetProperties(entity,ref instance);
 
@@ -34,18 +36,10 @@ namespace SnapshotIt.Domain.Utils
         
         public SValue<T> Get(int pos)
         {
-            T captured;
-            try
-            {
-                captured = captures[pos];
-            }
-            catch(IndexOutOfRangeException)
-            {
-                Console.WriteLine("INFO: Index is out of range, snapshots are 5. Your choosed position " + (pos - 1));
-                throw;
-            }
+            if (pos >= captures.Length)
+                throw new IndexOutOfRangeException();
 
-            return new SValue<T>() { Value = captured };
+            return new SValue<T> { Value = captures[pos] };
         }
 
         public Snaps() { }
