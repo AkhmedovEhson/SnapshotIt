@@ -21,14 +21,20 @@ public class Product
 ```
 var product = new Product() 
 {
-    id = 1
+    Id = 1
+    Name = "Nike"
 }
-var snapshots = new Snap<Product>(product);
-product.id = 2;
-// Note: Get previous state of component
-product = Snap<Product>.ClapOne(); // gets first snapshoted element
+var snapshots = new Snaps(product);
+product.Id = 2;
+product.Name = "Gucci";
 
-// Note: Returns: The previous product's name was Nike 
-log.Information($"The previous product's name was {product.Name}"); 
+// gets the last snapshot
+product = snapshots.Get(); 
+
+// Logs: The product's name is Gucci
+log.Information($"The product's name is {product.Name}");
+
+// Logs: The previous product's name was Nike 
+log.Information($"The previous product's name was {snapshots.Get().Value.Name}");
 ```
 
