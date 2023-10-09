@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Reflection;
 
 namespace SnapshotIt.Domain.Common.Reflection
 {
@@ -12,13 +7,13 @@ namespace SnapshotIt.Domain.Common.Reflection
         public static void SetProperties<T,T2>(T arg,ref T2 arg2)
         {
             var properties = arg.GetType().GetProperties();
-            var properties2 = arg2.GetType().GetProperties();
+            var p = arg2.GetType();
 
             if (properties.Any())
             {
                 for(int i = 0; i < properties.Length; i++)
                 {
-                    properties2[i].SetValue(arg2, properties[i].GetValue(arg));                
+                    p.GetProperty(properties[i].Name)!.SetValue(arg2, properties[i].GetValue(arg));
                 }
             }
         }
