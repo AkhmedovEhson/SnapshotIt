@@ -14,5 +14,10 @@ namespace SnapshotIt.Domain.Common.Types
     {
         public T Value { get; set; }
 
+        public object Property<T1>(string name)
+        {
+            Type _ = typeof(T);
+            return _.GetProperty(name)?.GetValue(this.Value);
+        }
     }
 }
