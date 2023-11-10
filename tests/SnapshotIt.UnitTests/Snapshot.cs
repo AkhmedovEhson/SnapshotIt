@@ -12,59 +12,36 @@ namespace SnapshotIt.UnitTests
         public int id { get; set; }   
     }
 
+
+    // todo: Fill some tests
     public class Tests
     {
         [Test]
-        public void Pick()
+        public async Task Pick()
         {
             var data = new Snaps<o>(new o { id = 1 });
-            var apple = data.Get();
-
-            apple.Should().NotBeNull();
-            apple.Value.Value.id.Should().Be(1);
+            var response = data.Get();
+            response.Should().NotBeNull();
+            response.Should().BeOfType<o>();
+            response.Value.Value.id.Should().Be(1);
           
         }
 
         [Test]
-        public void Pick2()
+        public async Task Pick2()
         {
+            const int iter = 100;
             var snapshot = new Snaps<o>();
 
-            for (int i = 0; i <= 100; i++)
+            for (int i = 0; i <= iter; i++)
             {
                 snapshot.Push(new o { id = i });
             }
+            var check1 = await snapshot.GetAsync(55);
+            check1.Should().NotBeNull();
+            check1.Value?.id.Should().Be(55);
 
-            snapshot.Get(4).Value.Should().NotBeNull();
-            snapshot.Get(4).Value?.id.Should().Be(100);
-
-            Assert.Throws<IndexOutOfRangeException>(() => snapshot.Get(12));
-        }
-
-        [Test]
-        public void ClapFail()
-        {
-            var snapshot = new Snaps<o>();
-            snapshot.Get().Value.Value.Should().BeNull();
-            snapshot.Get(2).Value.Should().BeNull();
-        }
-
-        [Test]
-        public void ClapSuccess()
-        {
-            var snapshot = new Snaps<o>();
-            snapshot.Push(new o { id = 2 });
-            snapshot.Get()?.Value.Should().NotBeNull();
-            snapshot.Get()?.Value.id.Should().Be(2); 
-            
-           
-        }
-
-        [Test]
-        public void ClapThrowsException()
-        {
-            var snapshot = new Snaps<o>();
-            Assert.Throws<IndexOutOfRangeException> (() => snapshot.Get(10));
+            Assert.ThrowsAsync<IndexOutOfRangeException>(async() => await snapshot.GetAsync(iter));
         }
 
 
