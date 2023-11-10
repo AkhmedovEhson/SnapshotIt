@@ -9,37 +9,38 @@ using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading.Tasks.Dataflow;
 
 namespace SnapshotIt.Domain.Utils
 {
 
     public struct Snaps<T> where T : class, new()
     {
-        public T[] captures = new T[5];
-        private int index = 0;
-
-        
+        private readonly BufferBlock<T> _buffer = new();
         public void Push(in T entity)
         {
-            T instance = new();
-
-            PropertyReflection.SetProperties(entity,ref instance);
-
-            captures[index < captures.Length - 1 ? index++ : index] = instance;
-            
+            _buffer.Post<T>(entity);
         }
 
         public SValue<T>? Get()
         {
-            return new SValue<T?>() { Value = captures[index == 0 ? index : index - 1] };         
+            var item = _buffer.Receive<T>();
+            return new SValue<T> { Value = item };
         }
         
-        public SValue<T> Get(int pos)
+        public async Task<SValue<T>> GetAsync(int pos)
         {
-            if (pos >= captures.Length)
+            T instance = null;
+
+            if (pos >= _buffer.Count)
                 throw new IndexOutOfRangeException();
 
-            return new SValue<T> { Value = captures[pos] };
+            for (int position = 0; position <= pos; position++) instance = await _buffer.ReceiveAsync<T>();
+
+            return new SValue<T>()
+            {
+                Value = instance
+            };
         }
 
         public Snaps() { }
