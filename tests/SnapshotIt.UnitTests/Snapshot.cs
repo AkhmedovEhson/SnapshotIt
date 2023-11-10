@@ -41,7 +41,13 @@ namespace SnapshotIt.UnitTests
             check1.Should().NotBeNull();
             check1.Value?.id.Should().Be(55);
 
-            Assert.ThrowsAsync<IndexOutOfRangeException>(async() => await snapshot.GetAsync(iter));
+        }
+
+        [Test]
+        public async Task ThrowsOutOfRange()
+        {
+            var snapshot = new Snaps<o>();
+            Assert.ThrowsAsync<IndexOutOfRangeException>(async () => await snapshot.GetAsync(1));
         }
 
 
