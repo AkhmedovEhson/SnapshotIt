@@ -35,8 +35,9 @@ namespace SnapshotIt.Domain.Utils
             if (pos >= _buffer.Count)
                 throw new IndexOutOfRangeException();
 
-            for (int position = 0; position <= pos; position++) instance = await _buffer.ReceiveAsync<T>();
-
+            for (int position = 0; position < pos; position++) await _buffer.ReceiveAsync<T>();
+            
+            instance = await _buffer.ReceiveAsync<T>();
             return new SValue<T>()
             {
                 Value = instance
