@@ -22,8 +22,7 @@ namespace SnapshotIt.UnitTests
             var data = new Snaps<o>(new o { id = 1 });
             var response = data.Get();
             response.Should().NotBeNull();
-            response.Should().BeOfType<o>();
-            response.Value.Value.id.Should().Be(1);
+            response!.Value.Value.id.Should().Be(1);
           
         }
 

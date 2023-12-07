@@ -28,6 +28,7 @@ namespace SnapshotIt.Domain.Utils
             return new SValue<T> { Value = item };
         }
         
+        //[!] Find way to improve performance ! ! ! 
         public async Task<SValue<T>> GetAsync(int pos)
         {
             T instance = null;
@@ -38,6 +39,7 @@ namespace SnapshotIt.Domain.Utils
             for (int position = 0; position < pos; position++) await _buffer.ReceiveAsync<T>();
             
             instance = await _buffer.ReceiveAsync<T>();
+
             return new SValue<T>()
             {
                 Value = instance
