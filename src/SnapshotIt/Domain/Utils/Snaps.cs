@@ -28,6 +28,7 @@ namespace SnapshotIt.Domain.Utils
             return new SValue<T> { Value = item };
         }
         
+        //[!] Find way to improve performance ! ! ! 
         public async Task<SValue<T>> GetAsync(int pos)
         {
             T instance = null;
@@ -35,7 +36,8 @@ namespace SnapshotIt.Domain.Utils
             if (pos >= _buffer.Count)
                 throw new IndexOutOfRangeException();
 
-            for (int position = 0; position <= pos; position++) instance = await _buffer.ReceiveAsync<T>();
+            for (int position = 0; position <= pos; position++)
+                instance = await _buffer.ReceiveAsync<T>();
 
             return new SValue<T>()
             {
