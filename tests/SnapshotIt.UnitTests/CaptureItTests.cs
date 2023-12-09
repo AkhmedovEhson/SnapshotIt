@@ -46,5 +46,50 @@ namespace SnapshotIt.UnitTests
                 var item = capture[1]; // out of size
             });
         }
+
+        [Test]
+        public void GetAsSpan()
+        {
+            // Arrange
+            var capture = new CaptureIt<o>(1);
+            capture.Post(new o { id = 123 });
+
+            // Act
+            var span = capture.GetAsSpan();
+
+
+            // Assert
+            span.Length.Should().Be(1);        
+        }
+
+        [Test]
+        public void GetAsEnumerable()
+        {
+
+            // Arrange
+            var capture = new CaptureIt<o>(1);
+            capture.Post(new o { id = 123 });
+
+            // Act
+            var enumerable = capture.GetAsEnumerable();
+            enumerable.Count().Should().Be(1);
+
+            // Assert
+            Assert.IsInstanceOf<IEnumerable<o>>(enumerable);
+        }
+
+        [Test]
+        public void GetAsReadonlySpan()
+        {
+            // Arrange
+            var capture = new CaptureIt<o>(1);
+            capture.Post(new o { id = 123 });
+
+            // Act
+            var span = capture.GetAsReadonlySpan();
+            
+            // Assert
+            span.Length.Should().Be(1);
+        }
     }
 }
