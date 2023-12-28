@@ -6,28 +6,27 @@ using System.Threading.Tasks;
 
 namespace SnapshotIt.Domain.Utils
 {
-    public struct CaptureIt<T>
+    public class CaptureIt<T>
     {
-        private T[] collection = null;
-        private int index = 0;
+        private static T[] collection = null;
+        private static int index = 0;
+        private static int size = 0;
 
-        public CaptureIt(int size)
+        public static T Get(int ind)
         {
-            collection = new T[size];
-        }
-
-        public T this[int ind]
-        {
-            get
+            if (ind > collection.Length - 1)
             {
-                if (ind > collection.Length - 1)
-                    throw new IndexOutOfRangeException();
-
-                return collection[ind];
+                throw new IndexOutOfRangeException();
             }
+            return collection[ind];
+        }
+        public static void Create(int s)
+        {
+            collection = new T[s];
+            size = s;
         }
 
-        public void Post(T value)
+        public static void Post(T value)
         {
             T instance = Activator.CreateInstance<T>();
 
@@ -41,15 +40,20 @@ namespace SnapshotIt.Domain.Utils
 
             collection[index > collection.Length - 1 ? index : index++] = instance;
         }
-        public Span<T> GetAsSpan()
+
+        public static void Reset(int? s)
+        {
+            collection = new T[!s.HasValue ? size : s.Value];
+        }
+        public static Span<T> GetAsSpan()
         {
             return collection.AsSpan();
         }
-        public ReadOnlySpan<T> GetAsReadonlySpan()
+        public static ReadOnlySpan<T> GetAsReadonlySpan()
         {
             return new ReadOnlySpan<T>(collection);
         }
-        public IEnumerable<T> GetAsEnumerable()
+        public static IEnumerable<T> GetAsEnumerable()
         {
             return collection.AsEnumerable();
         }
