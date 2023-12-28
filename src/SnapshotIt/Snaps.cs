@@ -14,47 +14,21 @@ using System.Threading.Tasks.Dataflow;
 namespace SnapshotIt.Domain.Utils
 {
 
-    public struct Snaps<T> where T : class, new()
+    public static class Snaps<T>
     {
-        private readonly BufferBlock<T> _buffer = new();
-        public void Push(in T entity)
+        private static readonly BufferBlock<T> _buffer = new();
+        public static void Push(in T entity)
         {
             _buffer.Post<T>(entity);          
         }
 
-        public SValue<T>? Get()
+
+        public static IAsyncEnumerable<T> ReadAllAsync()
         {
-            var item = _buffer.Receive<T>();
-            return new SValue<T> { Value = item };
-        }
-        
-        //[!] Find way to improve performance ! ! ! 
-        public async Task<SValue<T>> GetAsync(int pos)
-        {
-            T instance = null;
-
-            if (pos >= _buffer.Count)
-                throw new IndexOutOfRangeException();
-
-            for (int position = 0; position < pos; position++) await _buffer.ReceiveAsync<T>();
-            
-            instance = await _buffer.ReceiveAsync<T>();
-
-            
-            return new SValue<T>()
-            {
-                Value = instance
-            };
+            return _buffer.ReceiveAllAsync();
         }
 
-       
 
-        public Snaps() { }
-
-        public Snaps(T entity)
-        {
-            this.Push(in entity);
-        }
     }
 
 
