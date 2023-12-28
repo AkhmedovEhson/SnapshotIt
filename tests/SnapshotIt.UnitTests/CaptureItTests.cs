@@ -42,7 +42,6 @@ namespace SnapshotIt.UnitTests
         {
             Snapshot.Out.Create<o>(1);
             Snapshot.Out.Post(new o() { id = 1 });
-            Snapshot.Out.Post(new o { id = 123 });
 
             Assert.Throws<IndexOutOfRangeException>(() => {
                 var item = Snapshot.Out.Get<o>(3); // out of size
