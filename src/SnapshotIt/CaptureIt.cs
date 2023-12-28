@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SnapshotIt.Domain.Utils
 {
-    public class CaptureIt<T>
+    public static class CaptureIt<T>
     {
         private static T[] collection = null;
         private static int index = 0;
@@ -14,37 +14,45 @@ namespace SnapshotIt.Domain.Utils
 
         public static T Get(int ind)
         {
-            if (ind > collection.Length - 1)
+            if (ind < 0 || ind >= collection.Length)
             {
-                throw new IndexOutOfRangeException();
+                throw new IndexOutOfRangeException($"Index is out of range, input ( {typeof(T).FullName} )");
             }
+ 
             return collection[ind];
         }
+
         public static void Create(int s)
         {
             collection = new T[s];
             size = s;
         }
 
+        /// <summary>
+        /// Copies value and pastes in collection
+        /// </summary>
+        /// <param name="value"></param>
         public static void Post(T value)
         {
-            T instance = Activator.CreateInstance<T>();
-
-            Type instanceType = instance.GetType();
-            var props = value.GetType().GetProperties();
-
-            for(int i = 0; i < props.Length; i++)
+            if (value is ValueType)
             {
-                instanceType.GetProperty(props[i].Name)?.SetValue(instance, props[i].GetValue(value));
+                collection[index == collection.Length - 1 ? index : index++] = value;
+                return;
             }
 
-            collection[index > collection.Length - 1 ? index : index++] = instance;
-        }
+            var instance = Snapshot.Out.Copy<T>(value);
 
+            collection[index == collection.Length - 1 ? index : index++] = instance;
+        }
+        /// <summary>
+        /// Resets collection, makes `collection` for pointing to null
+        /// </summary>
+        /// <param name="s"></param>
         public static void Reset(int? s)
         {
             collection = new T[!s.HasValue ? size : s.Value];
         }
+
         public static Span<T> GetAsSpan()
         {
             return collection.AsSpan();
