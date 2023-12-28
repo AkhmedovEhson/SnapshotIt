@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{B0FF198B
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SnapshotIt.UnitTests", "tests\SnapshotIt.UnitTests\SnapshotIt.UnitTests.csproj", "{6BD3DBA2-2F9A-4013-AD65-72CE36035D59}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnapshotIt.Benchmarks", "tests\SnapshotIt.Benchmarks\SnapshotIt.Benchmarks.csproj", "{D00DAE22-2B30-4806-96EA-F01FEC2B3917}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,6 +27,10 @@ Global
 		{6BD3DBA2-2F9A-4013-AD65-72CE36035D59}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6BD3DBA2-2F9A-4013-AD65-72CE36035D59}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6BD3DBA2-2F9A-4013-AD65-72CE36035D59}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D00DAE22-2B30-4806-96EA-F01FEC2B3917}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D00DAE22-2B30-4806-96EA-F01FEC2B3917}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D00DAE22-2B30-4806-96EA-F01FEC2B3917}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D00DAE22-2B30-4806-96EA-F01FEC2B3917}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -32,5 +38,6 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{3024FF12-CE72-444F-A24C-BF48F6F4BABB} = {9891F523-3F7C-4EB3-BF06-38078AF2D05A}
 		{6BD3DBA2-2F9A-4013-AD65-72CE36035D59} = {B0FF198B-9C6F-4B77-87DE-AF5D81D0D486}
+		{D00DAE22-2B30-4806-96EA-F01FEC2B3917} = {B0FF198B-9C6F-4B77-87DE-AF5D81D0D486}
 	EndGlobalSection
 EndGlobal
