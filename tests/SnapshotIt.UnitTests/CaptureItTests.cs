@@ -14,36 +14,38 @@ namespace SnapshotIt.UnitTests
         public void CaptureSuccessfully()
         {
             // Arrange
-            var capture = new CaptureIt<o>(2);
-            o op = new() { id = 1 };
+            var obj = new o()
+            {
+                id = 1
+            };
+            Snapshot.Out.Create<o>(2);
 
-            // Act
-            capture.Post(op);
-            op.id = 2;
+            //Act
+            Snapshot.Out.Post<o>(obj);
+            var result = Snapshot.Out.Get<o>(0);
 
             // Assert
-            op.id.Should().Be(2);
-            capture[0].id.Should().Be(1);
+            result.id.Should().Be(1);
         }
 
         [Test]
         public void CaptureThrowsNullReference()
         {
-            var capture = new CaptureIt<o>();
+            Snapshot.Out.Create<o>(1);
 
-            Assert.Throws<NullReferenceException>(() => {
-                var item = capture[0]; // throws, size not provided to `CaptureIt`
-            });
+            var result = Snapshot.Out.Get<o>(0);
+            result.Should().BeNull();
         }
 
         [Test]
         public void CaptureThrowsOutOfRange()
         {
-            var capture = new CaptureIt<o>(1);
-            capture.Post(new o { id = 123 });
+            Snapshot.Out.Create<o>(1);
+            Snapshot.Out.Post(new o() { id = 1 });
+            Snapshot.Out.Post(new o { id = 123 });
 
             Assert.Throws<IndexOutOfRangeException>(() => {
-                var item = capture[1]; // out of size
+                var item = Snapshot.Out.Get<o>(3); // out of size
             });
         }
 
@@ -51,11 +53,11 @@ namespace SnapshotIt.UnitTests
         public void GetAsSpan()
         {
             // Arrange
-            var capture = new CaptureIt<o>(1);
-            capture.Post(new o { id = 123 });
+            Snapshot.Out.Create<o>(1);
+            Snapshot.Out.Post(new o { id = 123 });
 
             // Act
-            var span = capture.GetAsSpan();
+            var span = Snapshot.Out.GetAsSpan<o>();
 
 
             // Assert
@@ -67,11 +69,11 @@ namespace SnapshotIt.UnitTests
         {
 
             // Arrange
-            var capture = new CaptureIt<o>(1);
-            capture.Post(new o { id = 123 });
+            Snapshot.Out.Create<o>(1);
+            Snapshot.Out.Post(new o { id = 123 });
 
             // Act
-            var enumerable = capture.GetAsEnumerable();
+            var enumerable = Snapshot.Out.GetAsEnumerable<o>();
             enumerable.Count().Should().Be(1);
 
             // Assert
@@ -82,11 +84,11 @@ namespace SnapshotIt.UnitTests
         public void GetAsReadonlySpan()
         {
             // Arrange
-            var capture = new CaptureIt<o>(1);
-            capture.Post(new o { id = 123 });
+            Snapshot.Out.Create<o>(1);
+            Snapshot.Out.Post(new o { id = 123 });
 
             // Act
-            var span = capture.GetAsReadonlySpan();
+            var span = Snapshot.Out.GetAsReadonlySpan<o>();
             
             // Assert
             span.Length.Should().Be(1);

@@ -19,9 +19,9 @@ namespace SnapshotIt.UnitTests
         [Test]
         public async Task Pick()
         {
+            Snapshot.Out.Create<int>(1);
             Snapshot.Out.Post(1234);
             var cache = Snapshot.Out.Get<int>(0);
-            cache.Should().NotBe(null);
             cache.Should().Be(1234);
           
         }
