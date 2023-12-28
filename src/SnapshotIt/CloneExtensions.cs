@@ -9,7 +9,7 @@ using System.Threading.Tasks.Dataflow;
 namespace SnapshotIt
 {
     /// <summary>
-    /// CloneIt<T> where T is not null !
+    /// <seealso cref="CloneExtensions"/> - clones state with all it's props
     /// </summary>
     public static class CloneExtensions
     {
