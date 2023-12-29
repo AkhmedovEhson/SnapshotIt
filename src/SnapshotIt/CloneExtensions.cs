@@ -14,10 +14,11 @@ namespace SnapshotIt
     public static class CloneExtensions
     {
         /// <summary>
-        /// Copies 1'st (ReferenceType) component to another
+        /// Copies 1'st (ReferenceType) component to another, throws <seealso cref="ArgumentNullException"/> if `input` is null
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
+        /// <exception cref="ArgumentNullException"/>
         public static T Copy<T>(
             this ISnapshot _,
             T? input) where T : class
@@ -31,7 +32,7 @@ namespace SnapshotIt
             return instance;
         }
         /// <summary>
-        /// Copies 1'st (ValueType) component to another
+        /// Copies 1'st (ValueType) component to another, throws <seealso cref="ArgumentNullException"/> if `input` is null
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="_"></param>
