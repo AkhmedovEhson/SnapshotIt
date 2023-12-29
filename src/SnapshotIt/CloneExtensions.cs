@@ -20,7 +20,7 @@ namespace SnapshotIt
         /// <returns></returns>
         public static T Copy<T>(
             this ISnapshot _,
-            T input) where T : class
+            T? input) where T : class
         {
             if (input is null)
             {
