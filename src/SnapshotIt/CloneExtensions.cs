@@ -14,19 +14,40 @@ namespace SnapshotIt
     public static class CloneExtensions
     {
         /// <summary>
-        /// Copies 1'st component to another
+        /// Copies 1'st (ReferenceType) component to another
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
         public static T Copy<T>(
             this ISnapshot _,
-            T input) where T : notnull
+            T input) where T : class
         {
+            if (input is null)
+            {
+                throw new ArgumentNullException("Input is null, null can not be copied", nameof(input));
+            }
             var instance = Activator.CreateInstance<T>();
             PropertyReflection.SetProperties(input, ref instance);
             return instance;
+        }
+        /// <summary>
+        /// Copies 1'st (ValueType) component to another
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_"></param>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public static T Copy<T>(
+            this ISnapshot _,
+            T? input) where T : struct
+        {
+            if (!input.HasValue)
+            {
+                throw new ArgumentNullException("Input is null, null can not be copied",nameof(input));
+            }
 
-
+            return input.Value;
         }
     }
 }
