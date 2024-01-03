@@ -45,7 +45,7 @@ namespace SnapshotIt
         {
             if (!input.HasValue)
             {
-                throw new ArgumentNullException("Input is null, null can not be copied",nameof(input));
+                throw new ArgumentNullException("Input(?) is null, `NULL` can not be copied",nameof(input));
             }
 
             return input.Value;
