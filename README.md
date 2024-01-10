@@ -33,8 +33,11 @@ Snapshot.Out.Post(product); // captures state
 product.Id = 2;
 product.Name = "Gucci";
 
-// gets the first snapshot from capture collection
-product = Snapshot.Out.Get();
+const int index = 0;
+// Gets the first snapshot from capture collection
+// By default index = 0, using index easily can find the correct captured instance
+product = Snapshot.Out.Get(index);
+
 
 // Logs: The product's name is Gucci
 log.Information($"The product's name is {product.Name}");
