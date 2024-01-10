@@ -49,13 +49,11 @@ namespace SnapshotIt.Domain.Utils
         /// <param name="value"></param>
         public static void Post(T value)
         {
-            if (value is ValueType)
-            {
-                collection[index == collection.Length - 1 ? index : index++] = value;
-                return;
-            }
+            Type type = typeof(T);
 
-            var instance = Snapshot.Out.Copy<T>(value);
+            T instance = type.IsClass
+                ? Snapshot.Out.Copy<T>(value)
+                : value;
 
             collection[index == collection.Length - 1 ? index : index++] = instance;
         }
