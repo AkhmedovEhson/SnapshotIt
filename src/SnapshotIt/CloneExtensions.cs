@@ -21,7 +21,7 @@ namespace SnapshotIt
         /// <exception cref="ArgumentNullException"/>
         public static T Copy<T>(
             this ISnapshot _,
-            T? input) where T : class
+            T? input) 
         {
             if (input is null)
             {
@@ -39,7 +39,7 @@ namespace SnapshotIt
         /// <param name="input"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static T Copy<T>(
+        public static T CopyValue<T>(
             this ISnapshot _,
             T? input) where T : struct
         {
