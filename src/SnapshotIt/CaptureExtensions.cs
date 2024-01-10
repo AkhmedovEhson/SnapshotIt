@@ -33,7 +33,7 @@ namespace SnapshotIt
         /// <param name="ind"></param>
         /// <returns></returns>
         /// <exception cref="IndexOutOfRangeException"></exception>
-        public static T Get<T>(this ISnapshot _,int ind)
+        public static T Get<T>(this ISnapshot _, int ind = 0)
         {
             return CaptureIt<T>.Get(ind);
         }
