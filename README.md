@@ -11,7 +11,7 @@
 <ul>
     <li>📝 Snapshotting - simply snapshot any instance in any context of application, and use it in runtime of application.</li>
     <li>🗃️ Copying - copy any instance.</li>
-    <li>🌐 Channel `BufferBlock<T>` - use it as unbounded channel, post data init, read channel asEnumerable, asSpan, asReadonlySpan so on.</li>
+    <li>🌐 Channel `BufferBlock<T>` - use it as unbounded channel, post, read, close</li>
 </ul>
 
 🖊️ We have a class `Product` (?)
