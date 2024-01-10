@@ -4,10 +4,15 @@
 ![image](https://github.com/AkhmedovEhson/SnapshotIt/blob/main/assets/iconforgithub.png)
 
 # Requirements
-* .NET 7
+* .NET 6, .NET 7
 
 # Documentation
-`Snapshot It` is mini-library(utils) to make coding more easy. There are some moments when you update state of class and can not to recovery the previous state, here comes `Snapshot It`.
+`Snapshot It` is extensionable lightweight-library. Provides bunch of extensions.
+<ul>
+    <li>Snapshotting - simply snapshot any instance in any context of application, and use it in runtime of application.</li>
+    <li>Copying - copy any instance.</li>
+    <li>Channel `BufferBlock<T>` - use it as unbounded channel, post data init, read channel asEnumerable, asSpan, asReadonlySpan so on.</li>
+</ul>
 
 🖊️ We have a class `Product` (?)
 ```
@@ -24,17 +29,17 @@ var product = new Product()
     Id = 1
     Name = "Nike"
 }
-var snapshots = new Snaps(product);
+Snapshot.Out.Post(product); // captures state
 product.Id = 2;
 product.Name = "Gucci";
 
-// gets the last snapshot
-product = snapshots.Get(); 
+// gets the first snapshot from capture collection
+product = Snapshot.Out.Get();
 
 // Logs: The product's name is Gucci
 log.Information($"The product's name is {product.Name}");
 
 // Logs: The previous product's name was Nike 
-log.Information($"The previous product's name was {snapshots.Get().Value.Name}");
+log.Information($"The previous product's name was {product.Name}");
 ```
 
