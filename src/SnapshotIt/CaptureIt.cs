@@ -37,7 +37,7 @@ namespace SnapshotIt.Domain.Utils
         /// Creates new collection of captures with provided size
         /// </summary>
         /// <param name="s"></param>
-        public static void Create(int s)
+        public static void Create(int s = 1)
         {
             collection = new T[s];
             size = s;
