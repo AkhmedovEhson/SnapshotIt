@@ -37,6 +37,12 @@ namespace SnapshotIt
         {
             return CaptureIt<T>.Get(ind);
         }
+
+        public static T Get<T>(this ISnapshot _,Func<T, bool> predicate)
+        {
+            return CaptureIt<T>.Get(predicate);
+        }
+
         /// <summary>
         /// Responds collection of captures as <seealso cref="Span{T}"/>
         /// </summary>
