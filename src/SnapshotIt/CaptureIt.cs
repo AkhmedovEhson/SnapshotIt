@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,12 +34,31 @@ namespace SnapshotIt.Domain.Utils
             return collection[ind];
         }
 
+        public static T Get(Func<T,bool> expression)
+        {
+
+            var query = collection.Where(expression).FirstOrDefault();
+
+            if (query is null)
+            {
+                throw new NullReferenceException($"Type {typeof(T).Name} is not found in collection");
+            }
+
+            return query;
+        }
         /// <summary>
         /// Creates new collection of captures with provided size
         /// </summary>
         /// <param name="s"></param>
         public static void Create(int s = 1)
         {
+            if (collection is not null)
+            {
+                collection = new T[s];
+                size = s;
+                return;
+            }
+
             collection = new T[s];
             size = s;
         }
