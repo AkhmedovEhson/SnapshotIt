@@ -13,7 +13,7 @@ namespace SnapshotIt
     public static class CaptureExtensions
     {
         /// <summary>
-        /// Creates new collection of captures with provided size
+        /// Creates new collection of captures with provided size, or recreates it 
         /// </summary>
         /// <param name="s"></param>
         public static void Create<T>(this ISnapshot _, int size) => CaptureIt<T>.Create(size);
