@@ -7,7 +7,7 @@
 * .NET 6 🔒️ .NET 7 
 
 # Documentation
-💚 `Snapshot It` is extensionable lightweight-library. Provides bunch of extensions.
+💚 `Snapshot It` is extensionable lightweight-library, provides bunch of extensions to communicate with API.
 <ul>
     <li>📝 Snapshotting - simply snapshot any instance in any context of application, and use it in runtime of application.</li>
     <li>🗃️ Copying - copy any instance.</li>
