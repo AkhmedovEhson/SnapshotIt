@@ -19,7 +19,7 @@ namespace SnapshotIt.Domain.Utils
 
 
         /// <summary>
-        /// Gets data from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
+        /// Gets captured object from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
         /// </summary>
         /// <param name="ind"></param>
         /// <returns></returns>
@@ -34,6 +34,12 @@ namespace SnapshotIt.Domain.Utils
             return collection[ind];
         }
 
+        /// <summary>
+        /// Gets captured object from captures using expressions, else throws <seealso cref="NullReferenceException"/>
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
         public static T Get(Func<T,bool> expression)
         {
 
