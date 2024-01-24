@@ -21,6 +21,10 @@ public class Product
     public int Id {get;set}
     public string Name{get;set;}
 }
+
+// Copy class
+var product = new Product() { Id = 1,Name = "Product" } // note, it is reference type and mutable
+var product2 = Snapshot.Out.Copy(product); // copies `product`
 ```
 🐹 Let's do following steps....
 ```
@@ -29,20 +33,22 @@ var product = new Product()
     Id = 1
     Name = "Nike"
 }
-Snapshot.Out.Post(product); // captures state
+Snapshot.Out.Create<Product>(10); // initialized collection of `Product` with size `10`
+Snapshot.Out.Post<Product>(product); // captures state
+
 product.Id = 2;
 product.Name = "Gucci";
 
 const int index = 0;
 // Gets the first snapshot from capture collection
 // By default index = 0, using index easily can find the correct captured instance
-product = Snapshot.Out.Get(index);
+var Capturedproduct = Snapshot.Out.Get<Product>(index); or use expressions Snapshot.Out.Get(o => o.Id == n);
 
 
 // Logs: The product's name is Gucci
 log.Information($"The product's name is {product.Name}");
 
 // Logs: The previous product's name was Nike 
-log.Information($"The previous product's name was {product.Name}");
+log.Information($"The previous product's name was {Capturedproduct.Name}");
 ```
 
