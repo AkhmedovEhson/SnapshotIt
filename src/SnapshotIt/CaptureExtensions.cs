@@ -13,7 +13,7 @@ namespace SnapshotIt
     public static class CaptureExtensions
     {
         /// <summary>
-        /// Creates new collection of captures with provided size
+        /// Creates new collection of captures with provided size, or recreates it 
         /// </summary>
         /// <param name="s"></param>
         public static void Create<T>(this ISnapshot _, int size) => CaptureIt<T>.Create(size);
@@ -28,7 +28,7 @@ namespace SnapshotIt
             CaptureIt<T>.Post(input);
         }
         /// <summary>
-        /// Gets data from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
+        /// Gets captured object from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
         /// </summary>
         /// <param name="ind"></param>
         /// <returns></returns>
@@ -37,6 +37,23 @@ namespace SnapshotIt
         {
             return CaptureIt<T>.Get(ind);
         }
+
+        public static T Get<T>(this ISnapshot _,Func<T, bool> predicate)
+        {
+            return CaptureIt<T>.Get(predicate);
+        }
+
+        /// <summary>
+        /// Gets captured object from captures using expressions, else throws <seealso cref="NullReferenceException"/>
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static T Get<T>(this ISnapshot _,Func<T, bool> predicate)
+        {
+            return CaptureIt<T>.Get(predicate);
+        }
+
         /// <summary>
         /// Responds collection of captures as <seealso cref="Span{T}"/>
         /// </summary>
