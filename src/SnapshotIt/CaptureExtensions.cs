@@ -37,12 +37,6 @@ namespace SnapshotIt
         {
             return CaptureIt<T>.Get(ind);
         }
-
-        public static T Get<T>(this ISnapshot _,Func<T, bool> predicate)
-        {
-            return CaptureIt<T>.Get(predicate);
-        }
-
         /// <summary>
         /// Gets captured object from captures using expressions, else throws <seealso cref="NullReferenceException"/>
         /// </summary>
