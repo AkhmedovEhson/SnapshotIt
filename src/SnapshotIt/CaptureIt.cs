@@ -33,19 +33,6 @@ namespace SnapshotIt.Domain.Utils
  
             return collection[ind];
         }
-
-        public static T Get(Func<T,bool> expression)
-        {
-
-            var query = collection.Where(expression).FirstOrDefault();
-
-            if (query is null)
-            {
-                throw new NullReferenceException($"Type {typeof(T).Name} is not found in collection");
-            }
-
-            return query;
-        }
         /// <summary>
         /// Gets captured object from captures using expressions, else throws <seealso cref="NullReferenceException"/>
         /// </summary>
