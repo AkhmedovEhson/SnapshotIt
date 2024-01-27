@@ -28,6 +28,8 @@ var product2 = Snapshot.Out.Copy(product); // copies `product`
 ```
 🐹 Let's do following steps....
 ```
+using SnapshotIt;
+
 var product = new Product() 
 {
     Id = 1
@@ -53,6 +55,7 @@ log.Information($"The previous product's name was {Capturedproduct.Name}");
 ```
 💚 ASP.NET and Dependency Injections
 ```
+using SnapshotIt.DependencyInjection;
 // Actually for injecting stuff into class, you are injecting from $constructor
 public class UserController : BaseController
 {
