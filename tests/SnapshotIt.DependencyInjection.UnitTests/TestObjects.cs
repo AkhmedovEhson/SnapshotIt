@@ -11,4 +11,15 @@ namespace SnapshotIt.DependencyInjection.UnitTests
         public int Id { get; set; }
         public string Name { get; set; }
     }
+
+    public class ColourTests
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+    public class ColourTestsAsScoped
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
 }
