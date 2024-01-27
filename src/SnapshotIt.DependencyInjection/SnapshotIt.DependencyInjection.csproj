@@ -4,6 +4,8 @@
     <TargetFramework>net7.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <Title>SnapshotIt.DependencyInjection</Title>
+	 
   </PropertyGroup>
 
   <ItemGroup>
