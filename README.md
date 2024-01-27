@@ -51,4 +51,23 @@ log.Information($"The product's name is {product.Name}");
 // Logs: The previous product's name was Nike 
 log.Information($"The previous product's name was {Capturedproduct.Name}");
 ```
+💚 ASP.NET and Dependency Injections
+```
+// Actually for injecting stuff into class, you are injecting from $constructor
+public class UserController : BaseController
+{
+    public ILogger logger;
+    public UserController(ILogger logger) 
+    {
+        this.logger = logger;
+    }
+}
+
+// You can communicate with DI container very easy </>
+// Use following steps ...
+public class UserController : BaseController
+{
+    public ILogger logger = Connector.GetService<ILogger>(); // you got it :)
+}
+```
 
