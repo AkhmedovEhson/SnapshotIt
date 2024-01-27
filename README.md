@@ -56,6 +56,7 @@ log.Information($"The previous product's name was {Capturedproduct.Name}");
 💚 ASP.NET and Dependency Injections
 ```
 using SnapshotIt.DependencyInjection;
+
 // Actually for injecting stuff into class, you are injecting from $constructor
 public class UserController : BaseController
 {
