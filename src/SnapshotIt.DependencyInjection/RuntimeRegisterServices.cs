@@ -38,5 +38,29 @@ namespace SnapshotIt.DependencyInjection
             }
         }
 
+        public void ConfigureScopedServices()
+        {
+            var type = typeof(IScoped);
+            var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
+
+            types.ForEach(o => ServiceCollection.AddScoped(o));
+        }
+
+        public void ConfigureTransientServices()
+        {
+            var type = typeof(ITransient);
+            var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
+
+            types.ForEach(o => ServiceCollection.AddTransient(o));
+        }
+
+        public void ConfigureSingletonServices()
+        {
+            var type = typeof(ISingleton);
+            var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
+
+            types.ForEach(o => ServiceCollection.AddTransient(o));
+        }
+
     }
 }
