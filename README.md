@@ -74,4 +74,19 @@ public class UserController : BaseController
     public ILogger logger = Connector.GetService<ILogger>(); // you got it :)
 }
 ```
+🎨 Registration of services. ( in development )
+```
+using SnapshotIt.DependencyInjection;
+public class ProductService:IProductService{}
+public class AuthService : IAuthService{}
+public class TechService{}
+public class TranslateService:ITranslateService{}
+// and so on .... there may be 15 or more services !
+
+// just do not think about it and make each class to impl. `IRuntimeDependencyInjectionObject`
+IServiceCollection services;
+var runtimeExecutor = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(),services);
+runtimeExecutor.ConfigureAllServices(Store.Scoped); // each service impl. `IRuntimeDependencyInjectionObject` are going to be registered with lifetime `Scoped`
+```
+
 
