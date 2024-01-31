@@ -43,7 +43,21 @@ namespace SnapshotIt.DependencyInjection
             var type = typeof(IScoped);
             var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
 
-            types.ForEach(o => ServiceCollection.AddScoped(o));
+            if (types.Any())
+            {
+                foreach(var _type in types)
+                {
+                    var _interface = _type.GetInterfaces()[0];
+
+                    if (_interface.FullName == "IScoped")
+                    {
+                        ServiceCollection.AddScoped(_type);
+                        continue;
+                    }
+
+                    ServiceCollection.AddScoped(_interface, _type);
+                }
+            }
         }
 
         public void ConfigureTransientServices()
@@ -51,15 +65,42 @@ namespace SnapshotIt.DependencyInjection
             var type = typeof(ITransient);
             var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
 
-            types.ForEach(o => ServiceCollection.AddTransient(o));
+            if (types.Any())
+            {
+                foreach(var _type in types)
+                {
+                    var _interface = _type.GetInterfaces()[0];
+
+                    if (_interface.FullName == "ITransient")
+                    {
+                        ServiceCollection.AddTransient(_type);
+                        continue;
+                    }
+
+                    ServiceCollection.AddTransient(_interface, _type);
+                }
+            }
         }
 
         public void ConfigureSingletonServices()
         {
             var type = typeof(ISingleton);
             var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
+            if (types.Any())
+            {
+                foreach(var _type in types)
+                {
+                    var _interface = _type.GetInterfaces()[0];
 
-            types.ForEach(o => ServiceCollection.AddTransient(o));
+                    if (_interface.FullName == "ISingleton")
+                    {
+                        ServiceCollection.AddSingleton(_type);
+                        continue;
+                    }
+
+                    ServiceCollection.AddSingleton(_interface,_type);
+                }
+            }
         }
 
     }
