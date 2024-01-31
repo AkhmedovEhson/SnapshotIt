@@ -8,6 +8,9 @@ using System.Threading.Tasks;
 
 namespace SnapshotIt.DependencyInjection
 {
+    /// <summary>
+    /// RuntimeRegisterServices - registers all services to dep. injection container dynamically on runtime
+    /// </summary>
     public class RuntimeRegisterServices
     {
         private Assembly ExecutingAssembly { get; set; }
@@ -18,6 +21,10 @@ namespace SnapshotIt.DependencyInjection
             this.ServiceCollection = services;
         }
 
+        /// <summary>
+        /// Registers all services impl. `IRuntimeDependencyInjectionObject` to dep. injection container.
+        /// </summary>
+        /// <param name="store"></param>
         public void ConfigureAllServices(Store store)
         {
             var type = typeof(IRuntimeDependencyInjectionObject);
@@ -37,7 +44,9 @@ namespace SnapshotIt.DependencyInjection
 
             }
         }
-
+        /// <summary>
+        /// Registers services impl. `IScoped` to dependency injection container.
+        /// </summary>
         public void ConfigureScopedServices()
         {
             var type = typeof(IScoped);
@@ -59,7 +68,9 @@ namespace SnapshotIt.DependencyInjection
                 }
             }
         }
-
+        /// <summary>
+        /// Registers services impl. `ITransient` to dependency injection container.
+        /// </summary>
         public void ConfigureTransientServices()
         {
             var type = typeof(ITransient);
@@ -81,7 +92,9 @@ namespace SnapshotIt.DependencyInjection
                 }
             }
         }
-
+        /// <summary>
+        /// Registers services impl. `ISingleton` to dependency injection container.
+        /// </summary>
         public void ConfigureSingletonServices()
         {
             var type = typeof(ISingleton);
