@@ -58,7 +58,7 @@ namespace SnapshotIt.DependencyInjection
                 {
                     var _interface = _type.GetInterfaces()[0];
 
-                    if (_interface.FullName == "IScoped")
+                    if (_interface.Name == "IScoped")
                     {
                         ServiceCollection.AddScoped(_type);
                         continue;
@@ -82,7 +82,7 @@ namespace SnapshotIt.DependencyInjection
                 {
                     var _interface = _type.GetInterfaces()[0];
 
-                    if (_interface.FullName == "ITransient")
+                    if (_interface.Name == "ITransient")
                     {
                         ServiceCollection.AddTransient(_type);
                         continue;
@@ -105,7 +105,7 @@ namespace SnapshotIt.DependencyInjection
                 {
                     var _interface = _type.GetInterfaces()[0];
 
-                    if (_interface.FullName == "ISingleton")
+                    if (_interface.Name == "ISingleton")
                     {
                         ServiceCollection.AddSingleton(_type);
                         continue;
