@@ -55,9 +55,9 @@ namespace SnapshotIt.DependencyInjection.UnitTests
         public void GetRegisteredServices_Singleton_Success()
         {
             var runtime = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), dep_collection);
-            runtime.ConfigureScopedServices();
+            runtime.ConfigureSingletonServices();
             dep_collection.Should().NotBeNull();
-            dep_collection[0].Lifetime.Should().Be(ServiceLifetime.Scoped);
+            dep_collection[0].Lifetime.Should().Be(ServiceLifetime.Singleton);
         }
     }
 }
