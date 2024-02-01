@@ -109,6 +109,21 @@ namespace SnapshotIt.DependencyInjection.UnitTests
             service_singleton_secondAttempt.Name.Should().Be("colour");
         }
 
+        [Test]
+        public void CreateScope_Success()
+        {
+            var scope = Connector.CreateScope();
+            scope.Should().NotBeNull();
+            scope.ServiceProvider.Should().NotBeNull();
+        }
+
+        [Test]
+        public void CreateScopeAsync_Success()
+        {
+            var scope = Connector.CreateScopeAsync();
+            scope.Should().NotBeNull(); 
+            scope.ServiceProvider.Should().NotBeNull();
+        }
 
     }
 }
