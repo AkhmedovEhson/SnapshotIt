@@ -51,19 +51,19 @@ namespace SnapshotIt.DependencyInjection
         {
             var type = typeof(IScoped);
             var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
-
             if (types.Any())
             {
                 foreach(var _type in types)
                 {
-                    var _interface = _type.GetInterfaces()[0];
+                    var _interface = _type.GetInterfaces()
+                        .Where(each => type.IsAssignableFrom(each) && each.Name != type.Name)
+                        .FirstOrDefault();
 
-                    if (_interface.Name == "IScoped")
+                    if (_interface is null)
                     {
                         ServiceCollection.AddScoped(_type);
                         continue;
                     }
-
                     ServiceCollection.AddScoped(_interface, _type);
                 }
             }
@@ -75,14 +75,15 @@ namespace SnapshotIt.DependencyInjection
         {
             var type = typeof(ITransient);
             var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
-
             if (types.Any())
             {
                 foreach(var _type in types)
                 {
-                    var _interface = _type.GetInterfaces()[0];
+                    var _interface = _type.GetInterfaces()
+                      .Where(each => type.IsAssignableFrom(each) && each.Name != type.Name)
+                      .FirstOrDefault();
 
-                    if (_interface.Name == "ITransient")
+                    if (_interface is null)
                     {
                         ServiceCollection.AddTransient(_type);
                         continue;
@@ -103,14 +104,15 @@ namespace SnapshotIt.DependencyInjection
             {
                 foreach(var _type in types)
                 {
-                    var _interface = _type.GetInterfaces()[0];
+                    var _interface = _type.GetInterfaces()
+                      .Where(each => type.IsAssignableFrom(each) && each.Name != type.Name)
+                      .FirstOrDefault();
 
-                    if (_interface.Name == "ISingleton")
+                    if (_interface is null)
                     {
                         ServiceCollection.AddSingleton(_type);
                         continue;
                     }
-
                     ServiceCollection.AddSingleton(_interface,_type);
                 }
             }
