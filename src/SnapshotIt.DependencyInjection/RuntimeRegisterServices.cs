@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using SnapshotIt.DependencyInjection.ThirdParties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,7 +57,7 @@ namespace SnapshotIt.DependencyInjection
                 foreach(var _type in types)
                 {
                     var _interface = _type.GetInterfaces()
-                        .Where(each => type.IsAssignableFrom(each) && each.Name != type.Name)
+                        .Where(each => each.Name[1..] == _type.Name)
                         .FirstOrDefault();
 
                     if (_interface is null)
@@ -80,7 +81,7 @@ namespace SnapshotIt.DependencyInjection
                 foreach(var _type in types)
                 {
                     var _interface = _type.GetInterfaces()
-                      .Where(each => type.IsAssignableFrom(each) && each.Name != type.Name)
+                      .Where(each => each.Name[1..] == _type.Name)
                       .FirstOrDefault();
 
                     if (_interface is null)
@@ -105,7 +106,7 @@ namespace SnapshotIt.DependencyInjection
                 foreach(var _type in types)
                 {
                     var _interface = _type.GetInterfaces()
-                      .Where(each => type.IsAssignableFrom(each) && each.Name != type.Name)
+                      .Where(each => each.Name[1..] == _type.Name)
                       .FirstOrDefault();
 
                     if (_interface is null)
