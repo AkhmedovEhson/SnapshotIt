@@ -74,7 +74,7 @@ public class UserController : BaseController
     public ILogger logger = Connector.GetService<ILogger>(); // you got it :)
 }
 ```
-🎨 Registration of services.
+✨🎨 Registration of services to dependency injection container.
 ```
 using SnapshotIt.DependencyInjection;
 // NOTE: `SnapshotIt` looks for it's interface by [NAME] e.g. there is Product, it's interface must be `IProduct` !!!
