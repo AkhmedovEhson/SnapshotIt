@@ -74,19 +74,16 @@ public class UserController : BaseController
     public ILogger logger = Connector.GetService<ILogger>(); // you got it :)
 }
 ```
-🎨 Registration of services. ( in development )
+🎨 Registration of services.
 ```
 using SnapshotIt.DependencyInjection;
-public class ProductService:IProductService{}
-public class AuthService : IAuthService{}
-public class TechService{}
-public class TranslateService:ITranslateService{}
-// and so on .... there may be 15 or more services !
+// NOTE: `SnapshotIt` looks for it's interface by [NAME] e.g. there is Product, it's interface must be `IProduct` !!!
+public class ProductRepository : IProductRepository,IScoped{} // Interface `IScoped` pushes it as Scoped lifetime to dep. injection container. 
+public class ColorRepository : IColorRepository, ITransient{} // Interface `ITransient` pushes it as Transient lifetime to dep. injection container. 
 
-// just do not think about it and make each class to impl. `IRuntimeDependencyInjectionObject`
-IServiceCollection services;
-var runtimeExecutor = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(),services);
-runtimeExecutor.ConfigureAllServices(Store.Scoped); // each service impl. `IRuntimeDependencyInjectionObject` are going to be registered with lifetime `Scoped`
+var RuntimeServicesRegisterExecutor = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), services);
+RuntimeServicesRegisterExecutor.ConfigureScopedServices(); // looks for all classes impl. IScoped
+RuntimeServicesRegisterExecutor.ConfigureTransientServices(); // looks for all classes impl. ITransient
 ```
 
 
