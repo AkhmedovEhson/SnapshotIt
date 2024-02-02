@@ -52,6 +52,24 @@ namespace SnapshotIt.Domain.Utils
             return query;
         }
         /// <summary>
+        /// Gets captured object from captures using expressions, else throws <seealso cref="NullReferenceException"/>
+        /// </summary>
+        /// <param name="expression"></param>
+        /// <returns></returns>
+        /// <exception cref="NullReferenceException"></exception>
+        public static T Get(Func<T,bool> expression)
+        {
+
+            var query = collection.Where(expression).FirstOrDefault();
+
+            if (query is null)
+            {
+                throw new NullReferenceException($"Type {typeof(T).Name} is not found in collection");
+            }
+
+            return query;
+        }
+        /// <summary>
         /// Creates new collection of captures with provided size
         /// </summary>
         /// <param name="s"></param>
