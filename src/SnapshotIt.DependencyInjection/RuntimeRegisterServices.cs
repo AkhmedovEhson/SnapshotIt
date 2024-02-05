@@ -26,22 +26,74 @@ namespace SnapshotIt.DependencyInjection
         /// Registers all services impl. `IRuntimeDependencyInjectionObject` to dep. injection container.
         /// </summary>
         /// <param name="store"></param>
-        public void ConfigureAllServices(Store store)
+        public void ConfigureAllServices(ServiceLifetime lifetime)
         {
             var type = typeof(IRuntimeDependencyInjectionObject);
             var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
 
-            switch (store)
+            switch (lifetime)
             {
-                case Store.Transient:
-                    types.ForEach(o => ServiceCollection.AddTransient(o));
-                    break;
-                case Store.Scoped:
-                    types.ForEach(o => ServiceCollection.AddScoped(o));
-                    break;
+                case ServiceLifetime.Transient:
+                    {
+                        if (types.Any())
+                        {
+                            foreach (var _type in types)
+                            {
+                                var _interface = _type.GetInterfaces()
+                                  .Where(each => each.Name[1..] == _type.Name)
+                                  .FirstOrDefault();
+
+                                if (_interface is null)
+                                {
+                                    ServiceCollection.AddTransient(_type);
+                                    continue;
+                                }
+
+                                ServiceCollection.AddTransient(_interface, _type);
+                            }
+                        }
+                        break;
+                    }
+                case ServiceLifetime.Scoped:
+                    { 
+                        if (types.Any())
+                        {
+                            foreach (var _type in types)
+                            {
+                                var _interface = _type.GetInterfaces()
+                                    .Where(each => each.Name[1..] == _type.Name)
+                                    .FirstOrDefault();
+
+                                if (_interface is null)
+                                {
+                                    ServiceCollection.AddScoped(_type);
+                                    continue;
+                                }
+                                ServiceCollection.AddScoped(_interface, _type);
+                            }
+                        }
+                        break;
+                    }
                 default:
-                    types.ForEach(o => ServiceCollection.AddSingleton(o));
-                    break;
+                    {
+                        if (types.Any())
+                        {
+                            foreach (var _type in types)
+                            {
+                                var _interface = _type.GetInterfaces()
+                                  .Where(each => each.Name[1..] == _type.Name)
+                                  .FirstOrDefault();
+
+                                if (_interface is null)
+                                {
+                                    ServiceCollection.AddSingleton(_type);
+                                    continue;
+                                }
+                                ServiceCollection.AddSingleton(_interface, _type);
+                            }
+                        }
+                        break;
+                    }
 
             }
         }
