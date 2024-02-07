@@ -30,7 +30,9 @@ namespace SnapshotIt.DependencyInjection
             var singleton = typeof(IRuntimeDependencyInjectionObject<ISingleton>);
             var transient = typeof(IRuntimeDependencyInjectionObject<ITransient>);
             var scoped = typeof(IRuntimeDependencyInjectionObject<IScoped>);
+            
             bool _lifetime = false;
+            
             var types = ExecutingAssembly.GetExportedTypes()
                 .Where(o => o.IsClass)
                 .Where(o => singleton.IsAssignableFrom(o) || transient.IsAssignableFrom(o) || scoped.IsAssignableFrom(o))
