@@ -1,4 +1,5 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace SnapshotIt.DependencyInjection
     /// <summary>
     /// IRuntimeDependencyInjectionObject - common gateway to DI container
     /// </summary>
-    public interface IRuntimeDependencyInjectionObject { }
+    public interface IRuntimeDependencyInjectionObject<T> { }
     /// <summary>
     /// IScoped - gateway with lifetime `Scoped` to DI container
     /// </summary>
