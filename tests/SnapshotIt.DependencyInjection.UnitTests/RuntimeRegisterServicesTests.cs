@@ -24,13 +24,29 @@ namespace SnapshotIt.DependencyInjection.UnitTests
         public void GetRegisteredServicesInDICollection_Success()
         {
             var runtime = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), dep_collection);
-            runtime.ConfigureAllServices(ServiceLifetime.Transient);
+            runtime.ConfigureAllServices();
             dep_collection.Should().NotBeNull();
 
-            // Note: should be `1` because there is only one class impl. SnapshotIt's interface on this assembly 
-            dep_collection.Count.Should().Be(1); 
-            dep_collection[0].Lifetime.Should().Be(ServiceLifetime.Transient);
+            dep_collection.Count.Should().Be(3); 
+            dep_collection[0].Lifetime.Should().Be(ServiceLifetime.Scoped);
+            dep_collection[1].Lifetime.Should().Be(ServiceLifetime.Transient);
+            dep_collection[2].Lifetime.Should().Be(ServiceLifetime.Singleton);
+
         }
+
+        [Test]
+        public void GetRegisteredServicesInDICollection_Fail()
+        {
+            var runtime = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), dep_collection);
+            runtime.ConfigureAllServices();
+            dep_collection.Should().NotBeNull();
+
+            dep_collection.Count.Should().Be(3);
+            dep_collection[0].Lifetime.Should().Be(ServiceLifetime.Scoped);
+            dep_collection[1].Lifetime.Should().NotBe(ServiceLifetime.Singleton);
+            dep_collection[2].Lifetime.Should().NotBe(ServiceLifetime.Transient);
+        }
+
 
         [Test]
         public void GetRegisterdServices_Transient_Success()
