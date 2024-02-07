@@ -84,6 +84,10 @@ public class ColorRepository : IColorRepository, ITransient{} // Interface `ITra
 var RuntimeServicesRegisterExecutor = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), services);
 RuntimeServicesRegisterExecutor.ConfigureScopedServices(); // looks for all classes impl. IScoped
 RuntimeServicesRegisterExecutor.ConfigureTransientServices(); // looks for all classes impl. ITransient
-```
 
+// OR
+var RuntimeServicesRegisterExecutor = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), services);
+// By arguments of generic type runtimeobject can recognize to push it as Singleton or Scoped or Transient
+RuntimeServicesRegisterExecutor.ConfigureAllServices(); // looks for all classes impl. IRuntimeDependencyInjectionObject<T> where T IScoped, ITransient or ISingleton.
+```
 
