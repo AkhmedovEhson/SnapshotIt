@@ -38,15 +38,14 @@ namespace SnapshotIt.DependencyInjection
         /// <param name="serviceType"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static T? GetService<T>()
+        public static T GetService<T>()
         {
             if (_serviceProvider is null)
             {
                 throw new ArgumentNullException($"Provided `$service-provider` is not found");
             }
 
-            return _serviceProvider.GetService<T>();
-
+            return _serviceProvider.GetService<T>() ?? throw new ArgumentNullException("Service is not found in dep. injection container");
         }
 
         /// <summary>
@@ -55,13 +54,14 @@ namespace SnapshotIt.DependencyInjection
         /// <param name="serviceType"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"></exception>
-        public static object? GetService(Type serviceType)
+        public static object GetService(Type serviceType)
         {
             if (_serviceProvider is null)
             {
                 throw new ArgumentNullException($"Provided `$service-provider` is not found");
             }
-            return _serviceProvider.GetService(serviceType);
+
+            return _serviceProvider.GetService(serviceType) ?? throw new ArgumentNullException("Service is not found in dep. injection container"); ;
         }
         /// <summary>
         /// CreateScope - creates scope synchronously.
