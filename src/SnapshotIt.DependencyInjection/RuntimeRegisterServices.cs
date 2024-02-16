@@ -51,8 +51,8 @@ namespace SnapshotIt.DependencyInjection
 
         public void ConfigureAllServices()
         {
-            var attributes = ExecutingAssembly.GetCustomAttributes<RuntimeDependencyInjectionOptionAttribute>();
 
+            var attributes = ExecutingAssembly.GetCustomAttributes<RuntimeDependencyInjectionOptionAttribute>();
             var types = ExecutingAssembly.GetTypes();
 
             var list = new List<ComponentProtectedByAttributeResponse>();
