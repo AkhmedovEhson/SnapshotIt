@@ -49,30 +49,33 @@ namespace SnapshotIt.DependencyInjection.UnitTests
 
 
         [Test]
-        public void GetRegisterdServices_Transient_Success()
+        public void GetRegisteredServiceProtectedByAttribute_Singleton_Success()
         {
             var runtime = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), dep_collection);
-            runtime.ConfigureTransientServices();
-            dep_collection.Should().NotBeNull();
-            dep_collection[0].Lifetime.Should().Be(ServiceLifetime.Transient);
-        }
-
-
-        [Test]
-        public void GetRegisteredServices_Scoped_Success()
-        {
-            var runtime = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), dep_collection);
-            runtime.ConfigureScopedServices();
-            dep_collection[0].Lifetime.Should().Be(ServiceLifetime.Scoped);
-        }
-
-        [Test]
-        public void GetRegisteredServices_Singleton_Success()
-        {
-            var runtime = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), dep_collection);
-            runtime.ConfigureSingletonServices();
+            runtime.ConfigureAllServices();
             dep_collection.Should().NotBeNull();
             dep_collection[0].Lifetime.Should().Be(ServiceLifetime.Singleton);
+            dep_collection[0].ServiceType.Should().Be(typeof(Box));
+        }
+
+        [Test]
+        public void GetRegisteredServiceProtectedByAttribute_Scoped_Success()
+        {
+            var runtime = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), dep_collection);
+            runtime.ConfigureAllServices();
+            dep_collection.Should().NotBeNull();
+            dep_collection[1].Lifetime.Should().Be(ServiceLifetime.Scoped);
+            dep_collection[1].ServiceType.Should().Be(typeof(BoxScoped));
+        }
+
+        [Test]
+        public void GetRegisteredServiceProtectedByAttribute_Transient_Success()
+        {
+            var runtime = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), dep_collection);
+            runtime.ConfigureAllServices();
+            dep_collection.Should().NotBeNull();
+            dep_collection[2].Lifetime.Should().Be(ServiceLifetime.Transient);
+            dep_collection[2].ServiceType.Should().Be(typeof(BoxTransient));
         }
     }
 }

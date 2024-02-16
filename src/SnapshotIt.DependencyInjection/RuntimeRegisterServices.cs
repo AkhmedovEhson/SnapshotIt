@@ -1,10 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using SnapshotIt.DependencyInjection.Common;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SnapshotIt.DependencyInjection
 {
@@ -15,105 +11,87 @@ namespace SnapshotIt.DependencyInjection
     {
         private Assembly ExecutingAssembly { get; set; }
         private IServiceCollection ServiceCollection { get; set; }
-        public RuntimeRegisterServices(Assembly assembly,IServiceCollection services)
+        public RuntimeRegisterServices(Assembly assembly, IServiceCollection services)
         {
             this.ExecutingAssembly = assembly;
             this.ServiceCollection = services;
         }
 
-        /// <summary>
-        /// Registers all services impl. `IRuntimeDependencyInjectionObject` to dep. injection container.
-        /// </summary>
-        /// <param name="store"></param>
+        private void RegisterServiceToDependencyInjectionContainer(ServiceLifetime lifetime,Type service,Type _interface)
+        {
+            switch(lifetime)
+            {
+                case ServiceLifetime.Transient:
+                    ServiceCollection.AddTransient(service, _interface);
+                    break;
+                case ServiceLifetime.Scoped:
+                    ServiceCollection.AddScoped(service, _interface);
+                    break;
+                default:
+                    ServiceCollection.AddSingleton(service, _interface);
+                    break;
+            }
+        }
+
+        private void RegisterServiceToDependencyInjectionContainer(ServiceLifetime lifetime,Type service)
+        {
+            switch (lifetime)
+            {
+                case ServiceLifetime.Transient:
+                    ServiceCollection.AddTransient(service);
+                    break;
+                case ServiceLifetime.Scoped:
+                    ServiceCollection.AddScoped(service);
+                    break;
+                default:
+                    ServiceCollection.AddSingleton(service);
+                    break;
+            }
+        }
+
         public void ConfigureAllServices()
         {
-            var singleton = typeof(IRuntimeDependencyInjectionObject<ISingleton>);
-            var transient = typeof(IRuntimeDependencyInjectionObject<ITransient>);
-            var scoped = typeof(IRuntimeDependencyInjectionObject<IScoped>);
-            
-            bool _lifetime = false;
-            
-            var types = ExecutingAssembly.GetExportedTypes()
-                .Where(o => o.IsClass)
-                .Where(o => singleton.IsAssignableFrom(o) || transient.IsAssignableFrom(o) || scoped.IsAssignableFrom(o))
-                .ToList();
 
-            ServiceLifetime lifetime = default;
+            var attributes = ExecutingAssembly.GetCustomAttributes<RuntimeDependencyInjectionOptionAttribute>();
+            var types = ExecutingAssembly.GetTypes();
 
-            if (!types.Any())
-                return;
+            var list = new List<ComponentProtectedByAttributeResponse>();
 
-            foreach (var _type in types)
+            if (types.Any())
             {
-                Type? _interface = default;
-
-                var _interfaces = _type.GetInterfaces().AsEnumerable();
-                // Note: instead of scripting ( O(n^3 e.g or more ...) ), uses `foreach` loop
-                foreach (var item in _interfaces)
+                foreach(var type in types)
                 {
-                    if (item.Name[1..] == _type.Name)
+                    var customAttribute = type.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>();
+                    if (customAttribute != null)
                     {
-                        _interface = item;
+                        list.Add(
+                            new ComponentProtectedByAttributeResponse()
+                            {
+                                ServiceLifetime = customAttribute.Lifetime,
+                                Type = type,
+                            });
+                        continue;
+                    }
+                }
+            }
+
+            if (list.Any())
+            {
+                foreach(var item in list)
+                {
+                    var _interface = item.Type.GetType()
+                        .GetInterfaces()
+                        .Where(o => item.Type.Name == o.Name[1..]).FirstOrDefault();
+
+
+                    if (_interface != null)
+                    {
+                        RegisterServiceToDependencyInjectionContainer(item.ServiceLifetime, item.Type,_interface);
                         continue;
                     }
 
-
-                    if (_lifetime == false)
-                    {
-                        if (item.IsEquivalentTo(singleton))
-                        {
-                            lifetime = ServiceLifetime.Singleton;
-                        }
-                        else if (item.IsEquivalentTo(transient))
-                        {
-                            lifetime = ServiceLifetime.Transient;
-                        }
-                        else if (item.IsEquivalentTo(scoped))
-                        {
-                            lifetime = ServiceLifetime.Scoped;
-                        }
-                        _lifetime = true;
-                    }
-
-                }
-
+                    RegisterServiceToDependencyInjectionContainer(item.ServiceLifetime, item.Type);
                     
-                if (_lifetime)
-                {
-                    _lifetime = false;
-                    switch (lifetime)
-                    {
-                        case ServiceLifetime.Singleton:
-                            {
-                                if (_interface is not null)
-                                {
-                                    ServiceCollection.AddSingleton(_interface, _type);
-                                    break;
-                                }
-                                ServiceCollection.AddSingleton(_type);
-                                break;
-                            }
-                        case ServiceLifetime.Transient:
-                            {
-                                if (_interface is not null)
-                                {
-                                    ServiceCollection.AddTransient(_interface, _type);
-                                    break;
-                                }
-                                ServiceCollection.AddTransient(_type);
-                                break;
-                            }
-                        case ServiceLifetime.Scoped:
-                            {
-                                if (_interface is not null)
-                                {
-                                    ServiceCollection.AddScoped(_interface, _type);
-                                    break;
-                                }
-                                ServiceCollection.AddScoped(_type);
-                                break;
-                            }
-                    }
                 }
             }
         }
