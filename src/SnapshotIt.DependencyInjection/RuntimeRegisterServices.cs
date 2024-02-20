@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SnapshotIt.DependencyInjection.Common;
 using System.Reflection;
+using System.Reflection.Metadata;
+
 
 namespace SnapshotIt.DependencyInjection
 {
@@ -22,13 +24,13 @@ namespace SnapshotIt.DependencyInjection
             switch(lifetime)
             {
                 case ServiceLifetime.Transient:
-                    ServiceCollection.AddTransient(service, _interface);
+                    ServiceCollection.AddTransient(_interface,service);
                     break;
                 case ServiceLifetime.Scoped:
-                    ServiceCollection.AddScoped(service, _interface);
+                    ServiceCollection.AddScoped(_interface,service);
                     break;
                 default:
-                    ServiceCollection.AddSingleton(service, _interface);
+                    ServiceCollection.AddSingleton(_interface, service);
                     break;
             }
         }
@@ -53,7 +55,10 @@ namespace SnapshotIt.DependencyInjection
         {
             var attributes = ExecutingAssembly.GetCustomAttributes<RuntimeDependencyInjectionOptionAttribute>();
 
-            var types = ExecutingAssembly.GetTypes();
+            // Note: Exported types, e.g. matches ( .... )
+            var types = ExecutingAssembly.GetExportedTypes()
+                .Where(o => o.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>() is not null)
+                .ToList();
 
             var list = new List<ComponentProtectedByAttributeResponse>();
 
@@ -61,17 +66,8 @@ namespace SnapshotIt.DependencyInjection
             {
                 foreach(var type in types)
                 {
-                    var customAttribute = type.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>();
-                    if (customAttribute != null)
-                    {
-                        list.Add(
-                            new ComponentProtectedByAttributeResponse()
-                            {
-                                ServiceLifetime = customAttribute.Lifetime,
-                                Type = type,
-                            });
-                        continue;
-                    }
+                    var attribute = type.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>();
+                    list.Add(new ComponentProtectedByAttributeResponse(){ ServiceLifetime = attribute!.Lifetime,Type = type});
                 }
             }
 
@@ -79,9 +75,9 @@ namespace SnapshotIt.DependencyInjection
             {
                 foreach(var item in list)
                 {
-                    var _interface = item.Type.GetType()
+                    var _interface = item.Type
                         .GetInterfaces()
-                        .Where(o => item.Type.Name == o.Name[1..]).FirstOrDefault();
+                        .Where(o =>  o.Name[1..] == item.Type.Name).FirstOrDefault();
 
 
                     if (_interface != null)
