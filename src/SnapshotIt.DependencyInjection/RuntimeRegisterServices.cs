@@ -1,8 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using SnapshotIt.DependencyInjection.Common;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 
 
 namespace SnapshotIt.DependencyInjection
@@ -19,6 +19,7 @@ namespace SnapshotIt.DependencyInjection
             this.ExecutingAssembly = assembly;
             this.ServiceCollection = services;
         }
+        
 
         private void RegisterServiceToDependencyInjectionContainer(ServiceLifetime lifetime,Type service,Type _interface)
         {
@@ -51,49 +52,40 @@ namespace SnapshotIt.DependencyInjection
                     break;
             }
         }
-        
-       [MethodImpl(MethodImplOptions.AggressiveOptimization)]
-       public void ConfigureAllServices()
-       {
-          var attributes = ExecutingAssembly.GetCustomAttributes<RuntimeDependencyInjectionOptionAttribute>();
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
+        public void ConfigureAllServices()
+        {
+            var attributes = ExecutingAssembly.GetCustomAttributes<RuntimeDependencyInjectionOptionAttribute>();
 
-          // Note: Exported types, e.g. matches ( .... )
-          var types = ExecutingAssembly.GetExportedTypes()
-              .Where(o => o.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>() is not null)
-              .ToList();
+            // Note: Exported types, e.g. matches ( .... )
+            var types = ExecutingAssembly.GetExportedTypes()
+                .Where(o => o.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>() is not null)
+                .ToList();
 
-          var list = new List<ComponentProtectedByAttributeResponse>();
+            var list = new List<ComponentProtectedByAttributeResponse>();
 
-          if (types.Any())
-          {
-              foreach(var type in types)
-              {
-                  var attribute = type.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>();
-                  list.Add(new ComponentProtectedByAttributeResponse(){ ServiceLifetime = attribute!.Lifetime,Type = type});
-              }
-          }
+            if (types.Any())
+            {
+                foreach (var type in types)
+                {
+                    var attribute = type.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>();
 
-          if (list.Any())
-          {
-              foreach(var item in list)
-              {
-                  var _interface = item.Type
-                      .GetInterfaces()
-                      .Where(o =>  o.Name[1..] == item.Type.Name).FirstOrDefault();
+                    var _interface = type
+                            .GetInterfaces()
+                            .Where(o => o.Name[1..] == type.Name).FirstOrDefault();
 
+                    if (_interface != null)
+                    {
+                        RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type, _interface);
+                        continue;
+                    }
 
-                  if (_interface != null)
-                  {
-                      RegisterServiceToDependencyInjectionContainer(item.ServiceLifetime, item.Type,_interface);
-                      continue;
-                  }
-
-                  RegisterServiceToDependencyInjectionContainer(item.ServiceLifetime, item.Type);
-
-              }
-          }
-      
+                    RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type);
+                }
+            }
+            
         }
+      
     /// <summary>
     /// Registers services impl. `IScoped` to dependency injection container.
     /// </summary>
