@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using SnapshotIt.DependencyInjection.Common;
 using System.Reflection;
-
+using System.Runtime.CompilerServices;
 using System.Reflection.Metadata;
 
 
@@ -51,7 +51,8 @@ namespace SnapshotIt.DependencyInjection
                     break;
             }
         }
-
+        
+       [MethodImpl(MethodImplOptions.AggressiveOptimization)]
        public void ConfigureAllServices()
        {
           var attributes = ExecutingAssembly.GetCustomAttributes<RuntimeDependencyInjectionOptionAttribute>();
