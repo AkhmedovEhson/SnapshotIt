@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using SnapshotIt.DependencyInjection.Common;
 using System.Reflection;
 using System.Reflection.Metadata;
@@ -19,6 +19,7 @@ namespace SnapshotIt.DependencyInjection
             this.ExecutingAssembly = assembly;
             this.ServiceCollection = services;
         }
+        
 
         private void RegisterServiceToDependencyInjectionContainer(ServiceLifetime lifetime,Type service,Type _interface)
         {
@@ -51,7 +52,7 @@ namespace SnapshotIt.DependencyInjection
                     break;
             }
         }
-
+        [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public void ConfigureAllServices()
         {
             var attributes = ExecutingAssembly.GetCustomAttributes<RuntimeDependencyInjectionOptionAttribute>();
