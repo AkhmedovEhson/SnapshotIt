@@ -2,6 +2,7 @@
 using SnapshotIt.DependencyInjection.Common;
 using System.Reflection;
 using System.Reflection.Metadata;
+using System.Runtime.CompilerServices;
 
 
 namespace SnapshotIt.DependencyInjection
@@ -64,33 +65,26 @@ namespace SnapshotIt.DependencyInjection
 
             if (types.Any())
             {
-                foreach(var type in types)
+                foreach (var type in types)
                 {
                     var attribute = type.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>();
-                    list.Add(new ComponentProtectedByAttributeResponse(){ ServiceLifetime = attribute!.Lifetime,Type = type});
-                }
-            }
 
-            if (list.Any())
-            {
-                foreach(var item in list)
-                {
-                    var _interface = item.Type
-                        .GetInterfaces()
-                        .Where(o =>  o.Name[1..] == item.Type.Name).FirstOrDefault();
-
+                    var _interface = type
+                            .GetInterfaces()
+                            .Where(o => o.Name[1..] == type.Name).FirstOrDefault();
 
                     if (_interface != null)
                     {
-                        RegisterServiceToDependencyInjectionContainer(item.ServiceLifetime, item.Type,_interface);
+                        RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type, _interface);
                         continue;
                     }
 
-                    RegisterServiceToDependencyInjectionContainer(item.ServiceLifetime, item.Type);
-                    
+                    RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type);
                 }
             }
+            
         }
+      
     /// <summary>
     /// Registers services impl. `IScoped` to dependency injection container.
     /// </summary>
