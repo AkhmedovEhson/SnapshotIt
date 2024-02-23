@@ -58,11 +58,9 @@ namespace SnapshotIt.DependencyInjection
             var attributes = ExecutingAssembly.GetCustomAttributes<RuntimeDependencyInjectionOptionAttribute>();
 
             // Note: Exported types, e.g. matches ( .... )
-            var types = ExecutingAssembly.GetExportedTypes()
+            IReadOnlyCollection<Type> types = ExecutingAssembly.GetExportedTypes()
                 .Where(o => o.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>() is not null)
                 .ToList();
-
-            var list = new List<ComponentProtectedByAttributeResponse>();
 
             if (types.Any())
             {
