@@ -1,4 +1,3 @@
-﻿
 using Microsoft.Extensions.DependencyInjection;
 using SnapshotIt.DependencyInjection.Common;
 using System;
@@ -33,3 +32,4 @@ namespace SnapshotIt.DependencyInjection.UnitTests.TestObjects
     [RuntimeDependencyInjectionOption(Lifetime = ServiceLifetime.Transient)]
     public class TestObjectWithoutServiceTypeTransient { }
 }
+
