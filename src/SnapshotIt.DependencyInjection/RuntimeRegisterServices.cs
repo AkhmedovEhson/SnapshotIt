@@ -62,6 +62,8 @@ namespace SnapshotIt.DependencyInjection
                 .Where(o => o.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>() is not null)
                 .ToList();
 
+            var list = new List<ComponentProtectedByAttributeResponse>();
+
             if (types.Any())
             {
                 foreach (var type in types)
@@ -160,3 +162,4 @@ namespace SnapshotIt.DependencyInjection
 
     }
 }
+
