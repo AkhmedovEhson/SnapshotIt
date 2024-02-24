@@ -26,7 +26,7 @@ namespace SnapshotIt.DependencyInjection.UnitTests
         [Test]
         public void GetService_SuccessByGenericType()
         {
-            var service = Connector.GetService<ProductTests>() ?? throw new NullReferenceException();
+            var service = Connector.GetService<ProductTests>();
             service.Should().BeOfType<ProductTests>();
             service.Id.Should().Be(1);
             service.Name.Should().Be("Product");
@@ -35,8 +35,8 @@ namespace SnapshotIt.DependencyInjection.UnitTests
         [Test]
         public void GetService_SuccessByTypeFromArgument()
         {
-            var service = Connector.GetService(typeof(ProductTests)) ?? throw new NullReferenceException();
-            var product = (ProductTests?)service ?? throw new NullReferenceException();
+            var service = Connector.GetService(typeof(ProductTests));
+            var product = (ProductTests)service;
             product.Id.Should().Be(1);
             product.Name.Should().Be("Product");
         }
@@ -57,12 +57,12 @@ namespace SnapshotIt.DependencyInjection.UnitTests
         [Test]
         public void GetServiceAsTransient_Success()
         {
-            var service_transient = Connector.GetService<ColourTests>() ?? throw new NullReferenceException();
+            var service_transient = Connector.GetService<ColourTests>();
 
             service_transient.Id = 1;
             service_transient.Name = "colour";
 
-            var service_transient_secondAttempt = Connector.GetService<ColourTests>() ?? throw new NullReferenceException();
+            var service_transient_secondAttempt = Connector.GetService<ColourTests>();
 
             service_transient_secondAttempt.Id.Should().NotBe(1);
             service_transient_secondAttempt.Name.Should().NotBe("colour");
@@ -72,12 +72,12 @@ namespace SnapshotIt.DependencyInjection.UnitTests
         [Test]
         public void GetServiceAsScoped_Success()
         {
-            var service_scoped = Connector.GetService<ColourTestsAsScoped>() ?? throw new NullReferenceException();
+            var service_scoped = Connector.GetService<ColourTestsAsScoped>();
 
             service_scoped.Id = 1;
             service_scoped.Name = "colour";
 
-            var service_scoped_secondAttempt = Connector.GetService<ColourTestsAsScoped>() ?? throw new NullReferenceException();
+            var service_scoped_secondAttempt = Connector.GetService<ColourTestsAsScoped>();
 
             service_scoped_secondAttempt.Id.Should().Be(1);
             service_scoped_secondAttempt.Name.Should().Be("colour");
@@ -86,12 +86,12 @@ namespace SnapshotIt.DependencyInjection.UnitTests
         [Test]
         public void GetServiceAsSingleton_Success()
         {
-            var service_singleton = Connector.GetService<ProductTests>() ?? throw new NullReferenceException();
+            var service_singleton = Connector.GetService<ProductTests>();
 
             service_singleton.Id = 1;
             service_singleton.Name = "colour";
 
-            var service_singleton_secondAttempt = Connector.GetService<ProductTests>() ?? throw new NullReferenceException();
+            var service_singleton_secondAttempt = Connector.GetService<ProductTests>();
 
             service_singleton_secondAttempt.Id.Should().Be(1);
             service_singleton_secondAttempt.Name.Should().Be("colour");
