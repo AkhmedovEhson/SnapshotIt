@@ -100,17 +100,28 @@ namespace SnapshotIt.DependencyInjection.UnitTests
         [Test]
         public void CreateScope_Success()
         {
-            var scope = Connector.CreateScope();
+            using var scope = Connector.CreateScope();
+
             scope.Should().NotBeNull();
             scope.ServiceProvider.Should().NotBeNull();
+
+            scope.ServiceProvider.GetService<ProductTests>().Should().NotBeNull();
+            scope.ServiceProvider.GetService<ColourTests>().Should().NotBeNull();
+            scope.ServiceProvider.GetService<ColourTestsAsScoped>().Should().NotBeNull();   
         }
 
         [Test]
         public void CreateScopeAsync_Success()
         {
-            var scope = Connector.CreateScopeAsync();
+            using var scope = Connector.CreateScopeAsync();
+
             scope.Should().NotBeNull(); 
             scope.ServiceProvider.Should().NotBeNull();
+
+
+            scope.ServiceProvider.GetService<ProductTests>().Should().NotBeNull();
+            scope.ServiceProvider.GetService<ColourTests>().Should().NotBeNull();
+            scope.ServiceProvider.GetService<ColourTestsAsScoped>().Should().NotBeNull();
         }
 
     }
