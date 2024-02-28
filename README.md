@@ -77,17 +77,13 @@ public class UserController : BaseController
 ✨🎨 Registration of services to dependency injection container.
 ```
 using SnapshotIt.DependencyInjection;
-// NOTE: `SnapshotIt` looks for it's interface by [NAME] e.g. there is Product, it's interface must be `IProduct` !!!
-public class ProductRepository : IProductRepository,IScoped{} // Interface `IScoped` pushes it as Scoped lifetime to dep. injection container. 
-public class ColorRepository : IColorRepository, ITransient{} // Interface `ITransient` pushes it as Transient lifetime to dep. injection container. 
+[RuntimeDependencyInjectionOption(Lifetime = ServiceLifetime.Scoped)]
+public class ProductRepository : IProductRepository{}
+
+[RuntimeDependencyInjectionOption(Lifetime = ServiceLifetime.Transient)]
+public class ColorRepository : IColorRepository{}
 
 var RuntimeServicesRegisterExecutor = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), services);
-RuntimeServicesRegisterExecutor.ConfigureScopedServices(); // looks for all classes impl. IScoped
-RuntimeServicesRegisterExecutor.ConfigureTransientServices(); // looks for all classes impl. ITransient
-
-// OR
-var RuntimeServicesRegisterExecutor = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), services);
-// By arguments of generic type runtimeobject can recognize to push it as Singleton or Scoped or Transient
-RuntimeServicesRegisterExecutor.ConfigureAllServices(); // looks for all classes impl. IRuntimeDependencyInjectionObject<T> where T IScoped, ITransient or ISingleton.
+RuntimeServicesRegisterExecutor.ConfigureAllServices(); 
 ```
 
