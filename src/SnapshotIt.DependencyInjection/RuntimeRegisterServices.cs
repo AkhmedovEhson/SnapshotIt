@@ -55,9 +55,6 @@ namespace SnapshotIt.DependencyInjection
         [MethodImpl(MethodImplOptions.AggressiveOptimization)]
         public void ConfigureAllServices()
         {
-            var attributes = ExecutingAssembly.GetCustomAttributes<RuntimeDependencyInjectionOptionAttribute>();
-
-            // Note: Exported types, e.g. matches ( .... )
             IReadOnlyCollection<Type> types = ExecutingAssembly.GetExportedTypes()
                 .Where(o => o.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>() is not null)
                 .ToList();
