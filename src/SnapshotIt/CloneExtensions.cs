@@ -1,6 +1,7 @@
 ﻿using SnapshotIt.Domain.Common.Reflection;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -21,7 +22,7 @@ namespace SnapshotIt
         /// <exception cref="ArgumentNullException"/>
         public static T Copy<T>(
             this ISnapshot _,
-            T? input) 
+            [NotNull]T? input) 
         {
             if (input is null)
             {
