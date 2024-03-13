@@ -26,7 +26,7 @@ namespace SnapshotIt.Domain.Utils
         /// <exception cref="IndexOutOfRangeException"></exception>
         public static T Get(int ind)
         {
-            if (ind < 0 || ind >= collection.Length)
+            if (ind < 0 || ind >= (collection?.Length ?? size))
             {
                 throw new IndexOutOfRangeException($"Index is out of range, input ( {typeof(T).FullName} )");
             }
