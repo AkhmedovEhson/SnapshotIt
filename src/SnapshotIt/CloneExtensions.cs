@@ -20,7 +20,7 @@ namespace SnapshotIt
         /// <param name="input"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentNullException"/>
-        public static T Copy<T>(
+        public static T Copy<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T>(
             this ISnapshot _,
             [NotNull]T? input) 
         {
