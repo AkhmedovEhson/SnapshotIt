@@ -42,7 +42,7 @@ namespace SnapshotIt.DependencyInjection
         {
             if (_serviceProvider is null)
             {
-                throw new ArgumentNullException($"Provided `$service-provider` is not found");
+                throw new ArgumentNullException("$service-provider",$"Provided `$service-provider` is not found");
             }
 
             return _serviceProvider.GetService<T>() ?? throw new ArgumentNullException("Service is not found in dep. injection container");
@@ -58,7 +58,7 @@ namespace SnapshotIt.DependencyInjection
         {
             if (_serviceProvider is null)
             {
-                throw new ArgumentNullException($"Provided `$service-provider` is not found");
+                throw new ArgumentNullException("$service-provider",$"Provided `$service-provider` is not found");
             }
 
             return _serviceProvider.GetService(serviceType) ?? throw new ArgumentNullException("Service is not found in dep. injection container"); ;
