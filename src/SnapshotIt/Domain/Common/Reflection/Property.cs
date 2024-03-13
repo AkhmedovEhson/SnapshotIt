@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace SnapshotIt.Domain.Common.Reflection
 {
@@ -10,7 +11,9 @@ namespace SnapshotIt.Domain.Common.Reflection
         /// Fills properties of component dynamically.
         /// <br/>Argument by reference <paramref name="arg2"/>, so all changes effact to original variable(arg2)
         /// </summary>
-        public static void SetProperties<T,T2>(T arg,ref T2 arg2)
+        public static void SetProperties<
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T,
+            [DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T2>(T arg,ref T2 arg2)
         {
             var properties = arg.GetType().GetProperties();
             var p = arg2.GetType();
