@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Diagnostics.CodeAnalysis;
 namespace SnapshotIt.Domain.Common.Types
 {
     /// <summary>
@@ -14,7 +14,7 @@ namespace SnapshotIt.Domain.Common.Types
     {
         public T Value { get; set; }
 
-        public object Property<T1>(string name)
+        public readonly object Property<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T1>(string name)
         {
             Type _ = typeof(T);
             return _.GetProperty(name)?.GetValue(this.Value);
