@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 namespace SnapshotIt.Domain.Common.Types
 {
     /// <summary>
@@ -14,10 +15,13 @@ namespace SnapshotIt.Domain.Common.Types
     {
         public T Value { get; set; }
 
-        public readonly object Property<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T1>(string name)
+        public readonly object Property<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T1>(string name)
         {
             Type _ = typeof(T);
-            return _.GetProperty(name)?.GetValue(this.Value);
+
+            object? property = _.GetProperty(name)?.GetValue(this.Value) ?? throw new ArgumentNullException(_.Name,$"Property ${name} is not found !");
+
+            return property;
         }
     }
 }
