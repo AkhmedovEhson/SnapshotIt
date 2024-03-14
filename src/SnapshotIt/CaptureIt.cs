@@ -14,7 +14,7 @@ namespace SnapshotIt.Domain.Utils
     /// <typeparam name="T"></typeparam>
     public static class CaptureIt<T>
     {
-        private static T[] collection = null;
+        private static T[]? collection = null;
         private static int index = 0;
         private static int size = 0;
 
@@ -32,7 +32,7 @@ namespace SnapshotIt.Domain.Utils
                 throw new IndexOutOfRangeException($"Index is out of range, input ( {typeof(T).FullName} )");
             }
  
-            return collection[ind];
+            return collection![ind];
         }
         /// <summary>
         /// Gets captured object from captures using expressions, else throws <seealso cref="NullReferenceException"/>
@@ -42,7 +42,7 @@ namespace SnapshotIt.Domain.Utils
         /// <exception cref="NullReferenceException"></exception>
         public static T Get(Func<T,bool> expression)
         {
-            var query = collection.Where(expression).FirstOrDefault();
+            var query = collection!.Where(expression).FirstOrDefault();
 
             if (query is null)
             {
@@ -79,8 +79,8 @@ namespace SnapshotIt.Domain.Utils
             T instance = type.IsClass
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
-
-            collection[index == collection.Length - 1 ? index : index++] = instance;
+       
+            collection![index == collection.Length - 1 ? index : index++] = instance;
         }
         /// <summary>
         /// Resets collection, makes `collection` for pointing to null
@@ -112,7 +112,7 @@ namespace SnapshotIt.Domain.Utils
         /// <returns></returns>
         public static IEnumerable<T> GetAsEnumerable()
         {
-            return collection.AsEnumerable();
+            return collection!.AsEnumerable();
         }
         
 
