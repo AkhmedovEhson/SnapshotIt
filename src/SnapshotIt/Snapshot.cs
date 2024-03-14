@@ -14,7 +14,7 @@ namespace SnapshotIt
     /// </summary>
     public class Snapshot : ISnapshot
     {
-        public static ISnapshot Out { get; set; }
-        public static IAsyncLines AsyncOut { get; set; }
+        public static ISnapshot Out { get; set; } = null!;
+        public static IAsyncLines AsyncOut { get; set; } = null!;
     }
 }
