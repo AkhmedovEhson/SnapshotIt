@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
@@ -41,7 +42,6 @@ namespace SnapshotIt.Domain.Utils
         /// <exception cref="NullReferenceException"></exception>
         public static T Get(Func<T,bool> expression)
         {
-
             var query = collection.Where(expression).FirstOrDefault();
 
             if (query is null)
@@ -72,7 +72,7 @@ namespace SnapshotIt.Domain.Utils
         /// Copies value and pastes in collection
         /// </summary>
         /// <param name="value"></param>
-        public static void Post(T value)
+        public static void Post([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T value)
         {
             Type type = typeof(T);
 
