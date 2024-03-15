@@ -1,9 +1,5 @@
 ﻿using SnapshotIt.Domain.Utils;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SnapshotIt
 {
@@ -21,7 +17,7 @@ namespace SnapshotIt
         /// Copies value and pastes in collection
         /// </summary>
         /// <param name="value"></param>
-        public static void Post<T>(
+        public static void Post<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T>(
             this ISnapshot _,
             T input)
         {
