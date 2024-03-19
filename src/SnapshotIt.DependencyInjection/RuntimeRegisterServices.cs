@@ -20,7 +20,12 @@ namespace SnapshotIt.DependencyInjection
             this.ServiceCollection = services;
         }
         
-
+        /// <summary>
+        /// Registers service to DI container, with instance-type
+        /// </summary>
+        /// <param name="lifetime"></param>
+        /// <param name="service"></param>
+        /// <param name="_interface"></param>
         private void RegisterServiceToDependencyInjectionContainer(ServiceLifetime lifetime,Type service,Type _interface)
         {
             switch(lifetime)
@@ -36,7 +41,11 @@ namespace SnapshotIt.DependencyInjection
                     break;
             }
         }
-
+        /// <summary>
+        /// Registers service to DI container
+        /// </summary>
+        /// <param name="lifetime"></param>
+        /// <param name="service"></param>
         private void RegisterServiceToDependencyInjectionContainer(ServiceLifetime lifetime,Type service)
         {
             switch (lifetime)
