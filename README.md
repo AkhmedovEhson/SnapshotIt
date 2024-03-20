@@ -44,7 +44,9 @@ product.Name = "Gucci";
 const int index = 0;
 // Gets the first snapshot from capture collection
 // By default index = 0, using index easily can find the correct captured instance
-var Capturedproduct = Snapshot.Out.Get<Product>(index); or use expressions Snapshot.Out.Get(o => o.Id == n);
+var Capturedproduct = Snapshot.Out.Get<Product>(index);
+// or use expressions
+ Snapshot.Out.Get(o => o.Id == n);
 
 
 // Logs: The product's name is Gucci
