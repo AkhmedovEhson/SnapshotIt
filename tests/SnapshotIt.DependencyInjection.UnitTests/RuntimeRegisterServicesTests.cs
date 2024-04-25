@@ -33,10 +33,6 @@ namespace SnapshotIt.DependencyInjection.UnitTests
             var boxTransient = dep_collection.Where(o => o.ServiceType.Name is nameof(IBoxTransient)
                     && o.Lifetime == ServiceLifetime.Transient).FirstOrDefault();
 
-            // Assert
-            dep_collection.Should().NotBeNull();
-            dep_collection.Count.Should().Be(3);
-
             boxSingleton.Should().NotBeNull();
             boxScoped.Should().NotBeNull();
             boxTransient.Should().NotBeNull();

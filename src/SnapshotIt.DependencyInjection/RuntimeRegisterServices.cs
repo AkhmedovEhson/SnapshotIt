@@ -1,7 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using SnapshotIt.DependencyInjection.Common;
 using System.Reflection;
-using System.Reflection.Metadata;
 using System.Runtime.CompilerServices;
 
 
@@ -89,7 +88,7 @@ namespace SnapshotIt.DependencyInjection
             }
             
         }
-      
+
     /// <summary>
     /// Registers services impl. `IScoped` to dependency injection container.
     /// </summary>

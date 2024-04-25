@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using System.Reflection;
+
 
 namespace SnapshotIt.Domain.Common.Reflection
 {

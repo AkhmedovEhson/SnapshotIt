@@ -1,11 +1,5 @@
 ﻿using SnapshotIt.Domain.Common.Reflection;
-using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading.Tasks.Dataflow;
 
 namespace SnapshotIt
 {
@@ -15,7 +9,7 @@ namespace SnapshotIt
     public static class CloneExtensions
     {
         /// <summary>
-        /// Copies 1'st (ReferenceType) component to another, throws <seealso cref="ArgumentNullException"/> if `input` is null
+        /// Copies 1'st class to another, throws <seealso cref="ArgumentNullException"/> if `input` is null
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>

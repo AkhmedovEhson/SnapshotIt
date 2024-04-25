@@ -8,7 +8,6 @@
     <Title>SnapshotIt2</Title>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	<Version>1.1.1</Version>
-	  <TrimMode>full</TrimMode>
   </PropertyGroup>
 
   <ItemGroup>
