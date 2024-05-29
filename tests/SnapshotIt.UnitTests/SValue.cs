@@ -31,11 +31,9 @@ namespace SnapshotIt.UnitTests
             // Arrange
             var snap = new SValue<o> { Value = null };
             
-            // Act
-            var property = snap.Property<int>("unknown");
 
-            // Assert
-            property.Should().Be(null);
+            // Act && Assert
+            Assert.Throws<ArgumentNullException>(() => snap.Property<int>("unknown"));
         }
     }
 }
