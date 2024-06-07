@@ -10,7 +10,7 @@ namespace SnapshotIt.Domain.Common.Types
     /// <typeparam name="T"></typeparam>
     public struct SValue<T>
     {
-        public T Value { get; set; }
+        public T Value { get; init; }
 
         public readonly object Property<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T1>(string name)
         {
