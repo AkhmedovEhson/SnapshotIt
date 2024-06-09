@@ -23,6 +23,13 @@ namespace SnapshotIt
         {
             CaptureIt<T>.Post(input);
         }
+
+        public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T>(
+            this ISnapshot _,
+            T input)
+        {
+            return CaptureIt<T>.PostAsync(input);
+        }
         /// <summary>
         /// Gets captured object from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
         /// </summary>
