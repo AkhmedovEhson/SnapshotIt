@@ -24,6 +24,12 @@ namespace SnapshotIt
             CaptureIt<T>.Post(input);
         }
 
+        /// <summary>
+        /// `PostAsync` - posts object to collection of captures concurrently.
+        /// <br/>`Task.WhenAll(Any)` - paste 10 `PostAsync` to Task.WhenAll(Any), it completes concurrently
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T>(
             this ISnapshot _,
             T input)
