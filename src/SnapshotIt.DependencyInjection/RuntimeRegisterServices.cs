@@ -77,7 +77,7 @@ namespace SnapshotIt.DependencyInjection
                             .GetInterfaces()
                             .Where(o => o.Name[1..] == type.Name).FirstOrDefault();
 
-                    if (_interface != null)
+                    if (_interface is not null)
                     {
                         RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type, _interface);
                         continue;
