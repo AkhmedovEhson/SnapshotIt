@@ -12,12 +12,11 @@ namespace SnapshotIt.Domain.Utils
     /// <seealso cref="CaptureIt{T}" /> provides bunch of APIs to collect data
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public static class CaptureIt<T>
+    public static partial class CaptureIt<T>
     {
-        private static T[]? collection = null;
+        private static T[]? collection;
         private static int index = 0;
         private static int size = 0;
-
 
         /// <summary>
         /// Gets captured object from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
