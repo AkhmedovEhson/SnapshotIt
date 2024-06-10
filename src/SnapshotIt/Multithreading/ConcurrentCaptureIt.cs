@@ -68,7 +68,8 @@ public static partial class CaptureIt<T>
 
                 if (index + pos >= _size)
                 {
-                    throw new IndexOutOfRangeException("Provided position is out of range of collection of captures");
+                    var array = new T[_size * 2];
+                    array = collection;collection = array;
                 }
 
                 collection![index + pos] = instance;
