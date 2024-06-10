@@ -37,6 +37,21 @@ namespace SnapshotIt
             return CaptureIt<T>.PostAsync(input);
         }
         /// <summary>
+        /// `PostAsync` - posts object to collection of captures concurrently, including the position in collection of captures.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_"></param>
+        /// <param name="input"></param>
+        /// <param name="pos"></param>
+        /// <returns></returns>
+        public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
+            this ISnapshot _,
+            T input,
+            int pos = 1)
+        {
+            return CaptureIt<T>.PostAsync(input, pos);
+        }
+        /// <summary>
         /// Gets captured object from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
         /// </summary>
         /// <param name="ind"></param>
