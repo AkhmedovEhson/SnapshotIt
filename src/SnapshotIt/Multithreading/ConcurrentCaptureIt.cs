@@ -45,7 +45,7 @@ public static partial class CaptureIt<T>
     /// <param name="pos"></param>
     /// <returns></returns>
     public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T value,
-                                                                                 int pos = 1)
+                                                                                 uint pos = 1)
     {
         var task = Task.Run(() =>
         {

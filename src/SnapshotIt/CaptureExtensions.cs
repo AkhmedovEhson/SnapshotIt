@@ -47,7 +47,7 @@ namespace SnapshotIt
         public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
             this ISnapshot _,
             T input,
-            int pos = 1)
+            uint pos = 1)
         {
             return CaptureIt<T>.PostAsync(input, pos);
         }
