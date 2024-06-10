@@ -13,26 +13,26 @@ public static partial class CaptureIt<T>
 
     /// <summary>
     /// `PostAsync` - posts object to collection of captures concurrently.
-    /// <br/>`Task.WhenAll(Any)` - paste 10 `PostAsync` to Task.WhenAll(Any), it completes concurrently
+    /// <br/> `pos` - the position of collection, helps to determine the position in collection of captures
     /// </summary>
     /// <param name="value"></param>
+    /// <param name="pos"></param>
     /// <returns></returns>
-    public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T value)
+    public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T value,
+                                                                                 int pos = 1)
     {
         var task = Task.Run(() =>
         {
-
             Type type = typeof(T);
 
             T instance = type.IsClass
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
 
-
             // Note: Locking threading when touching collection ?!
             lock (locker)
             {
-                collection![index == collection.Length - 1 ? index : index++] = instance;
+                collection![index == collection.Length - 1 ? index : index + pos] = instance;
             }
 
         });
