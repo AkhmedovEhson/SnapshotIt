@@ -21,18 +21,10 @@ public static partial class CaptureIt<T>
     {
         var task = Task.Run(() =>
         {
-
-            Type type = typeof(T);
-
-            T instance = type.IsClass
-                ? Snapshot.Out.Copy<T>(value)
-                : value;
-
             lock (locker)
             {
-                collection![index == collection.Length - 1 ? index : index++] = instance;
+                Post(value);
             }
-
         });
 
         return task;
