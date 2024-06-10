@@ -28,6 +28,8 @@ public static partial class CaptureIt<T>
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
 
+
+            // Note: Locking threading when touching collection ?!
             lock (locker)
             {
                 collection![index == collection.Length - 1 ? index : index++] = instance;
