@@ -58,7 +58,20 @@ public static partial class CaptureIt<T>
             // Note: Locking threading when touching collection ?!
             lock (locker)
             {
-                collection![index == collection.Length - 1 ? index : index + pos] = instance;
+                int _size = collection?.Length ?? size;
+
+                if (index == (_size - 1))
+                {
+                    collection![index] = instance;
+                    return;
+                }
+
+                if (index + pos >= _size)
+                {
+                    throw new IndexOutOfRangeException("Provided position is out of range of collection of captures");
+                }
+
+                collection![index + pos] = instance;
             }
 
         });
