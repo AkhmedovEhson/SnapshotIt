@@ -68,8 +68,9 @@ public static partial class CaptureIt<T>
 
                 if (index + pos >= _size)
                 {
-                    var array = new T[_size * 2];
-                    array = collection;collection = array;
+                    var array = new T[collection.Length * 2];
+                    Array.Copy(collection, array, collection.Length);
+                    collection = array;
                 }
 
                 collection![index + pos] = instance;

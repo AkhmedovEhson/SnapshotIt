@@ -78,8 +78,14 @@ namespace SnapshotIt.Domain.Utils
             T instance = type.IsClass
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
-       
-            collection![index == collection.Length - 1 ? index : index++] = instance;
+
+            if (index == collection.Length - 1)
+            {
+                var array = new T[collection.Length * 2];
+                Array.Copy(collection,array,collection.Length);
+                collection = array;
+            }
+            collection![index++] = instance;
         }
         /// <summary>
         /// Resets collection, makes `collection` for pointing to null
