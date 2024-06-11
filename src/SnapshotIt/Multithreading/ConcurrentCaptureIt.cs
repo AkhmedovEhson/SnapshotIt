@@ -28,7 +28,14 @@ public static partial class CaptureIt<T>
 
             lock (locker)
             {
-                collection![index == collection.Length - 1 ? index : index] = instance;
+                int _size = collection.Length;
+                if (index == (_size - 1))
+                {
+                    var array = new T[collection.Length * 2];
+                    Array.Copy(collection, array, collection.Length);
+                    collection = array;
+                }
+                collection[index++] = instance;
             }
 
         });
@@ -58,22 +65,16 @@ public static partial class CaptureIt<T>
             // Note: Locking threading when touching collection ?!
             lock (locker)
             {
-                int _size = collection?.Length ?? size;
+                int _size = collection.Length;
 
-                if (index == (_size - 1))
-                {
-                    collection![index] = instance;
-                    return;
-                }
-
-                if (index + pos >= _size)
+                if (index + pos >= _size || index == (_size - 1))
                 {
                     var array = new T[collection.Length * 2];
                     Array.Copy(collection, array, collection.Length);
                     collection = array;
                 }
 
-                collection![index + pos] = instance;
+                collection[index + pos] = instance;
             }
 
         });

@@ -14,9 +14,11 @@ namespace SnapshotIt.Domain.Utils
     /// <typeparam name="T"></typeparam>
     public static partial class CaptureIt<T>
     {
-        private static T[]? collection;
+        private static T[] collection = new T[Constants.SizeOfCaptures];
         private static int index = 0;
         private static int size = 0;
+
+
 
         /// <summary>
         /// Gets captured object from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
@@ -26,12 +28,12 @@ namespace SnapshotIt.Domain.Utils
         /// <exception cref="IndexOutOfRangeException"></exception>
         public static T Get(int ind)
         {
-            if (ind < 0 || ind >= (collection?.Length ?? size))
+            if (ind < 0 || ind >= (collection.Length))
             {
                 throw new IndexOutOfRangeException($"Index is out of range, input ( {typeof(T).FullName} )");
             }
  
-            return collection![ind];
+            return collection[ind];
         }
         /// <summary>
         /// Gets captured object from captures using expressions, else throws <seealso cref="NullReferenceException"/>
@@ -41,7 +43,7 @@ namespace SnapshotIt.Domain.Utils
         /// <exception cref="NullReferenceException"></exception>
         public static T Get(Func<T,bool> expression)
         {
-            var query = collection!.Where(expression).FirstOrDefault();
+            var query = collection.Where(expression).FirstOrDefault();
 
             if (query is null)
             {
@@ -85,7 +87,7 @@ namespace SnapshotIt.Domain.Utils
                 Array.Copy(collection,array,collection.Length);
                 collection = array;
             }
-            collection![index++] = instance;
+            collection[index++] = instance;
         }
         /// <summary>
         /// Resets collection, makes `collection` for pointing to null
@@ -117,7 +119,7 @@ namespace SnapshotIt.Domain.Utils
         /// <returns></returns>
         public static IEnumerable<T> GetAsEnumerable()
         {
-            return collection!.AsEnumerable();
+            return collection.AsEnumerable();
         }
         
 
