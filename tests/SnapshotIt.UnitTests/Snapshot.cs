@@ -4,26 +4,30 @@ using SnapshotIt.Domain;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Attributes;
 using SnapshotIt.Domain.Utils;
+using SnapshotIt.UnitTests.TestObjects;
 
 namespace SnapshotIt.UnitTests
 {
-    public class o
-    {
-        public int id { get; set; }   
-    }
-
-
     // todo: Fill some tests
-    public class Tests
+    public class SnapshotItTests
     {
         [Test]
-        public async Task Pick()
+        public async Task Snapshot_Success()
         {
-            Snapshot.Out.Create<int>(1);
-            Snapshot.Out.Post(1234);
-            var cache = Snapshot.Out.Get<int>(0);
-            cache.Should().Be(1234);
+            var @object = new SimpleObject() { Id = 1,Name = "test"};
+            const int _Itr = 1_000;
+
+            for(int i = 0; i < _Itr; i++)
+            {
+                @object.Id = i;
+                Snapshot.AsyncOut.PostToBuffers(@object);
+            }
+
+            IAsyncEnumerable<SimpleObject> enumerable =  Snapshot.AsyncOut.ReadFromBuffersLine<SimpleObject>();
+            var enumerator = enumerable.GetAsyncEnumerator();
+            enumerator.Should().NotBeNull();
           
+            
         }
 
 
