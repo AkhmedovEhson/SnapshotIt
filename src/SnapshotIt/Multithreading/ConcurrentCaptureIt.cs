@@ -22,10 +22,11 @@ public static partial class CaptureIt<T>
         {
             Type type = typeof(T);
 
+            // Initializes the type
             T instance = type.IsClass
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
-
+            // locks the thread.
             lock (locker)
             {
                 int _size = collection.Length;
@@ -58,15 +59,17 @@ public static partial class CaptureIt<T>
         {
             Type type = typeof(T);
 
+            // Initializes the type
             T instance = type.IsClass
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
 
-            // Note: Locking threading when touching collection ?!
+            // locks the thread.
             lock (locker)
             {
                 int _size = collection.Length;
 
+                // Checks if provided position exists in collection and checks if current pointer points to the end of collection
                 if (index + pos >= _size || index == (_size - 1))
                 {
                     var array = new T[collection.Length * 2];
