@@ -24,10 +24,14 @@ namespace SnapshotIt.UnitTests
             }
 
             IAsyncEnumerable<SimpleObject> enumerable =  Snapshot.AsyncOut.ReadFromBuffersLine<SimpleObject>();
-            var enumerator = enumerable.GetAsyncEnumerator();
-            enumerator.Should().NotBeNull();
-          
-            
+            enumerable.Should().NotBeNull();
+            enumerable.Should().NotBeOfType<IAsyncEnumerable<SimpleObject>>();
+        }
+
+        [Test]
+        public void Snapshot_Failure()
+        {
+             // todo ...
         }
 
 
