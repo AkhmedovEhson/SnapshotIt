@@ -17,6 +17,15 @@ namespace SnapshotIt.Domain.Utils
     public static class Snaps<T>
     {
         private static BufferBlock<T> _buffer = new();
+
+        static Snaps()
+        {
+            if (_buffer is null)
+            {
+                CreateBufferBlock();
+            }
+        }
+
         public static void Push(in T entity) => _buffer.Post<T>(entity);
         public static IAsyncEnumerable<T> ReadAllAsync() => _buffer.ReceiveAllAsync();
         public static void CloseBuffersBlock() => _buffer.Complete();
