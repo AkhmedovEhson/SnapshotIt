@@ -16,7 +16,7 @@ namespace SnapshotIt
         /// <exception cref="ArgumentNullException"/>
         public static T Copy<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T>(
             this ISnapshot _,
-            [NotNull]T? input) where T : class
+            [NotNull]T? input) 
         {
             if (input is null)
             {
