@@ -18,6 +18,7 @@ namespace SnapshotIt.Domain.Utils
     {
         private static BufferBlock<T> _buffer = new();
 
+        // Note: creates default buffer-block if it is not created :)
         static Snaps()
         {
             if (_buffer is null)
