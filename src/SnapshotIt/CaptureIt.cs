@@ -58,15 +58,9 @@ namespace SnapshotIt.Domain.Utils
         /// <param name="s"></param>
         public static void Create(int s = 1)
         {
-            if (collection is not null)
-            {
-                collection = new T[s];
-                size = s;
-                return;
-            }
-
             collection = new T[s];
             size = s;
+            index = 0;
         }
 
         /// <summary>
