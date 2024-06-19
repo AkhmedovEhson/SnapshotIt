@@ -23,7 +23,11 @@ namespace SnapshotIt
         {
             CaptureIt<T>.Post(input);
         }
-
+        /// <summary>
+        /// `Reset` - resets the collection of data with new collection !
+        /// </summary>
+        /// <param name="size"></param>
+       public static void Reset(int? size) => CaptureIt<int>.Reset(size);
         /// <summary>
         /// `PostAsync` - posts object to collection of captures concurrently.
         /// <br/>`Task.WhenAll(Any)` - paste 10 `PostAsync` to Task.WhenAll(Any), it completes concurrently
