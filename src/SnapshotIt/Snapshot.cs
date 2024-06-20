@@ -9,7 +9,7 @@ namespace SnapshotIt
     /// </summary>
     public class Snapshot : ISnapshot
     {
-        public static ISnapshot Out { get; set; } = null!;
-        public static IAsyncLines AsyncOut { get; set; } = null!;
+        public static ISnapshot Out { get; } = null!;
+        public static IAsyncLines AsyncOut { get; } = null!;
     }
 }
