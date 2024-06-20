@@ -14,7 +14,7 @@ namespace SnapshotIt.Domain.Utils
     /// <typeparam name="T"></typeparam>
     public static partial class CaptureIt<T>
     {
-        private static T[] collection = new T[Constants.SizeOfCaptures];
+        private static T[] collection = new T[6];
         private static int index = 0;
         private static int size = 0;
 
