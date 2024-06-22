@@ -9,7 +9,7 @@ namespace SnapshotIt.Domain.Utils;
 
 public static partial class CaptureIt<T>
 {
-    private static object locker = new object();
+    private static volatile object locker = new object();
 
     /// <summary>
     /// `PostAsync` - posts object to collection of captures concurrently.
