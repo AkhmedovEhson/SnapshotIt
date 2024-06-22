@@ -18,6 +18,7 @@ public static partial class CaptureIt<T>
     /// <returns></returns>
     public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T value)
     {
+        // WIP: Initialization of the new `Task` :)
         var task = Task.Run(() =>
         {
             Type type = typeof(T);
@@ -55,6 +56,7 @@ public static partial class CaptureIt<T>
     public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T value,
                                                                                  uint pos = 1)
     {
+        // WIP: Initialization of the new `Task` :)
         var task = Task.Run(() =>
         {
             Type type = typeof(T);
