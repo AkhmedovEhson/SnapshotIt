@@ -20,7 +20,7 @@ namespace SnapshotIt
         {
             if (input is null)
             {
-                throw new ArgumentNullException(nameof(input),"Input is null, null can not be copied");
+                throw new ArgumentNullException(nameof(input),"Input is null, it can not be copied");
             }
             var instance = Activator.CreateInstance<T>();
             PropertyReflection.SetProperties(input, ref instance);
