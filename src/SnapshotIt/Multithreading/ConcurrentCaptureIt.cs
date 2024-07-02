@@ -65,23 +65,17 @@ public static partial class CaptureIt<T>
             T instance = type.IsClass
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
+                
+            int _size = collection.Length;
 
-            // locks the thread.
-            lock (locker)
+            // Checks if provided position exists in collection and checks if current pointer points to the end of collection
+            if (index + pos >= _size || index == (_size - 1))
             {
-                int _size = collection.Length;
-
-                // Checks if provided position exists in collection and checks if current pointer points to the end of collection
-                if (index + pos >= _size || index == (_size - 1))
-                {
-                    var array = new T[collection.Length * 2];
-                    Array.Copy(collection, array, collection.Length);
-                    collection = array;
-                }
-
-                collection[index + pos] = instance;
+                var array = new T[collection.Length * 2];
+                Array.Copy(collection, array, collection.Length);
+                lock (locker) collection = array;     
             }
-
+            lock(locker) collection[index + pos] = instance;
         });
 
         return task;
