@@ -79,6 +79,8 @@ public class UserController : BaseController
 ✨🎨 Registration of services to dependency injection container.
 ```
 using SnapshotIt.DependencyInjection;
+
+// Interface should be named same as class but with prefix `I` [!]
 [RuntimeDependencyInjectionOption(Lifetime = ServiceLifetime.Scoped)]
 public class ProductRepository : IProductRepository{}
 
@@ -86,6 +88,7 @@ public class ProductRepository : IProductRepository{}
 public class ColorRepository : IColorRepository{}
 
 var RuntimeServicesRegisterExecutor = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), services);
+
 RuntimeServicesRegisterExecutor.ConfigureAllServices(); 
 ```
 
