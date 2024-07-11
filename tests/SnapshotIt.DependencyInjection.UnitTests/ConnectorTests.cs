@@ -7,7 +7,7 @@ namespace SnapshotIt.DependencyInjection.UnitTests
     public class ConnectorTests
     {
         [OneTimeSetUp]
-        public void RunBeforeAnyTests()
+        public void RunOnetimeBeforeRunningTests()
         {
             var serviceCollection = new ServiceCollection();
             serviceCollection.AddSingleton<ProductTests>();
