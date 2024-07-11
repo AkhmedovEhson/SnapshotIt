@@ -1,4 +1,5 @@
-﻿using SnapshotIt.Domain.Common.Reflection;
+﻿using SnapshotIt.Domain;
+using SnapshotIt.Domain.Common.Reflection;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SnapshotIt
@@ -22,9 +23,7 @@ namespace SnapshotIt
             {
                 throw new ArgumentNullException(nameof(input),"Input is null, it can not be copied");
             }
-            var instance = Activator.CreateInstance<T>();
-            PropertyReflection.SetProperties(input, ref instance);
-            return instance;
+            return ActivatorIt.CreateInstanceWithCopyingProperties<T>(input);
         }
 
 
