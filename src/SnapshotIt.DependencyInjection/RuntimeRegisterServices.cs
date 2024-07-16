@@ -77,13 +77,17 @@ namespace SnapshotIt.DependencyInjection
                             .GetInterfaces()
                             .Where(o => o.Name[1..] == type.Name).FirstOrDefault();
 
-                    if (_interface is not null)
+                    if (_interface is null)
                     {
-                        RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type, _interface);
-                        continue;
+                        Console.WriteLine("`RuntimeRegisterServices` finds interface of component passing first charecter of interface's name");
+                        Console.WriteLine("Note: Component with interface example: ProductService:IProductService, interface is exact as component with `I` at the beginning");
+                        RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type);
                     }
 
-                    RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type);
+
+                    RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type, _interface);
+
+
                 }
             }
             
