@@ -12,7 +12,7 @@ namespace SnapshotIt
         /// Creates new collection of captures with provided size, or recreates it 
         /// </summary>
         /// <param name="s"></param>
-        public static void Create<T>(this ISnapshot _, int size) => CaptureIt<T>.Create(size);
+        public static void Create<T>(this ISnapshot _, uint size) => CaptureIt<T>.Create(size);
         /// <summary>
         /// Copies value and pastes in collection
         /// </summary>
@@ -61,7 +61,7 @@ namespace SnapshotIt
         /// <param name="ind"></param>
         /// <returns></returns>
         /// <exception cref="IndexOutOfRangeException"></exception>
-        public static T Get<T>(this ISnapshot _, int ind = 0)
+        public static T Get<T>(this ISnapshot _, uint ind = 0)
         {
             return CaptureIt<T>.Get(ind);
         }

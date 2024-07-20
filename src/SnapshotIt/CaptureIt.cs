@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -15,8 +16,8 @@ namespace SnapshotIt.Domain.Utils
     public static partial class CaptureIt<T>
     {
         private static T[] collection = new T[6];
-        private static int index = 0;
-        private static int size = 0;
+        private static uint index = 0;
+        private static uint size = 0;
 
 
 
@@ -26,13 +27,13 @@ namespace SnapshotIt.Domain.Utils
         /// <param name="ind"></param>
         /// <returns></returns>
         /// <exception cref="IndexOutOfRangeException"></exception>
-        public static T Get(int ind)
+        public static T Get(uint ind)
         {
-            if (ind < 0 || ind >= collection.Length)
+            if (ind >= collection.Length)
             {
                 throw new IndexOutOfRangeException($"Index is out of range, input ( {typeof(T).FullName} )");
             }
- 
+
             return collection[ind];
         }
         /// <summary>
@@ -56,7 +57,7 @@ namespace SnapshotIt.Domain.Utils
         /// Creates new collection of captures with provided size
         /// </summary>
         /// <param name="s"></param>
-        public static void Create(int s = 1)
+        public static void Create(uint s = 1)
         {
             collection = new T[s];
             size = s;
