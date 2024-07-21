@@ -9,7 +9,6 @@ namespace SnapshotIt.Domain.Utils;
 
 public static partial class CaptureIt<T>
 {
-    private static volatile object locker = new object();
 
     /// <summary>
     /// `PostAsync` - posts object to collection of captures concurrently.
@@ -18,27 +17,33 @@ public static partial class CaptureIt<T>
     /// <returns></returns>
     public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T value)
     {
+
         // WIP: Initialization of the new `Task` :)
         var task = Task.Run(() =>
-        {
+        {       
+            var spinLock = new SpinLock();
+            bool _locked = false;
+
             Type type = typeof(T);
 
             // Initializes the type
             T instance = type.IsClass
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
+
             // locks the thread.
-            lock (locker)
+            spinLock.Enter(ref _locked);
+
+            int _size = collection.Length;
+            if (index == (_size - 1))
             {
-                int _size = collection.Length;
-                if (index == (_size - 1))
-                {
-                    var array = new T[collection.Length * 2];
-                    Array.Copy(collection, array, collection.Length);
-                    collection = array;
-                }
-                collection[index++] = instance;
+                var array = new T[collection.Length * 2];
+                Array.Copy(collection, array, collection.Length);
+                collection = array;
             }
+            collection[index++] = instance;
+
+            spinLock.Exit();
 
         });
 
@@ -59,6 +64,9 @@ public static partial class CaptureIt<T>
         // WIP: Initialization of the new `Task` :)
         var task = Task.Run(() =>
         {
+            var spinLock = new SpinLock();
+            bool _locked = false;
+
             Type type = typeof(T);
 
             // Initializes the type
@@ -66,19 +74,21 @@ public static partial class CaptureIt<T>
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
 
-            lock(locker)
+            // locks the thread.
+            spinLock.Enter(ref _locked);
+
+            int _size = collection.Length;
+
+            // Checks if provided position exists in collection and checks if current pointer points to the end of collection
+            if (index + pos >= _size || index == (_size - 1))
             {
-                int _size = collection.Length;
-                
-                // Checks if provided position exists in collection and checks if current pointer points to the end of collection
-                if (index + pos >= _size || index == (_size - 1))
-                {
-                    var array = new T[collection.Length * 2];
-                    Array.Copy(collection, array, collection.Length);
-                    collection = array;     
-                }
-                collection[index + pos] = instance;
+                var array = new T[collection.Length * 2];
+                Array.Copy(collection, array, collection.Length);
+                collection = array;
             }
+            collection[index + pos] = instance;
+
+            spinLock.Exit();
         });
 
         return task;
