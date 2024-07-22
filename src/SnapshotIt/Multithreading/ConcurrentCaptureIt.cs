@@ -31,7 +31,6 @@ public static partial class CaptureIt<T>
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
 
-            // locks the thread.
             spinLock.Enter(ref _locked);
 
             int _size = collection.Length;
@@ -74,7 +73,6 @@ public static partial class CaptureIt<T>
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
 
-            // locks the thread.
             spinLock.Enter(ref _locked);
 
             int _size = collection.Length;
