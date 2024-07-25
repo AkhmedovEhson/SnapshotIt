@@ -25,7 +25,7 @@ namespace SnapshotIt.Domain.Utils
         /// Gets captured object from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
         /// </summary>
         /// <param name="ind"></param>
-        /// <returns></returns>
+        /// <returns>Captured object typeof <seealso cref="{T}"/></returns>
         /// <exception cref="IndexOutOfRangeException"></exception>
         public static T Get(uint ind)
         {
@@ -40,7 +40,7 @@ namespace SnapshotIt.Domain.Utils
         /// Gets captured object from captures using expressions, else throws <seealso cref="NullReferenceException"/>
         /// </summary>
         /// <param name="expression"></param>
-        /// <returns></returns>
+        /// <returns>Captured object typeof <seealso cref="{T}"/></returns>
         /// <exception cref="NullReferenceException"></exception>
         public static T Get(Func<T,bool> expression)
         {
@@ -103,7 +103,7 @@ namespace SnapshotIt.Domain.Utils
         /// <summary>
         /// Responds collection of captures as <seealso cref="ReadOnlySpan{T}"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Captures in <seealso cref="ReadOnlySpan{T}"/></returns>
         public static ReadOnlySpan<T> GetAsReadonlySpan()
         {
             return new ReadOnlySpan<T>(collection);
@@ -111,12 +111,36 @@ namespace SnapshotIt.Domain.Utils
         /// <summary>
         /// Responds collection of captures as <seealso cref="IEnumerable{T}"/>
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Captures in <seealso cref="IEnumerable{T}"/> iterator</returns>
         public static IEnumerable<T> GetAsEnumerable()
         {
             return collection.AsEnumerable();
         }
-        
+        /// <summary>
+        /// Responds collection of captures as <seealso cref="List{T}"/>
+        /// </summary>
+        /// <returns><seealso cref="List{T}"/> of captures</returns>
+        public static List<T> GetAsList()
+        {
+            return collection.ToList();
+        }
+        /// <summary>
+        /// Responds collection of captures as <seealso cref="List{T}"/> with size settings
+        /// </summary>
+        /// <param name="size"></param>
+        /// <returns><seealso cref="List{T}"/> of captures</returns>
+        public static List<T> GetAsList(uint size)
+        {
+            var list = new List<T>();
+            list.Capacity = (int)size;
+
+            foreach(var item in GetAsEnumerable())
+            {
+                list.Add(item);
+            }
+
+            return list;
+        }
 
     }
 }
