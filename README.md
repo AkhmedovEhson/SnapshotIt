@@ -24,7 +24,7 @@ public class Product
 
 // Copy class
 var product = new Product() { Id = 1,Name = "Product" } // note, it is reference type and mutable
-var product2 = Snapshot.Out.Copy(product); // copies `product`
+var product2 = Snapshot.Out.Copy(product); // despite of class is reference type, we can copy `product` ;)
 ```
 🐹 Let's do following steps....
 ```
