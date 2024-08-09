@@ -80,7 +80,8 @@ public class UserController : BaseController
 ```
 using SnapshotIt.DependencyInjection;
 
-// Interface should be named same as class but with prefix `I` [!]
+// Interface must be named same as class but with prefix `I` [!]
+// Example, ProductRepository -> [I]ProductRepository
 [RuntimeDependencyInjectionOption(Lifetime = ServiceLifetime.Scoped)]
 public class ProductRepository : IProductRepository{}
 
