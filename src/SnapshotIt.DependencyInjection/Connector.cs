@@ -10,8 +10,8 @@ namespace SnapshotIt.DependencyInjection
     /// </summary>
     public static class Connector
     {
-        private static IServiceProvider _serviceProvider;
-        private static Assembly _executingAssembly;
+        private static IServiceProvider _serviceProvider = null!;
+        private static Assembly _executingAssembly = null!;
 
         /// <summary>
         /// ConfigureConnector - adjusts _service-provider, and will use it in runtime of application
