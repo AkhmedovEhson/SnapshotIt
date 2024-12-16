@@ -43,13 +43,13 @@ namespace SnapshotIt.DependencyInjection.UnitTests
 
 
         [Test]
-        public void GetService_FailByTypeFromArgument()
+        public void GetService_FailByTypeFromArgument_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => Connector.GetService(typeof(object)));
         }
 
         [Test]
-        public void GetService_FailByGenericType()
+        public void GetService_FailByGenericType_ThrowsArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => Connector.GetService<object>());
         }

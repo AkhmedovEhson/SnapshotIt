@@ -18,13 +18,13 @@
 ```
 public class Product
 {
-    public int Id {get;set}
+    public int Id {get;set;}
     public string Name{get;set;}
 }
 
 // Copy class
 var product = new Product() { Id = 1,Name = "Product" } // note, it is reference type and mutable
-var product2 = Snapshot.Out.Copy(product); // copies `product`
+var product2 = Snapshot.Out.Copy(product); // despite of class is reference type, we can copy `product` ;)
 ```
 🐹 Let's do following steps....
 ```
@@ -80,7 +80,8 @@ public class UserController : BaseController
 ```
 using SnapshotIt.DependencyInjection;
 
-// Interface should be named same as class but with prefix `I` [!]
+// Interface must be named same as class but with prefix `I` [!]
+// Example, ProductRepository -> [I]ProductRepository
 [RuntimeDependencyInjectionOption(Lifetime = ServiceLifetime.Scoped)]
 public class ProductRepository : IProductRepository{}
 
