@@ -8,11 +8,11 @@ namespace SnapshotIt.DependencyInjection.UnitTests
 {
     public class RuntimeRegisterServicesTests
     {
-        private ServiceCollection dep_collection = new ServiceCollection();
-        [SetUp]
+        private IServiceCollection dep_collection;
+        [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
-            dep_collection.Clear();
+            dep_collection = new ServiceCollection();
         }
 
         [Test]
