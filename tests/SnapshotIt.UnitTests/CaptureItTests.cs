@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using SnapshotIt.Domain.Utils;
+using SnapshotIt.UnitTests.TestObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;

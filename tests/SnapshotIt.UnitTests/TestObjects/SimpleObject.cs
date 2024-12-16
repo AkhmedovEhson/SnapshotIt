@@ -11,4 +11,9 @@ namespace SnapshotIt.UnitTests.TestObjects
         public int Id { get; set; }
         public string Name { get; set; }
     }
+
+    public class o
+    {
+        public int id { get; set; } 
+    }
 }
