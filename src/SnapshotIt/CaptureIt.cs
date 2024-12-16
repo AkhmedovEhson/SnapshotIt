@@ -126,7 +126,6 @@ namespace SnapshotIt.Domain.Utils
         }
         /// <summary>
         /// Responds collection of captures as <seealso cref="List{T}"/> with size settings
-        /// NOTE: More appropriate to use, instead of just `GetAsList`, it generally enhances performance !
         /// </summary>
         /// <param name="size"></param>
         /// <returns><seealso cref="List{T}"/> of captures</returns>

@@ -33,7 +33,7 @@ namespace SnapshotIt
         /// <br/>`Task.WhenAll(Any)` - paste 10 `PostAsync` to Task.WhenAll(Any), it completes concurrently
         /// </summary>
         /// <param name="value"></param>
-        /// <returns>Single <seealso cref="{Task}"/></returns>
+        /// <returns></returns>
         public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T>(
             this ISnapshot _,
             T input)
@@ -47,7 +47,7 @@ namespace SnapshotIt
         /// <param name="_"></param>
         /// <param name="input"></param>
         /// <param name="pos"></param>
-        /// <returns>Single <seealso cref="{Task}"/></returns>
+        /// <returns></returns>
         public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
             this ISnapshot _,
             T input,
