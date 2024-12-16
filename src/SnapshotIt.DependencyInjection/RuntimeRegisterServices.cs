@@ -124,13 +124,13 @@ namespace SnapshotIt.DependencyInjection
             var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
 
             if (!types.Any()) return;
-            
+          
             foreach (var _type in types)
             {
                 var _interface = _type.GetInterfaces()
                   .Where(each => each.Name.AsSpan()[1..] == _type.Name.AsSpan())
                   .FirstOrDefault();
-
+              
                 if (_interface is null)
                 {
                     ServiceCollection.AddTransient(_type);
