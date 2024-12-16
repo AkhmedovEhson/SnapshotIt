@@ -74,12 +74,13 @@ namespace SnapshotIt.DependencyInjection
                     var attribute = type.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>();
                     var _interface = type
                             .GetInterfaces()
-                            .Where(o => o.Name[1..] == type.Name).FirstOrDefault();
+                            .Where(o => o.Name.AsSpan()[1..].ToString() == type.Name).FirstOrDefault();
 
                     if (_interface is null)
                     {
                         Console.WriteLine("`RuntimeRegisterServices` will be looking for an interface of component comparing the names, e.g. ProductService -> IProductService");
                         RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type);
+                        continue;
                     }
 
 
@@ -103,7 +104,7 @@ namespace SnapshotIt.DependencyInjection
                 foreach(var _type in types)
                 {
                     var _interface = _type.GetInterfaces()
-                        .Where(each => each.Name[1..] == _type.Name)
+                        .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
                         .FirstOrDefault();
 
                     if (_interface is null)
@@ -127,7 +128,7 @@ namespace SnapshotIt.DependencyInjection
                 foreach(var _type in types)
                 {
                     var _interface = _type.GetInterfaces()
-                      .Where(each => each.Name[1..] == _type.Name)
+                      .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
                       .FirstOrDefault();
 
                     if (_interface is null)
@@ -152,7 +153,7 @@ namespace SnapshotIt.DependencyInjection
                 foreach(var _type in types)
                 {
                     var _interface = _type.GetInterfaces()
-                      .Where(each => each.Name[1..] == _type.Name)
+                      .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
                       .FirstOrDefault();
 
                     if (_interface is null)
