@@ -67,29 +67,28 @@ namespace SnapshotIt.DependencyInjection
                 .Where(o => o.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>() is not null)
                 .ToList();
 
-            if (types.Any())
+            if (!types.Any()) return;
+
+            foreach (var type in types)
             {
-                foreach (var type in types)
+                var attribute = type.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>();
+                var _interface = type
+                        .GetInterfaces()
+                        .Where(o => o.Name.AsSpan()[1..].ToString() == type.Name).FirstOrDefault();
+
+                if (_interface is null)
                 {
-                    var attribute = type.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>();
-                    var _interface = type
-                            .GetInterfaces()
-                            .Where(o => o.Name.AsSpan()[1..].ToString() == type.Name).FirstOrDefault();
-
-                    if (_interface is null)
-                    {
-                        Console.WriteLine("`RuntimeRegisterServices` will be looking for an interface of component comparing the names, e.g. ProductService -> IProductService");
-                        RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type);
-                        continue;
-                    }
-
-
-                    RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type, _interface);
-
-
+                    Console.WriteLine("`RuntimeRegisterServices` will be looking for an interface of component comparing the names, e.g. ProductService -> IProductService");
+                    RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type);
+                    continue;
                 }
+
+
+                RegisterServiceToDependencyInjectionContainer(attribute.Lifetime, type, _interface);
+
+
             }
-            
+
         }
 
     /// <summary>
@@ -99,22 +98,22 @@ namespace SnapshotIt.DependencyInjection
         {
             var type = typeof(IScoped);
             var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
-            if (types.Any())
-            {
-                foreach(var _type in types)
-                {
-                    var _interface = _type.GetInterfaces()
-                        .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
-                        .FirstOrDefault();
+            if (!types.Any()) return;
 
-                    if (_interface is null)
-                    {
-                        ServiceCollection.AddScoped(_type);
-                        continue;
-                    }
-                    ServiceCollection.AddScoped(_interface, _type);
+            foreach (var _type in types)
+            {
+                var _interface = _type.GetInterfaces()
+                    .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
+                    .FirstOrDefault();
+
+                if (_interface is null)
+                {
+                    ServiceCollection.AddScoped(_type);
+                    continue;
                 }
+                ServiceCollection.AddScoped(_interface, _type);
             }
+
         }
         /// <summary>
         /// Registers services impl. `ITransient` to dependency injection container.
@@ -123,22 +122,22 @@ namespace SnapshotIt.DependencyInjection
         {
             var type = typeof(ITransient);
             var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
-            if (types.Any())
+
+            if (!types.Any()) return;
+
+            foreach (var _type in types)
             {
-                foreach(var _type in types)
+                var _interface = _type.GetInterfaces()
+                  .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
+                  .FirstOrDefault();
+
+                if (_interface is null)
                 {
-                    var _interface = _type.GetInterfaces()
-                      .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
-                      .FirstOrDefault();
-
-                    if (_interface is null)
-                    {
-                        ServiceCollection.AddTransient(_type);
-                        continue;
-                    }
-
-                    ServiceCollection.AddTransient(_interface, _type);
+                    ServiceCollection.AddTransient(_type);
+                    continue;
                 }
+
+                ServiceCollection.AddTransient(_interface, _type);
             }
         }
         /// <summary>
@@ -148,21 +147,21 @@ namespace SnapshotIt.DependencyInjection
         {
             var type = typeof(ISingleton);
             var types = ExecutingAssembly.GetExportedTypes().Where(o => type.IsAssignableFrom(o) && o.IsClass).ToList();
-            if (types.Any())
-            {
-                foreach(var _type in types)
-                {
-                    var _interface = _type.GetInterfaces()
-                      .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
-                      .FirstOrDefault();
+            if (!types.Any()) return;
 
-                    if (_interface is null)
-                    {
-                        ServiceCollection.AddSingleton(_type);
-                        continue;
-                    }
-                    ServiceCollection.AddSingleton(_interface,_type);
+
+            foreach (var _type in types)
+            {
+                var _interface = _type.GetInterfaces()
+                  .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
+                  .FirstOrDefault();
+
+                if (_interface is null)
+                {
+                    ServiceCollection.AddSingleton(_type);
+                    continue;
                 }
+                ServiceCollection.AddSingleton(_interface, _type);
             }
         }
 
