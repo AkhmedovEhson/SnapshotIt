@@ -12,10 +12,11 @@ namespace SnapshotIt.UnitTests
 
     public class CaptureItTests
     {
+        private const int _defaultSizeOfSnapshots = 100;
         [SetUp]
         public void RunBeforeAnyTests()
         {
-            Snapshot.Out.Create<o>(100);
+            Snapshot.Out.Create<o>(_defaultSizeOfSnapshots);
         }
         [Test]
         public void Capture_Post_Successfully()
@@ -54,7 +55,7 @@ namespace SnapshotIt.UnitTests
         }
 
         [Test]
-        public void CapturedObject_Throws_NullReferenceException()
+        public void CapturedObject_NullResponseFromCapturedList_Sucessfully()
         {
 
             var result = Snapshot.Out.Get<o>(0);
@@ -87,6 +88,7 @@ namespace SnapshotIt.UnitTests
             // Assert
             bool result = span is Span<o>;
             result.Should().BeTrue();
+            span.Length.Should().Be(_defaultSizeOfSnapshots);
         }
 
         [Test]
@@ -101,6 +103,7 @@ namespace SnapshotIt.UnitTests
 
             // Assert
             Assert.IsInstanceOf<IEnumerable<o>>(enumerable);
+            enumerable.Count().Should().Be(_defaultSizeOfSnapshots);
         }
 
         [Test]
@@ -115,6 +118,7 @@ namespace SnapshotIt.UnitTests
             // Assert
             bool result = span is ReadOnlySpan<o>;
             result.Should().BeTrue();
+            span.Length.Should().Be(_defaultSizeOfSnapshots);
         }
     }
 }
