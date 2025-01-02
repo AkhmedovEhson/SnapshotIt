@@ -4,7 +4,7 @@
 ![image](https://github.com/AkhmedovEhson/SnapshotIt/blob/main/assets/iconforgithub.png)
 
 # Requirements
-* .NET 6 🔒️ .NET 7 
+* .NET 8
 
 # Documentation
 💚 `Snapshot It` is extensionable lightweight-library, provides bunch of extensions.

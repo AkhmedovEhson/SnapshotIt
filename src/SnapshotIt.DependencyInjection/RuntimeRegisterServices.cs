@@ -74,7 +74,7 @@ namespace SnapshotIt.DependencyInjection
                 var attribute = type.GetCustomAttribute<RuntimeDependencyInjectionOptionAttribute>();
                 var _interface = type
                         .GetInterfaces()
-                        .Where(o => o.Name.AsSpan()[1..].ToString() == type.Name).FirstOrDefault();
+                        .Where(o => o.Name.AsSpan()[1..] == type.Name.AsSpan()).FirstOrDefault();
 
                 if (_interface is null)
                 {
@@ -128,7 +128,7 @@ namespace SnapshotIt.DependencyInjection
             foreach (var _type in types)
             {
                 var _interface = _type.GetInterfaces()
-                  .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
+                  .Where(each => each.Name.AsSpan()[1..] == _type.Name.AsSpan())
                   .FirstOrDefault();
               
                 if (_interface is null)
@@ -153,7 +153,7 @@ namespace SnapshotIt.DependencyInjection
             foreach (var _type in types)
             {
                 var _interface = _type.GetInterfaces()
-                  .Where(each => each.Name.AsSpan()[1..].ToString() == _type.Name)
+                  .Where(each => each.Name.AsSpan()[1..] == _type.Name.AsSpan())
                   .FirstOrDefault();
 
                 if (_interface is null)
