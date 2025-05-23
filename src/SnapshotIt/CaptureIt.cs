@@ -72,7 +72,7 @@ namespace SnapshotIt.Domain.Utils
         {
             Type type = typeof(T);
 
-            T instance = type.IsClass
+            T instance = !type.IsValueType
                 ? Snapshot.Out.Copy<T>(value)
                 : value;
 
