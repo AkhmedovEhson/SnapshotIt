@@ -5,9 +5,14 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
-    <Title>SnapshotIt2</Title>
+    <Title>SnapshotItLib</Title>
 	<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	<Version>1.1.1</Version>
+	<Version>6.1</Version>
+	<EnableTrimAnalyzer>true</EnableTrimAnalyzer>
+	<AnalysisLevel>latest</AnalysisLevel>
+	<SignAssembly>False</SignAssembly>
+	<AssemblyOriginatorKeyFile>Ehson</AssemblyOriginatorKeyFile>
+	<Authors>Ehson Akhmedov</Authors>
   </PropertyGroup>
 
   <ItemGroup>

@@ -68,7 +68,7 @@ namespace SnapshotIt.Domain.Utils
         /// Copies value and pastes in collection
         /// </summary>
         /// <param name="value"></param>
-        public static void Post([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T value)
+        public static void Post([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)]T value)
         {
             Type type = typeof(T);
 

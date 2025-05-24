@@ -1,6 +1,7 @@
 ﻿using System;
 
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace SnapshotIt.Domain.Common.Types
 {
@@ -14,9 +15,9 @@ namespace SnapshotIt.Domain.Common.Types
 
         public readonly object Property<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T1>(string name)
         {
-            Type _ = typeof(T);
+            PropertyInfo? propertyInfo = typeof(T1).GetProperty(name) ?? throw new NullReferenceException("Property is not found");
 
-            object? property = _.GetProperty(name)?.GetValue(this.Value) ?? throw new ArgumentNullException(_.Name,$"Property ${name} is not found !");
+            object? property = propertyInfo.GetValue(this.Value) ?? throw new ArgumentNullException(propertyInfo.Name,$"Property ${name} is not found !");
 
             return property;
         }
