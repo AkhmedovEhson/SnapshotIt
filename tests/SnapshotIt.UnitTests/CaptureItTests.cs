@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SnapshotIt;
 
 namespace SnapshotIt.UnitTests
 {
@@ -15,7 +16,8 @@ namespace SnapshotIt.UnitTests
         private const int _defaultSizeOfSnapshots = 100;
         [SetUp]
         public void RunBeforeAnyTests()
-        {
+        { 
+           
             Snapshot.Out.Create<o>(_defaultSizeOfSnapshots);
         }
         [Test]

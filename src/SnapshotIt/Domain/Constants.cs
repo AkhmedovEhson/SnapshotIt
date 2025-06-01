@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SnapshotIt.Domain
 {
-    public class Constants
+    internal class Constants
     {
         public const int SizeOfCaptures = 6;
     }

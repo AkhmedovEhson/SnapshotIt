@@ -14,7 +14,7 @@ using System.Threading.Tasks.Dataflow;
 namespace SnapshotIt.Domain.Utils
 {
 
-    public static class Snaps<T>
+    internal static class Snaps<T>
     {
         private static BufferBlock<T> _buffer = new();
 

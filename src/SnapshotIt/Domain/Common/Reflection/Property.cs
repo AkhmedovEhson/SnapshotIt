@@ -3,7 +3,7 @@
 
 namespace SnapshotIt.Domain.Common.Reflection
 {
-    public static class PropertyReflection
+    internal static class PropertyReflection
     {
         /// <summary>
         /// Fills properties of component dynamically.
