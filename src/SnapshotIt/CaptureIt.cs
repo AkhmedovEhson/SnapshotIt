@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿
 using System.Diagnostics.CodeAnalysis;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection.Metadata;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace SnapshotIt.Domain.Utils
 {
@@ -13,7 +7,7 @@ namespace SnapshotIt.Domain.Utils
     /// <seealso cref="CaptureIt{T}" /> provides bunch of APIs to collect data
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public static partial class CaptureIt<T>
+    internal static partial class CaptureIt<T>
     {
         private static T[] collection = new T[6];
         private static uint index = 0;

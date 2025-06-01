@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace SnapshotIt.Domain;
 
-public static class ActivatorIt
+internal static class ActivatorIt
 {
     public static T CreateInstanceWithCopyingProperties
         <[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicParameterlessConstructor)]T>(T instance)
