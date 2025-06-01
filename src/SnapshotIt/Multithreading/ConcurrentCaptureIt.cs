@@ -15,7 +15,7 @@ public static partial class CaptureIt<T>
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T value)
+    public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value)
     {
 
         // WIP: Initialization of the new `Task` :)
@@ -57,7 +57,7 @@ public static partial class CaptureIt<T>
     /// <param name="value"></param>
     /// <param name="pos"></param>
     /// <returns></returns>
-    public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T value,
+    public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value,
                                                                                  uint pos = 1)
     {
         // WIP: Initialization of the new `Task` :)
