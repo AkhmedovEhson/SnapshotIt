@@ -56,7 +56,6 @@ internal static partial class CaptureIt<T>
     public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value)
     {
         await Writer.WriteAsync(new Pocket<T>() { Index = Interlocked.Increment(ref index), Value = value });
-        Writer.Complete();
     }
 
     /// <summary>
