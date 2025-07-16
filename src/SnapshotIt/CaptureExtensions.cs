@@ -81,7 +81,7 @@ namespace SnapshotIt
         /// <param name="_"></param>
         /// <param name="ind"></param>
         /// <returns></returns>
-        public static ValueTask<T> GetAsync<T>(this ISnapshot _,int ind)
+        public static Task<T> GetAsync<T>(this ISnapshot _,int ind)
         {
             return CaptureIt<T>.GetAsync(ind);
         }
@@ -92,7 +92,7 @@ namespace SnapshotIt
         /// <typeparam name="T"></typeparam>
         /// <param name="_"></param>
         /// <returns></returns>
-        public static ValueTask<T[]> GetAllAsync<T>(this ISnapshot _)
+        public static Task<T[]> GetAllAsync<T>(this ISnapshot _)
         {
             return CaptureIt<T>.GetAllAsync();
         }
