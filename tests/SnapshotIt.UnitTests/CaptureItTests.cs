@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SnapshotIt;
+using System.Xml.Serialization;
 
 namespace SnapshotIt.UnitTests
 {
@@ -35,6 +36,69 @@ namespace SnapshotIt.UnitTests
 
             // Assert
             result.id.Should().Be(1);
+        }
+
+
+        [Test]
+        public async Task CapturedObject_GetAsync_Success()
+        {
+            var obj = new o[] 
+            {
+                new o()
+                {
+                    id = 1
+                } 
+            };
+
+            await Snapshot.Out.PostAsync<o>(obj);
+            var result = await Snapshot.Out.GetAsync<o>(0);
+
+            result.Should().NotBeNull();
+            result.id.Should().Be(1);
+        }
+
+        [Test]
+        public async Task CapturedObject_PostAsync_GetAllAsync_ArrayTimesToTwo_Success()
+        {
+            var obj = new o[]
+            {
+                new o() { id = 1 },
+                new o() { id = 2 },
+                new o() { id = 3 }
+            };
+
+            Snapshot.Out.Create<o>(2);
+            await Snapshot.Out.PostAsync<o>(obj);
+            var result = await Snapshot.Out.GetAllAsync<o>();
+
+            result.Should().NotBeNull();
+            result.Length.Should().Be(4);
+            result[0].id.Should().Be(1);
+            result[1].id.Should().Be(2);
+            result[2].id.Should().Be(3);
+        }
+        [Test]
+        public async Task CapturedObject_PostAsync_GetAllAsync_Success()
+        {
+            var obj = new o[2]
+            {
+                new o()
+                {
+                    id = 1
+                },
+                new o()
+                {
+                    id = 2
+                }
+            };
+            Snapshot.Out.Create<o>(2);
+            await Snapshot.Out.PostAsync<o>(obj);
+            var result = await Snapshot.Out.GetAllAsync<o>();
+
+            result.Should().NotBeNull();
+            result.Length.Should().Be(2);
+            result[0].id.Should().Be(1);
+            result[1].id.Should().Be(2);
         }
 
         [Test]
