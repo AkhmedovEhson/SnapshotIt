@@ -47,7 +47,7 @@ internal static partial class CaptureIt<T>
                 ? Snapshot.Out.Copy<T>(values[i])
                 : values[i];
 
-            await Writer.WriteAsync(new Pocket<T>() { Index = index++, Value = instance });
+            await Writer.WriteAsync(new Pocket<T>() { Index = Interlocked.Increment(ref index), Value = instance });
         }
 
         Writer.Complete();
@@ -55,7 +55,7 @@ internal static partial class CaptureIt<T>
 
     public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value)
     {
-        await Writer.WriteAsync(new Pocket<T>() { Index = index++, Value = value });
+        await Writer.WriteAsync(new Pocket<T>() { Index = Interlocked.Increment(ref index), Value = value });
         Writer.Complete();
     }
 
