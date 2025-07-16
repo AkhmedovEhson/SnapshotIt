@@ -14,29 +14,29 @@ FluentValidation integration for SnapshotIt library, providing comprehensive val
 ## Available Methods
 
 ### Post Methods (with validation before storing)
-- `PostWithValidation<T>(T input, IValidator<T> validator)` - Synchronous validation before posting
-- `PostWithValidationAsync<T>(T input, IValidator<T> validator)` - Asynchronous validation before posting
-- `PostWithValidationAsync<T>(T[] values, IValidator<T> validator)` - Asynchronous validation before posting arrays
+- `Post<T>(T input, IValidator<T> validator)` - Synchronous validation before posting
+- `PostAsync<T>(T input, IValidator<T> validator)` - Asynchronous validation before posting
+- `PostAsync<T>(T[] values, IValidator<T> validator)` - Asynchronous validation before posting arrays
 
 ### Get Methods (with validation when retrieving)
-- `GetWithValidation<T>(IValidator<T> validator, uint ind = 0)` - Get by index with validation
-- `GetWithValidation<T>(Func<T, bool> predicate, IValidator<T> validator)` - Get by predicate with validation
-- `GetWithValidationAsync<T>(int ind, IValidator<T> validator)` - Async get by index with validation
-- `GetAllWithValidationAsync<T>(IValidator<T> validator)` - Get all items with validation
+- `Get<T>(uint ind, IValidator<T> validator)` - Get by index with validation
+- `Get<T>(Func<T, bool> predicate, IValidator<T> validator)` - Get by predicate with validation
+- `GetAsync<T>(int ind, IValidator<T> validator)` - Async get by index with validation
+- `GetAllAsync<T>(IValidator<T> validator)` - Get all items with validation
 
 ### Collection Methods (with validation when retrieving)
-- `GetAsListWithValidation<T>(IValidator<T> validator)` - Get as List with validation
-- `GetAsListWithValidation<T>(uint size, IValidator<T> validator)` - Get as List with size and validation
-- `GetAsEnumerableWithValidation<T>(IValidator<T> validator)` - Get as IEnumerable with validation
-- `GetAsSpanWithValidation<T>(IValidator<T> validator)` - Get as Span with validation
-- `GetAsReadonlySpanWithValidation<T>(IValidator<T> validator)` - Get as ReadOnlySpan with validation
+- `GetAsList<T>(IValidator<T> validator)` - Get as List with validation
+- `GetAsList<T>(uint size, IValidator<T> validator)` - Get as List with size and validation
+- `GetAsEnumerable<T>(IValidator<T> validator)` - Get as IEnumerable with validation
+- `GetAsSpan<T>(IValidator<T> validator)` - Get as Span with validation
+- `GetAsReadonlySpan<T>(IValidator<T> validator)` - Get as ReadOnlySpan with validation
 
 ### Pure Validation Methods (validation without posting/retrieving)
 - `Validate<T>(T input, IValidator<T> validator)` - Synchronous validation only
 - `ValidateAsync<T>(T input, IValidator<T> validator)` - Asynchronous validation only
 
 ### Utility Methods
-- `CreateWithValidation<T>(uint size, IValidator<T> validator)` - Create collection with validation support
+- `Create<T>(uint size, IValidator<T> validator)` - Create collection with validation support
 
 ## Usage
 
@@ -62,23 +62,23 @@ var validator = new ProductValidator();
 var product = new Product { Id = 1, Name = "Test Product", Price = 99.99m };
 
 // Post with validation
-Snapshot.Out.PostWithValidation(product, validator);
+Snapshot.Out.Post(product, validator);
 
 // Or async
-await Snapshot.Out.PostWithValidationAsync(product, validator);
+await Snapshot.Out.PostAsync(product, validator);
 ```
 
 ### Validation on Retrieval
 
 ```csharp
 // Get object with validation
-var validatedProduct = Snapshot.Out.GetWithValidation(validator, 0);
+var validatedProduct = Snapshot.Out.Get<Product>(0, validator);
 
 // Get collection with validation  
-var validatedList = Snapshot.Out.GetAsListWithValidation(validator);
+var validatedList = Snapshot.Out.GetAsList(validator);
 
 // Get all items with validation
-var validatedItems = await Snapshot.Out.GetAllWithValidationAsync(validator);
+var validatedItems = await Snapshot.Out.GetAllAsync(validator);
 ```
 
 ### Validation Without Posting
@@ -102,7 +102,7 @@ var result = await Snapshot.Out.ValidateAsync(product, validator);
 
 ```csharp
 var products = new[] { product1, product2, product3 };
-await Snapshot.Out.PostWithValidationAsync(products, validator);
+await Snapshot.Out.PostAsync(products, validator);
 ```
 
 ## Exception Handling
@@ -112,7 +112,7 @@ When validation fails, a `ValidationException` is thrown containing all validati
 ```csharp
 try
 {
-    Snapshot.Out.PostWithValidation(invalidProduct, validator);
+    Snapshot.Out.Post(invalidProduct, validator);
 }
 catch (ValidationException ex)
 {

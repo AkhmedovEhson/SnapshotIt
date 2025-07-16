@@ -18,7 +18,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void PostWithValidation_ValidObject_ShouldPostSuccessfully()
+        public void Post_ValidObject_ShouldPostSuccessfully()
         {
             // Arrange
             var validProduct = new TestProduct
@@ -30,7 +30,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             };
 
             // Act
-            Action act = () => Snapshot.Out.PostWithValidation(validProduct, _validator);
+            Action act = () => Snapshot.Out.Post(validProduct, _validator);
 
             // Assert
             act.Should().NotThrow();
@@ -41,7 +41,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void PostWithValidation_InvalidObject_ShouldThrowValidationException()
+        public void Post_InvalidObject_ShouldThrowValidationException()
         {
             // Arrange
             var invalidProduct = new TestProduct
@@ -53,7 +53,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             };
 
             // Act
-            Action act = () => Snapshot.Out.PostWithValidation(invalidProduct, _validator);
+            Action act = () => Snapshot.Out.Post(invalidProduct, _validator);
 
             // Assert
             act.Should().Throw<ValidationException>()
@@ -61,7 +61,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public async Task PostWithValidationAsync_ValidObject_ShouldPostSuccessfully()
+        public async Task PostAsync_ValidObject_ShouldPostSuccessfully()
         {
             // Arrange
             var validProduct = new TestProduct
@@ -73,7 +73,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             };
 
             // Act
-            Func<Task> act = async () => await Snapshot.Out.PostWithValidationAsync(validProduct, _validator);
+            Func<Task> act = async () => await Snapshot.Out.PostAsync(validProduct, _validator);
 
             // Assert
             await act.Should().NotThrowAsync();
@@ -86,7 +86,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public async Task PostWithValidationAsync_InvalidObject_ShouldThrowValidationException()
+        public async Task PostAsync_InvalidObject_ShouldThrowValidationException()
         {
             // Arrange
             var invalidProduct = new TestProduct
@@ -98,7 +98,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             };
 
             // Act
-            Func<Task> act = async () => await Snapshot.Out.PostWithValidationAsync(invalidProduct, _validator);
+            Func<Task> act = async () => await Snapshot.Out.PostAsync(invalidProduct, _validator);
 
             // Assert
             await act.Should().ThrowAsync<ValidationException>()
@@ -106,7 +106,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public async Task PostWithValidationAsync_ValidArrayOfObjects_ShouldPostSuccessfully()
+        public async Task PostAsync_ValidArrayOfObjects_ShouldPostSuccessfully()
         {
             // Arrange
             var validProducts = new[]
@@ -116,7 +116,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             };
 
             // Act
-            Func<Task> act = async () => await Snapshot.Out.PostWithValidationAsync(validProducts, _validator);
+            Func<Task> act = async () => await Snapshot.Out.PostAsync(validProducts, _validator);
 
             // Assert
             await act.Should().NotThrowAsync();
@@ -125,7 +125,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public async Task PostWithValidationAsync_ArrayWithInvalidObjects_ShouldThrowValidationException()
+        public async Task PostAsync_ArrayWithInvalidObjects_ShouldThrowValidationException()
         {
             // Arrange
             var mixedProducts = new[]
@@ -135,7 +135,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             };
 
             // Act
-            Func<Task> act = async () => await Snapshot.Out.PostWithValidationAsync(mixedProducts, _validator);
+            Func<Task> act = async () => await Snapshot.Out.PostAsync(mixedProducts, _validator);
 
             // Assert
             await act.Should().ThrowAsync<ValidationException>()
@@ -229,17 +229,17 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void CreateWithValidation_ShouldCreateCollectionWithValidationSupport()
+        public void Create_ShouldCreateCollectionWithValidationSupport()
         {
             // Arrange & Act
-            Action act = () => Snapshot.Out.CreateWithValidation<TestProduct>(5, _validator);
+            Action act = () => Snapshot.Out.Create<TestProduct>(5, _validator);
 
             // Assert
             act.Should().NotThrow();
         }
 
         [Test]
-        public void GetWithValidation_ValidObject_ShouldReturnValidatedObject()
+        public void Get_ValidObject_ShouldReturnValidatedObject()
         {
             // Arrange
             var validProduct = new TestProduct
@@ -252,7 +252,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             Snapshot.Out.Post(validProduct);
 
             // Act
-            var result = Snapshot.Out.GetWithValidation(_validator, 0);
+            var result = Snapshot.Out.Get<TestProduct>(0, _validator);
 
             // Assert
             result.Should().NotBeNull();
@@ -261,7 +261,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void GetWithValidation_InvalidObject_ShouldThrowValidationException()
+        public void Get_InvalidObject_ShouldThrowValidationException()
         {
             // Arrange
             var invalidProduct = new TestProduct
@@ -274,7 +274,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             Snapshot.Out.Post(invalidProduct);
 
             // Act
-            Action act = () => Snapshot.Out.GetWithValidation(_validator, 0);
+            Action act = () => Snapshot.Out.Get<TestProduct>(0, _validator);
 
             // Assert
             act.Should().Throw<ValidationException>()
@@ -282,7 +282,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void GetWithValidation_WithPredicate_ValidObject_ShouldReturnValidatedObject()
+        public void Get_WithPredicate_ValidObject_ShouldReturnValidatedObject()
         {
             // Arrange
             var validProduct = new TestProduct
@@ -295,7 +295,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             Snapshot.Out.Post(validProduct);
 
             // Act
-            var result = Snapshot.Out.GetWithValidation(p => p.Id == 1, _validator);
+            var result = Snapshot.Out.Get(p => p.Id == 1, _validator);
 
             // Assert
             result.Should().NotBeNull();
@@ -304,7 +304,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void GetWithValidation_WithPredicate_InvalidObject_ShouldThrowValidationException()
+        public void Get_WithPredicate_InvalidObject_ShouldThrowValidationException()
         {
             // Arrange
             var invalidProduct = new TestProduct
@@ -317,7 +317,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             Snapshot.Out.Post(invalidProduct);
 
             // Act
-            Action act = () => Snapshot.Out.GetWithValidation(p => p.Id == 0, _validator);
+            Action act = () => Snapshot.Out.Get(p => p.Id == 0, _validator);
 
             // Assert
             act.Should().Throw<ValidationException>()
@@ -325,7 +325,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public async Task GetWithValidationAsync_ValidObject_ShouldReturnValidatedObject()
+        public async Task GetAsync_ValidObject_ShouldReturnValidatedObject()
         {
             // Arrange
             var validProduct = new TestProduct
@@ -338,7 +338,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             await Snapshot.Out.PostAsync(validProduct);
 
             // Act
-            var result = await Snapshot.Out.GetWithValidationAsync(0, _validator);
+            var result = await Snapshot.Out.GetAsync(0, _validator);
 
             // Assert
             result.Should().NotBeNull();
@@ -347,7 +347,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public async Task GetWithValidationAsync_InvalidObject_ShouldThrowValidationException()
+        public async Task GetAsync_InvalidObject_ShouldThrowValidationException()
         {
             // Arrange
             var invalidProduct = new TestProduct
@@ -360,7 +360,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             await Snapshot.Out.PostAsync(invalidProduct);
 
             // Act
-            Func<Task> act = async () => await Snapshot.Out.GetWithValidationAsync(0, _validator);
+            Func<Task> act = async () => await Snapshot.Out.GetAsync(0, _validator);
 
             // Assert
             await act.Should().ThrowAsync<ValidationException>()
@@ -368,7 +368,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public async Task GetAllWithValidationAsync_ValidObjects_ShouldReturnValidatedObjects()
+        public async Task GetAllAsync_ValidObjects_ShouldReturnValidatedObjects()
         {
             // Arrange
             var validProducts = new[]
@@ -379,7 +379,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             await Snapshot.Out.PostAsync(validProducts);
 
             // Act
-            var result = await Snapshot.Out.GetAllWithValidationAsync(_validator);
+            var result = await Snapshot.Out.GetAllAsync(_validator);
 
             // Assert
             result.Should().NotBeNull();
@@ -387,7 +387,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public async Task GetAllWithValidationAsync_InvalidObjects_ShouldThrowValidationException()
+        public async Task GetAllAsync_InvalidObjects_ShouldThrowValidationException()
         {
             // Arrange
             var mixedProducts = new[]
@@ -398,7 +398,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             await Snapshot.Out.PostAsync(mixedProducts);
 
             // Act
-            Func<Task> act = async () => await Snapshot.Out.GetAllWithValidationAsync(_validator);
+            Func<Task> act = async () => await Snapshot.Out.GetAllAsync(_validator);
 
             // Assert
             await act.Should().ThrowAsync<ValidationException>()
@@ -406,7 +406,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void GetAsListWithValidation_ValidObjects_ShouldReturnValidatedList()
+        public void GetAsList_ValidObjects_ShouldReturnValidatedList()
         {
             // Arrange
             var validProducts = new[]
@@ -420,7 +420,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             }
 
             // Act
-            var result = Snapshot.Out.GetAsListWithValidation(_validator);
+            var result = Snapshot.Out.GetAsList(_validator);
 
             // Assert
             result.Should().NotBeNull();
@@ -429,7 +429,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void GetAsListWithValidation_InvalidObjects_ShouldThrowValidationException()
+        public void GetAsList_InvalidObjects_ShouldThrowValidationException()
         {
             // Arrange
             var invalidProduct = new TestProduct
@@ -442,7 +442,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             Snapshot.Out.Post(invalidProduct);
 
             // Act
-            Action act = () => Snapshot.Out.GetAsListWithValidation(_validator);
+            Action act = () => Snapshot.Out.GetAsList(_validator);
 
             // Assert
             act.Should().Throw<ValidationException>()
@@ -450,7 +450,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void GetAsListWithValidation_WithSize_ValidObjects_ShouldReturnValidatedList()
+        public void GetAsList_WithSize_ValidObjects_ShouldReturnValidatedList()
         {
             // Arrange
             var validProducts = new[]
@@ -464,7 +464,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             }
 
             // Act
-            var result = Snapshot.Out.GetAsListWithValidation(5, _validator);
+            var result = Snapshot.Out.GetAsList(5, _validator);
 
             // Assert
             result.Should().NotBeNull();
@@ -473,7 +473,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void GetAsEnumerableWithValidation_ValidObjects_ShouldReturnValidatedEnumerable()
+        public void GetAsEnumerable_ValidObjects_ShouldReturnValidatedEnumerable()
         {
             // Arrange
             var validProducts = new[]
@@ -487,7 +487,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             }
 
             // Act
-            var result = Snapshot.Out.GetAsEnumerableWithValidation(_validator);
+            var result = Snapshot.Out.GetAsEnumerable(_validator);
 
             // Assert
             result.Should().NotBeNull();
@@ -495,7 +495,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void GetAsEnumerableWithValidation_InvalidObjects_ShouldThrowValidationException()
+        public void GetAsEnumerable_InvalidObjects_ShouldThrowValidationException()
         {
             // Arrange
             var invalidProduct = new TestProduct
@@ -508,7 +508,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             Snapshot.Out.Post(invalidProduct);
 
             // Act
-            Action act = () => Snapshot.Out.GetAsEnumerableWithValidation(_validator).ToList();
+            Action act = () => Snapshot.Out.GetAsEnumerable(_validator).ToList();
 
             // Assert
             act.Should().Throw<ValidationException>()
@@ -516,7 +516,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void GetAsSpanWithValidation_ValidObjects_ShouldReturnValidatedSpan()
+        public void GetAsSpan_ValidObjects_ShouldReturnValidatedSpan()
         {
             // Arrange
             var validProducts = new[]
@@ -530,14 +530,14 @@ namespace SnapshotIt.FluentValidation.UnitTests
             }
 
             // Act
-            var result = Snapshot.Out.GetAsSpanWithValidation(_validator);
+            var result = Snapshot.Out.GetAsSpan(_validator);
 
             // Assert
             result.Length.Should().BeGreaterOrEqualTo(2);
         }
 
         [Test]
-        public void GetAsSpanWithValidation_InvalidObjects_ShouldThrowValidationException()
+        public void GetAsSpan_InvalidObjects_ShouldThrowValidationException()
         {
             // Arrange
             var invalidProduct = new TestProduct
@@ -550,7 +550,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             Snapshot.Out.Post(invalidProduct);
 
             // Act
-            Action act = () => Snapshot.Out.GetAsSpanWithValidation(_validator);
+            Action act = () => Snapshot.Out.GetAsSpan(_validator);
 
             // Assert
             act.Should().Throw<ValidationException>()
@@ -558,7 +558,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
         }
 
         [Test]
-        public void GetAsReadonlySpanWithValidation_ValidObjects_ShouldReturnValidatedReadonlySpan()
+        public void GetAsReadonlySpan_ValidObjects_ShouldReturnValidatedReadonlySpan()
         {
             // Arrange
             var validProducts = new[]
@@ -572,14 +572,14 @@ namespace SnapshotIt.FluentValidation.UnitTests
             }
 
             // Act
-            var result = Snapshot.Out.GetAsReadonlySpanWithValidation(_validator);
+            var result = Snapshot.Out.GetAsReadonlySpan(_validator);
 
             // Assert
             result.Length.Should().BeGreaterOrEqualTo(2);
         }
 
         [Test]
-        public void GetAsReadonlySpanWithValidation_InvalidObjects_ShouldThrowValidationException()
+        public void GetAsReadonlySpan_InvalidObjects_ShouldThrowValidationException()
         {
             // Arrange
             var invalidProduct = new TestProduct
@@ -592,7 +592,7 @@ namespace SnapshotIt.FluentValidation.UnitTests
             Snapshot.Out.Post(invalidProduct);
 
             // Act
-            Action act = () => Snapshot.Out.GetAsReadonlySpanWithValidation(_validator);
+            Action act = () => Snapshot.Out.GetAsReadonlySpan(_validator);
 
             // Assert
             act.Should().Throw<ValidationException>()

@@ -17,7 +17,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="input">The object to validate and post</param>
         /// <param name="validator">The FluentValidation validator to use</param>
         /// <exception cref="ValidationException">Thrown when validation fails</exception>
-        public static void PostWithValidation<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
+        public static void Post<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
             this ISnapshot snapshot,
             T input,
             IValidator<T> validator)
@@ -40,7 +40,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="input">The object to validate and post</param>
         /// <param name="validator">The FluentValidation validator to use</param>
         /// <exception cref="ValidationException">Thrown when validation fails</exception>
-        public static async Task PostWithValidationAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
+        public static async Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
             this ISnapshot snapshot,
             T input,
             IValidator<T> validator)
@@ -63,7 +63,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="values">The objects to validate and post</param>
         /// <param name="validator">The FluentValidation validator to use</param>
         /// <exception cref="ValidationException">Thrown when validation fails for any object</exception>
-        public static async Task PostWithValidationAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
+        public static async Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
             this ISnapshot snapshot,
             T[] values,
             IValidator<T> validator)
@@ -123,7 +123,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="snapshot">The snapshot instance</param>
         /// <param name="size">The size of the collection</param>
         /// <param name="validator">The FluentValidation validator for future validations</param>
-        public static void CreateWithValidation<T>(
+        public static void Create<T>(
             this ISnapshot snapshot,
             uint size,
             IValidator<T> validator)
@@ -141,10 +141,10 @@ namespace SnapshotIt.FluentValidation
         /// <returns>The validated captured object</returns>
         /// <exception cref="ValidationException">Thrown when the retrieved object fails validation</exception>
         /// <exception cref="IndexOutOfRangeException">Thrown when index is out of range</exception>
-        public static T GetWithValidation<T>(
+        public static T Get<T>(
             this ISnapshot snapshot,
-            IValidator<T> validator,
-            uint ind = 0)
+            uint ind,
+            IValidator<T> validator)
         {
             var result = snapshot.Get<T>(ind);
             var validationResult = validator.Validate(result);
@@ -167,7 +167,7 @@ namespace SnapshotIt.FluentValidation
         /// <returns>The validated captured object</returns>
         /// <exception cref="ValidationException">Thrown when the retrieved object fails validation</exception>
         /// <exception cref="NullReferenceException">Thrown when object is not found</exception>
-        public static T GetWithValidation<T>(
+        public static T Get<T>(
             this ISnapshot snapshot,
             Func<T, bool> predicate,
             IValidator<T> validator)
@@ -192,7 +192,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="validator">The FluentValidation validator to use</param>
         /// <returns>The validated captured object</returns>
         /// <exception cref="ValidationException">Thrown when the retrieved object fails validation</exception>
-        public static async Task<T> GetWithValidationAsync<T>(
+        public static async Task<T> GetAsync<T>(
             this ISnapshot snapshot,
             int ind,
             IValidator<T> validator)
@@ -216,7 +216,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="validator">The FluentValidation validator to use</param>
         /// <returns>Array of validated captured objects</returns>
         /// <exception cref="ValidationException">Thrown when any retrieved object fails validation</exception>
-        public static async Task<T[]> GetAllWithValidationAsync<T>(
+        public static async Task<T[]> GetAllAsync<T>(
             this ISnapshot snapshot,
             IValidator<T> validator)
         {
@@ -245,7 +245,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="validator">The FluentValidation validator to use</param>
         /// <returns>Span of validated captured objects</returns>
         /// <exception cref="ValidationException">Thrown when any object fails validation</exception>
-        public static Span<T> GetAsSpanWithValidation<T>(
+        public static Span<T> GetAsSpan<T>(
             this ISnapshot snapshot,
             IValidator<T> validator)
         {
@@ -274,7 +274,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="validator">The FluentValidation validator to use</param>
         /// <returns>ReadOnlySpan of validated captured objects</returns>
         /// <exception cref="ValidationException">Thrown when any object fails validation</exception>
-        public static ReadOnlySpan<T> GetAsReadonlySpanWithValidation<T>(
+        public static ReadOnlySpan<T> GetAsReadonlySpan<T>(
             this ISnapshot snapshot,
             IValidator<T> validator)
         {
@@ -303,7 +303,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="validator">The FluentValidation validator to use</param>
         /// <returns>IEnumerable of validated captured objects</returns>
         /// <exception cref="ValidationException">Thrown when any object fails validation</exception>
-        public static IEnumerable<T> GetAsEnumerableWithValidation<T>(
+        public static IEnumerable<T> GetAsEnumerable<T>(
             this ISnapshot snapshot,
             IValidator<T> validator)
         {
@@ -331,7 +331,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="validator">The FluentValidation validator to use</param>
         /// <returns>List of validated captured objects</returns>
         /// <exception cref="ValidationException">Thrown when any object fails validation</exception>
-        public static List<T> GetAsListWithValidation<T>(
+        public static List<T> GetAsList<T>(
             this ISnapshot snapshot,
             IValidator<T> validator)
         {
@@ -361,7 +361,7 @@ namespace SnapshotIt.FluentValidation
         /// <param name="validator">The FluentValidation validator to use</param>
         /// <returns>List of validated captured objects</returns>
         /// <exception cref="ValidationException">Thrown when any object fails validation</exception>
-        public static List<T> GetAsListWithValidation<T>(
+        public static List<T> GetAsList<T>(
             this ISnapshot snapshot,
             uint size,
             IValidator<T> validator)
