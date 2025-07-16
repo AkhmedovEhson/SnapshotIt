@@ -28,32 +28,31 @@ namespace SnapshotIt
         /// </summary>
         /// <param name="size"></param>
        public static void Reset(int? size) => CaptureIt<int>.Reset(size);
+
         /// <summary>
-        /// `PostAsync` - posts object to collection of captures concurrently.
+        /// `PostAsync` - posts bunch of captures to collection of captures concurrently.
         /// <br/>`Task.WhenAll(Any)` - paste 10 `PostAsync` to Task.WhenAll(Any), it completes concurrently
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)]T>(
+        public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
             this ISnapshot _,
-            T input)
+            T[] values)
         {
-            return CaptureIt<T>.PostAsync(input);
+            return CaptureIt<T>.PostAsync(values);
         }
         /// <summary>
-        /// `PostAsync` - posts object to collection of captures concurrently, including the position in collection of captures.
+        /// `PostAsync` - posts an object to collection of captures asynchronously.
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="_"></param>
-        /// <param name="input"></param>
-        /// <param name="pos"></param>
+        /// <param name="value"></param>
         /// <returns></returns>
         public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
-            this ISnapshot _,
-            T input,
-            uint pos = 1)
+          this ISnapshot _,
+          T value)
         {
-            return CaptureIt<T>.PostAsync(input, pos);
+            return CaptureIt<T>.PostAsync(value);
         }
         /// <summary>
         /// Gets captured object from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
@@ -74,6 +73,28 @@ namespace SnapshotIt
         public static T Get<T>(this ISnapshot _,Func<T, bool> predicate)
         {
             return CaptureIt<T>.Get(predicate);
+        }
+        /// <summary>
+        /// `GetAsync` - gets captured object by index asynchronously
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_"></param>
+        /// <param name="ind"></param>
+        /// <returns></returns>
+        public static ValueTask<T> GetAsync<T>(this ISnapshot _,int ind)
+        {
+            return CaptureIt<T>.GetAsync(ind);
+        }
+
+        /// <summary>
+        /// `GetAllAsync` - get all captures asynchronously and returns them as an array.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="_"></param>
+        /// <returns></returns>
+        public static ValueTask<T[]> GetAllAsync<T>(this ISnapshot _)
+        {
+            return CaptureIt<T>.GetAllAsync();
         }
 
         /// <summary>

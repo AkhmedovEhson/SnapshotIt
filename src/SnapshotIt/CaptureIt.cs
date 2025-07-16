@@ -14,7 +14,6 @@ namespace SnapshotIt.Domain.Utils
         private static uint size = 0;
 
 
-
         /// <summary>
         /// Gets captured object from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
         /// </summary>

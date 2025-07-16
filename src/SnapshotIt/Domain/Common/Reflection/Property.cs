@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 
 namespace SnapshotIt.Domain.Common.Reflection
@@ -15,7 +16,7 @@ namespace SnapshotIt.Domain.Common.Reflection
             var properties = arg!.GetType().GetProperties();
             var copyofInstance = arg2!.GetType();
 
-            if (properties.Any())
+            if (properties.Length > 0)
             {
                 for(int i = 0; i < properties.Length; i++)
                 {
@@ -23,6 +24,9 @@ namespace SnapshotIt.Domain.Common.Reflection
                 }
             }
         }
+
+
+
 
     }
 }

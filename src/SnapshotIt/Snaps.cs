@@ -21,10 +21,7 @@ namespace SnapshotIt.Domain.Utils
         // Note: creates default buffer-block if it is not created :)
         static Snaps()
         {
-            if (_buffer is null)
-            {
-                CreateBufferBlock();
-            }
+
         }
 
         public static void Push(in T entity) => _buffer.Post<T>(entity);

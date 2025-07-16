@@ -1,91 +1,122 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Threading.Channels;
 using SnapshotIt;
+using SnapshotIt.Multithreading;
 
 
 namespace SnapshotIt.Domain.Utils;
 
 internal static partial class CaptureIt<T>
 {
+    private static Channel<Pocket<T>> _channel = Channel.CreateUnbounded<Pocket<T>>();
 
-    /// <summary>
-    /// `PostAsync` - posts object to collection of captures concurrently.
-    /// </summary>
-    /// <param name="value"></param>
-    /// <returns></returns>
-    public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value)
+    public static ChannelWriter<Pocket<T>> Writer
     {
-
-        // WIP: Initialization of the new `Task` :)
-        var task = Task.Run(() =>
-        {       
-            var spinLock = new SpinLock();
-            bool _locked = false;
-
-            Type type = typeof(T);
-
-            // Initializes the type
-            T instance = type.IsClass
-                ? Snapshot.Out.Copy<T>(value)
-                : value;
-
-            spinLock.Enter(ref _locked);
-
-            int _size = collection.Length;
-            if (index == (_size - 1))
-            {
-                var array = new T[collection.Length * 2];
-                Array.Copy(collection, array, collection.Length);
-                collection = array;
-            }
-            collection[index++] = instance;
-
-            spinLock.Exit();
-
-        });
-
-        return task;
-    }
-
-
-    /// <summary>
-    /// `PostAsync` - posts object to collection of captures concurrently.
-    /// <br/> `pos` - the position of collection, helps to determine the position in collection of captures
-    /// </summary>
-    /// <param name="value"></param>
-    /// <param name="pos"></param>
-    /// <returns></returns>
-    public static Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value,
-                                                                                 uint pos = 1)
-    {
-        // WIP: Initialization of the new `Task` :)
-        var task = Task.Run(() =>
+        get
         {
-            var spinLock = new SpinLock();
-            bool _locked = false;
+            if (_channel.Reader.Completion.IsCompleted)
+            {
+                _channel = Channel.CreateUnbounded<Pocket<T>>();
+            }
+            return _channel.Writer;
+        }
+    }
 
+    public static ChannelReader<Pocket<T>> Reader
+    {
+        get
+        {
+            return _channel.Reader;
+        }
+    }
+
+    /// <summary>
+    /// `PostAsync` - posts object to collection of captures concurrently.
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T[] values)
+    {
+
+        for (int i = 0; i < values.Length; i++)
+        {
             Type type = typeof(T);
 
             // Initializes the type
             T instance = type.IsClass
-                ? Snapshot.Out.Copy<T>(value)
-                : value;
+                ? Snapshot.Out.Copy<T>(values[i])
+                : values[i];
 
-            spinLock.Enter(ref _locked);
+            await Writer.WriteAsync(new Pocket<T>() { Index = index++, Value = instance });
+        }
 
-            int _size = collection.Length;
-
-            // Checks if provided position exists in collection and checks if current pointer points to the end of collection
-            if (index + pos >= _size || index == (_size - 1))
-            {
-                var array = new T[collection.Length * 2];
-                Array.Copy(collection, array, collection.Length);
-                collection = array;
-            }
-            collection[index + pos] = instance;
-
-            spinLock.Exit();
-        });
-
-        return task;
+        Writer.Complete();
     }
+
+    public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value)
+    {
+        await Writer.WriteAsync(new Pocket<T>() { Index = index++, Value = value });
+        Writer.Complete();
+    }
+
+    /// <summary>
+    /// `GetAllAsync` - gets all captures asynchronously and returns them as an array.
+    /// </summary>
+    /// <returns>As a response, there is an instance of <seealso cref="Array"/></returns>
+    public static async ValueTask<T[]> GetAllAsync()
+    {
+        if (!Reader.Completion.IsCompleted)
+        {
+            await foreach (var item in Reader.ReadAllAsync())
+            {
+
+                if (item.Index > (collection.Length - 1))
+                {
+                    var array = new T[collection.Length * 2];
+                    Array.Copy(collection, array, collection.Length);
+                    collection = array;
+                }
+
+                T instance = item.Value.GetType().IsClass
+                    ? Snapshot.Out.Copy<T>(item.Value)
+                    : item.Value;
+
+
+                collection[item.Index] = instance;
+            }
+        }
+
+
+        return collection;
+    }
+    /// <summary>
+    /// `GetAsync` - gets capture by index asynchronously.
+    /// </summary>
+    /// <param name="ind"></param>
+    /// <returns>As a response, there is an instance of captured object</returns>
+    public static async ValueTask<T> GetAsync(int ind)
+    {
+        if (!Reader.Completion.IsCompleted)
+        {
+            await foreach (var item in Reader.ReadAllAsync())
+            {
+                if (item.Index > (collection.Length - 1))
+                {
+                    var array = new T[collection.Length * 2];
+                    Array.Copy(collection, array, collection.Length);
+                    collection = array;
+                }
+
+                T instance = item.Value.GetType().IsClass
+                    ? Snapshot.Out.Copy<T>(item.Value)
+                    : item.Value;
+
+                collection[item.Index] = instance;
+            }
+        }
+
+
+        return collection[ind];
+    }
+
 }
