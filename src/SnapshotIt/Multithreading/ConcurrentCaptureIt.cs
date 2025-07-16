@@ -63,30 +63,9 @@ internal static partial class CaptureIt<T>
     /// `GetAllAsync` - gets all captures asynchronously and returns them as an array.
     /// </summary>
     /// <returns>As a response, there is an instance of <seealso cref="Array"/></returns>
-    public static async ValueTask<T[]> GetAllAsync()
+    public static async Task<T[]> GetAllAsync()
     {
-        if (!Reader.Completion.IsCompleted)
-        {
-            await foreach (var item in Reader.ReadAllAsync())
-            {
-
-                if (item.Index > (collection.Length - 1))
-                {
-                    var array = new T[collection.Length * 2];
-                    Array.Copy(collection, array, collection.Length);
-                    collection = array;
-                }
-
-                T instance = item.Value.GetType().IsClass
-                    ? Snapshot.Out.Copy<T>(item.Value)
-                    : item.Value;
-
-
-                collection[item.Index] = instance;
-            }
-        }
-
-
+        await FillCollection();
         return collection;
     }
     /// <summary>
@@ -94,29 +73,34 @@ internal static partial class CaptureIt<T>
     /// </summary>
     /// <param name="ind"></param>
     /// <returns>As a response, there is an instance of captured object</returns>
-    public static async ValueTask<T> GetAsync(int ind)
+    public static async Task<T> GetAsync(int ind)
     {
-        if (!Reader.Completion.IsCompleted)
+        await FillCollection();
+        return collection[ind];
+    }
+
+    /// <summary>
+    /// `FillCollection` - fills the collection with captured objects from the channel asynchronously.
+    /// </summary>
+    /// <returns></returns>
+    private static async Task FillCollection()
+    {
+        await foreach (var item in Reader.ReadAllAsync())
         {
-            await foreach (var item in Reader.ReadAllAsync())
+            if (item.Index > (collection.Length - 1))
             {
-                if (item.Index > (collection.Length - 1))
-                {
-                    var array = new T[collection.Length * 2];
-                    Array.Copy(collection, array, collection.Length);
-                    collection = array;
-                }
-
-                T instance = item.Value.GetType().IsClass
-                    ? Snapshot.Out.Copy<T>(item.Value)
-                    : item.Value;
-
-                collection[item.Index] = instance;
+                var array = new T[collection.Length * 2];
+                Array.Copy(collection, array, collection.Length);
+                collection = array;
             }
+
+            T instance = item.Value.GetType().IsClass
+                ? Snapshot.Out.Copy<T>(item.Value)
+                : item.Value;
+
+            collection[item.Index] = instance;
         }
 
-
-        return collection[ind];
     }
 
 }
