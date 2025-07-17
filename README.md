@@ -92,3 +92,22 @@ var RuntimeServicesRegisterExecutor = new RuntimeRegisterServices(Assembly.GetEx
 RuntimeServicesRegisterExecutor.ConfigureAllServices(); 
 ```
 
+## 🚀 Enhancement Ideas & Future Development
+
+We're actively collecting ideas for enhancing SnapshotIt! Check out our enhancement documents:
+
+- **[💡 Enhancement Ideas](ENHANCEMENT_IDEAS.md)** - Comprehensive list of potential features and improvements
+- **[📋 Ideas Summary](IDEAS_SUMMARY.md)** - Quick overview of top enhancement ideas  
+- **[🗺️ Development Roadmap](ROADMAP.md)** - Planned development phases and timeline
+- **[🎯 Example Concepts](examples/README.md)** - Code examples showing potential future APIs
+
+### Top Enhancement Ideas
+- **Snapshot Metadata & Tagging** - Add tags and descriptions to snapshots
+- **JSON Persistence** - Save/load snapshots to files  
+- **Snapshot Comparison** - Compare snapshots to see what changed
+- **LINQ Query Support** - Query snapshots with LINQ expressions
+- **Fluent Configuration** - Enhanced setup and configuration API
+- **Event-Driven Notifications** - React to snapshot operations
+
+**Have ideas?** Please share them in [GitHub Issues](https://github.com/AkhmedovEhson/SnapshotIt/issues) or [Discussions](https://github.com/AkhmedovEhson/SnapshotIt/discussions)!
+
