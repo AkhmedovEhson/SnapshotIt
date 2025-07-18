@@ -43,9 +43,7 @@ internal static partial class CaptureIt<T>
             Type type = typeof(T);
 
             // Initializes the type
-            T instance = type.IsClass
-                ? Snapshot.Out.Copy<T>(values[i])
-                : values[i];
+            T instance = values[i];
 
             await Writer.WriteAsync(new Pocket<T>() { Index = Interlocked.Increment(ref index), Value = instance });
         }
@@ -93,9 +91,7 @@ internal static partial class CaptureIt<T>
                 collection = array;
             }
 
-            T instance = item.Value.GetType().IsClass
-                ? Snapshot.Out.Copy<T>(item.Value)
-                : item.Value;
+            T instance = item.Value;
 
             collection[item.Index] = instance;
         }

@@ -38,11 +38,13 @@ namespace SnapshotIt.Domain.Utils
         public static T Get(Func<T,bool> expression)
         {
             var query = collection.Where(expression).FirstOrDefault();
-
+            
             if (query is null)
             {
                 throw new NullReferenceException($"Type {typeof(T).Name} is not found in collection");
             }
+
+
 
             return query;
         }
@@ -65,9 +67,7 @@ namespace SnapshotIt.Domain.Utils
         {
             Type type = typeof(T);
 
-            T instance = !type.IsValueType
-                ? Snapshot.Out.Copy<T>(value)
-                : value;
+            T instance = value;
 
             if (index == collection.Length - 1)
             {
