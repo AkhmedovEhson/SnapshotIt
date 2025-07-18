@@ -138,11 +138,6 @@ Feel free to check [issues page](https://github.com/AkhmedovEhson/SnapshotIt/iss
 
 ---
 
-## 📄 License
-
-This project is currently not assigned a license. Please add one if planning for public use!
-
----
 
 ## 🧑 Author
 
