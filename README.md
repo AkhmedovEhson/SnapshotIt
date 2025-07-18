@@ -1,94 +1,154 @@
 # SnapshotIt
-🎉 Snapshot It 1.0.0. Before changing the state of component, just snapshot the state of object to make it easy to recovery.
 
-![image](https://github.com/AkhmedovEhson/SnapshotIt/blob/main/assets/iconforgithub.png)
+🎉 **SnapshotIt** is a lightweight, extensible C# library for .NET that allows you to easily snapshot (capture), restore, and copy the state of your objects at any point in your application. Perfect for undo/redo functionality, state recovery, and seamless state management!
 
-# Requirements
-* .NET 6 🔒️ .NET 7 
+![SnapshotIt Logo](https://github.com/AkhmedovEhson/SnapshotIt/blob/main/assets/iconforgithub.png)
 
-# Documentation
-💚 `Snapshot It` is extensionable lightweight-library, provides bunch of extensions.
-<ul>
-    <li>📝 Snapshotting - simply snapshot any instance in any context of application, and use it in runtime of application.</li>
-    <li>🗃️ Copying - copy any instance.</li>
-    <li>🌐 Channel `BufferBlock<T>` - use it as unbounded channel, post, read, close.</li>
-</ul>
+---
 
-🖊️ We have a class `Product` (?)
+## ✨ Features
+
+- **Snapshotting**: Instantly capture the state of any object and restore it when needed.
+- **Copying**: Deep-copy objects to avoid unwanted side effects.
+- **Unbounded Channel (`BufferBlock<T>`)**: Use as an unbounded channel for posting, reading, and closing items.
+- **Dependency Injection Helpers**: Easy integration with ASP.NET and .NET DI containers.
+- **Extensible**: Add new features and extensions easily.
+- **FluentValidation Integration**: Validate objects when saving or restoring snapshots (see [`SnapshotIt.FluentValidation`](./src/SnapshotIt.FluentValidation/README.md)).
+
+---
+
+## 🚦 Requirements
+
+- .NET 6 or .NET 7
+
+---
+
+## 📦 Installation
+
+Add the package to your project (coming soon via NuGet):
+
+```bash
+dotnet add package SnapshotIt
 ```
+
+Or clone this repo and reference directly.
+
+---
+
+## 📚 Documentation & Usage
+
+### 1. Snapshotting and Copying
+
+```csharp
 public class Product
 {
-    public int Id {get;set}
-    public string Name{get;set;}
+    public int Id { get; set; }
+    public string Name { get; set; }
 }
 
 // Copy class
-var product = new Product() { Id = 1,Name = "Product" } // note, it is reference type and mutable
-var product2 = Snapshot.Out.Copy(product); // copies `product`
-```
-🐹 Let's do following steps....
-```
-using SnapshotIt;
+var product = new Product { Id = 1, Name = "Product" }; // reference type, mutable
+var product2 = Snapshot.Out.Copy(product); // deep copy
 
-var product = new Product() 
-{
-    Id = 1
-    Name = "Nike"
-}
-Snapshot.Out.Create<Product>(10); // initialized collection of `Product` with size `10`
-Snapshot.Out.Post<Product>(product); // captures state
+// Create a snapshot collection
+Snapshot.Out.Create<Product>(10); // initialize collection with room for 10 snapshots
 
+// Capture the state
+Snapshot.Out.Post(product);
+
+// Mutate the object
 product.Id = 2;
 product.Name = "Gucci";
 
-const int index = 0;
-// Gets the first snapshot from capture collection
-// By default index = 0, using index easily can find the correct captured instance
-var Capturedproduct = Snapshot.Out.Get<Product>(index);
-// or use expressions
-var Capturedproduct = Snapshot.Out.Get<Product>(o => o.Id == n);
-
-
-// Logs: The product's name is Gucci
-log.Information($"The product's name is {product.Name}");
-
-// Logs: The previous product's name was Nike 
-log.Information($"The previous product's name was {Capturedproduct.Name}");
+// Restore previous state
+var capturedProduct = Snapshot.Out.Get<Product>(0); // get first snapshot
+var capturedByPredicate = Snapshot.Out.Get<Product>(p => p.Id == 1);
 ```
-💚 ASP.NET and Dependency Injections
+
+**Logging Example:**
+
+```csharp
+log.Information($"The product's name is {product.Name}"); // Logs: Gucci
+log.Information($"The previous product's name was {capturedProduct.Name}"); // Logs: Nike
 ```
+
+---
+
+### 2. ASP.NET & Dependency Injection
+
+```csharp
 using SnapshotIt.DependencyInjection;
 
-// Actually for injecting stuff into class, you are injecting from $constructor
+// Standard DI via constructor
 public class UserController : BaseController
 {
     public ILogger logger;
-    public UserController(ILogger logger) 
+    public UserController(ILogger logger)
     {
         this.logger = logger;
     }
 }
 
-// You can communicate with DI container very easy </>
-// Use following steps ...
+// Or get directly from DI container
 public class UserController : BaseController
 {
-    public ILogger logger = Connector.GetService<ILogger>(); // you got it :)
+    public ILogger logger = Connector.GetService<ILogger>();
 }
 ```
-✨🎨 Registration of services to dependency injection container.
-```
+
+#### Service Registration
+
+```csharp
 using SnapshotIt.DependencyInjection;
 
-// Interface should be named same as class but with prefix `I` [!]
 [RuntimeDependencyInjectionOption(Lifetime = ServiceLifetime.Scoped)]
-public class ProductRepository : IProductRepository{}
+public class ProductRepository : IProductRepository {}
 
 [RuntimeDependencyInjectionOption(Lifetime = ServiceLifetime.Transient)]
-public class ColorRepository : IColorRepository{}
+public class ColorRepository : IColorRepository {}
 
-var RuntimeServicesRegisterExecutor = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), services);
-
-RuntimeServicesRegisterExecutor.ConfigureAllServices(); 
+var runtimeServices = new RuntimeRegisterServices(Assembly.GetExecutingAssembly(), services);
+runtimeServices.ConfigureAllServices();
 ```
+
+---
+
+## 🧪 FluentValidation Integration
+
+See [`SnapshotIt.FluentValidation/README.md`](./src/SnapshotIt.FluentValidation/README.md) for details.
+
+- Validate objects before posting or retrieving snapshots.
+- Synchronous and asynchronous validation support.
+- Comprehensive error handling.
+
+Example:
+
+```csharp
+var validator = new ProductValidator();
+Snapshot.Out.Post(product, validator);
+var validatedProduct = Snapshot.Out.Get<Product>(0, validator);
+```
+
+---
+
+## 🤝 Contributing
+
+Contributions, issues and feature requests are welcome!  
+Feel free to check [issues page](https://github.com/AkhmedovEhson/SnapshotIt/issues).
+
+---
+
+## 📄 License
+
+This project is currently not assigned a license. Please add one if planning for public use!
+
+---
+
+## 🧑 Author
+
+- [@AkhmedovEhson](https://github.com/AkhmedovEhson)
+
+---
+
+Happy coding! 🚀
 
