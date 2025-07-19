@@ -3,6 +3,7 @@ using BenchmarkDotNet.Attributes;
 using SnapshotIt.Benchmarks.Types;
 using BenchmarkDotNet.Running;
 using SnapshotIt;
+using BenchmarkDotNet.Configs;
 
 class Program
 {
@@ -96,6 +97,7 @@ public class CaptureItIndividualBenchmarks
 /// </summary>
 [MemoryDiagnoser]
 [SimpleJob]
+[GroupBenchmarksBy(BenchmarkLogicalGroupRule.ByCategory)]
 public class CaptureItComparisonBenchmarks
 {
     private Product _testProduct = null!;
@@ -130,24 +132,28 @@ public class CaptureItComparisonBenchmarks
     }
 
     [Benchmark(Baseline = true)]
+    [BenchmarkCategory("Post")]
     public void Post_Sync()
     {
         Snapshot.Out.Post(_testProduct);
     }
     
     [Benchmark]
+    [BenchmarkCategory("Post")]
     public async Task PostAsync_Comparison()
     {
         await Snapshot.Out.PostAsync(_testProduct);
     }
     
     [Benchmark(Baseline = true)]
+    [BenchmarkCategory("Get")]
     public Product Get_Sync()
     {
         return Snapshot.Out.Get<Product>(10);
     }
     
     [Benchmark]
+    [BenchmarkCategory("Get")]
     public async Task<Product> GetAsync_Comparison()
     {
         return await Snapshot.Out.GetAsync<Product>(10);
