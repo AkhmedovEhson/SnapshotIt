@@ -41,19 +41,27 @@ internal static partial class CaptureIt<T>
         for (int i = 0; i < values.Length; i++)
         {
             Type type = typeof(T);
+            var result = values[i];
 
             // Initializes the type
-            T instance = values[i];
+            T instance = type.IsClass
+                ? Snapshot.Out.Copy<T>(result)
+                : result;
 
-            await Writer.WriteAsync(new Pocket<T>() { Index = Interlocked.Increment(ref index), Value = instance });
+            await Writer.WriteAsync(new Pocket<T>() { Index = index, Value = instance });
+            Interlocked.Increment(ref index);
+
+
         }
-
         Writer.Complete();
     }
 
     public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value)
     {
-        await Writer.WriteAsync(new Pocket<T>() { Index = Interlocked.Increment(ref index), Value = value });
+        await Writer.WriteAsync(new Pocket<T>() { Index = index, Value = value });
+        Interlocked.Increment(ref index);
+
+        Writer.Complete();
     }
 
     /// <summary>
@@ -81,21 +89,28 @@ internal static partial class CaptureIt<T>
     /// </summary>
     /// <returns></returns>
     private static async Task FillCollection()
-    {
-        await foreach (var item in Reader.ReadAllAsync())
+    { 
+
+        if (Reader.Count > 0)
         {
-            if (item.Index > (collection.Length - 1))
+            await foreach (var item in Reader.ReadAllAsync())
             {
-                var array = new T[collection.Length * 2];
-                Array.Copy(collection, array, collection.Length);
-                collection = array;
+                if (item.Index > (collection.Length - 1))
+                {
+                    var array = new T[collection.Length * 2];
+                    Array.Copy(collection, array, collection.Length);
+                    collection = array;
+                }
+
+                Pocket<T> instance = item.GetType().IsClass
+                    ? Snapshot.Out.Copy(item)
+                    : item;
+
+                collection[item.Index] = instance.Value;
             }
 
-            T instance = item.Value;
-
-            collection[item.Index] = instance;
+          
         }
-
     }
 
 }

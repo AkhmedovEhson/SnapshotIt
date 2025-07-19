@@ -49,7 +49,7 @@ namespace SnapshotIt.UnitTests
                     id = 1
                 } 
             };
-
+  
             await Snapshot.Out.PostAsync<o>(obj);
             var result = await Snapshot.Out.GetAsync<o>(0);
 
