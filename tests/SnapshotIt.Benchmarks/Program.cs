@@ -4,18 +4,13 @@ using SnapshotIt.Benchmarks.Types;
 using BenchmarkDotNet.Running;
 using SnapshotIt;
 using BenchmarkDotNet.Configs;
+using System.Text.Json;
 
 class Program
 {
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
-        var switcher = new BenchmarkSwitcher(new[]
-        {
-            typeof(CaptureItIndividualBenchmarks),
-            typeof(CaptureItComparisonBenchmarks)
-        });
-        
-        switcher.Run(args);
+        BenchmarkRunner.Run<CaptureItComparisonBenchmarks>();
     }
 }
 
@@ -135,14 +130,17 @@ public class CaptureItComparisonBenchmarks
     [BenchmarkCategory("Post")]
     public void Post_Sync()
     {
-        Snapshot.Out.Post(_testProduct);
+        foreach(var item in _testProducts)
+        {
+            Snapshot.Out.Post(item);
+        }
     }
     
     [Benchmark]
     [BenchmarkCategory("Post")]
     public async Task PostAsync_Comparison()
     {
-        await Snapshot.Out.PostAsync(_testProduct);
+        await Snapshot.Out.PostAsync(_testProducts);
     }
     
     [Benchmark(Baseline = true)]

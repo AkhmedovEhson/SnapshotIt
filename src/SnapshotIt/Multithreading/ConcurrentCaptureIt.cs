@@ -14,7 +14,9 @@ internal static partial class CaptureIt<T>
     {
         get
         {
-            if (_channel.Reader.Completion.IsCompleted)
+            bool IsCompleted = _channel.Writer.WaitToWriteAsync().AsTask().GetAwaiter().GetResult();
+
+            if (IsCompleted is false)
             {
                 _channel = Channel.CreateUnbounded<Pocket<T>>();
             }
@@ -53,6 +55,7 @@ internal static partial class CaptureIt<T>
 
 
         }
+
         Writer.Complete();
     }
 
