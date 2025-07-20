@@ -37,9 +37,10 @@ namespace SnapshotIt
         /// <returns></returns>
         public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
             this ISnapshot _,
-            T[] values)
+            T[] values,
+            CancellationToken cancellationToken = default)
         {
-            return CaptureIt<T>.PostAsync(values);
+            return CaptureIt<T>.PostAsync(values,cancellationToken);
         }
         /// <summary>
         /// `PostAsync` - posts an object to collection of captures asynchronously.
@@ -50,9 +51,10 @@ namespace SnapshotIt
         /// <returns></returns>
         public static Task PostAsync<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicProperties)] T>(
           this ISnapshot _,
-          T value)
+          T value,
+          CancellationToken cancellationToken = default)
         {
-            return CaptureIt<T>.PostAsync(value);
+            return CaptureIt<T>.PostAsync(value,cancellationToken);
         }
         /// <summary>
         /// Gets captured object from captures by index, otherwise if provided index is out of range, throws <seealso cref="IndexOutOfRangeException"/>
@@ -81,9 +83,11 @@ namespace SnapshotIt
         /// <param name="_"></param>
         /// <param name="ind"></param>
         /// <returns></returns>
-        public static Task<T> GetAsync<T>(this ISnapshot _,int ind)
+        public static Task<T> GetAsync<T>(this ISnapshot _,
+            int ind,
+            CancellationToken cancellationToken = default)
         {
-            return CaptureIt<T>.GetAsync(ind);
+            return CaptureIt<T>.GetAsync(ind,cancellationToken);
         }
 
         /// <summary>
@@ -92,9 +96,10 @@ namespace SnapshotIt
         /// <typeparam name="T"></typeparam>
         /// <param name="_"></param>
         /// <returns></returns>
-        public static Task<T[]> GetAllAsync<T>(this ISnapshot _)
+        public static Task<T[]> GetAllAsync<T>(this ISnapshot _,
+            CancellationToken cancellationToken = default)
         {
-            return CaptureIt<T>.GetAllAsync();
+            return CaptureIt<T>.GetAllAsync(cancellationToken);
         }
 
         /// <summary>

@@ -9,12 +9,15 @@ namespace SnapshotIt.Domain.Utils;
 internal static partial class CaptureIt<T>
 {
     private static Channel<Pocket<T>> _channel = Channel.CreateUnbounded<Pocket<T>>();
+    private static SemaphoreSlim _semaphore = new (1, 1);
 
     public static ChannelWriter<Pocket<T>> Writer
     {
         get
         {
-            if (_channel.Reader.Completion.IsCompleted)
+            bool CanWrite = _channel.Writer.WaitToWriteAsync().AsTask().GetAwaiter().GetResult();
+
+            if (CanWrite is false)
             {
                 _channel = Channel.CreateUnbounded<Pocket<T>>();
             }
@@ -35,34 +38,56 @@ internal static partial class CaptureIt<T>
     /// </summary>
     /// <param name="value"></param>
     /// <returns></returns>
-    public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T[] values)
+    public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T[] values,
+        CancellationToken cancellationToken = default)
     {
-
-        for (int i = 0; i < values.Length; i++)
+        try
         {
-            Type type = typeof(T);
+            await _semaphore.WaitAsync(cancellationToken);
+            for (int i = 0; i < values.Length; i++)
+            {
+                Type type = typeof(T);
+                var result = values[i];
 
-            // Initializes the type
-            T instance = values[i];
+                // Initializes the type
+                T instance = type.IsClass
+                    ? Snapshot.Out.Copy<T>(result)
+                    : result;
 
-            await Writer.WriteAsync(new Pocket<T>() { Index = Interlocked.Increment(ref index), Value = instance });
+                var currentIndex = Interlocked.Increment(ref index) - 1;
+                await Writer.WriteAsync(new Pocket<T>() { Index = currentIndex, Value = instance },cancellationToken);
+            }
         }
-
-        Writer.Complete();
+        finally
+        {
+            Writer.Complete();
+            _semaphore.Release();
+        }
     }
 
-    public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value)
+    public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value,
+        CancellationToken cancellationToken = default)
     {
-        await Writer.WriteAsync(new Pocket<T>() { Index = Interlocked.Increment(ref index), Value = value });
+        try
+        {
+            await _semaphore.WaitAsync(cancellationToken);
+            var currentIndex = Interlocked.Increment(ref index) - 1;
+            await Writer.WriteAsync(new Pocket<T>() { Index = currentIndex, Value = value },cancellationToken);
+        }
+        finally
+        {
+            Writer.Complete();
+            _semaphore.Release();
+        }
     }
 
     /// <summary>
     /// `GetAllAsync` - gets all captures asynchronously and returns them as an array.
     /// </summary>
     /// <returns>As a response, there is an instance of <seealso cref="Array"/></returns>
-    public static async Task<T[]> GetAllAsync()
+    public static async Task<T[]> GetAllAsync(CancellationToken cancellationToken = default)
     {
-        await FillCollection();
+        await FillCollection(cancellationToken);
         return collection;
     }
     /// <summary>
@@ -70,9 +95,9 @@ internal static partial class CaptureIt<T>
     /// </summary>
     /// <param name="ind"></param>
     /// <returns>As a response, there is an instance of captured object</returns>
-    public static async Task<T> GetAsync(int ind)
+    public static async Task<T> GetAsync(int ind,CancellationToken cancellationToken = default)
     {
-        await FillCollection();
+        await FillCollection(cancellationToken);
         return collection[ind];
     }
 
@@ -80,22 +105,34 @@ internal static partial class CaptureIt<T>
     /// `FillCollection` - fills the collection with captured objects from the channel asynchronously.
     /// </summary>
     /// <returns></returns>
-    private static async Task FillCollection()
+    private static async Task FillCollection(CancellationToken cancellationToken)
     {
-        await foreach (var item in Reader.ReadAllAsync())
+        try
         {
-            if (item.Index > (collection.Length - 1))
+            await _semaphore.WaitAsync(cancellationToken);
+            if (Reader.Count > 0)
             {
-                var array = new T[collection.Length * 2];
-                Array.Copy(collection, array, collection.Length);
-                collection = array;
+                await foreach (var item in Reader.ReadAllAsync(cancellationToken))
+                {
+                    if (item.Index > (collection.Length - 1))
+                    {
+                        var array = new T[collection.Length * 2];
+                        Array.Copy(collection, array, collection.Length);
+                        collection = array;
+                    }
+
+                    Pocket<T> instance = item.GetType().IsClass
+                        ? Snapshot.Out.Copy(item)
+                        : item;
+
+                    collection[item.Index] = instance.Value;
+                }
             }
-
-            T instance = item.Value;
-
-            collection[item.Index] = instance;
         }
-
+        finally
+        {
+            _semaphore.Release();
+        }
     }
 
 }
