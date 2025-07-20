@@ -41,7 +41,6 @@ internal static partial class CaptureIt<T>
     public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T[] values,
         CancellationToken cancellationToken = default)
     {
-
         await _channelLocker.WaitAsync(cancellationToken);
 
         try
