@@ -9,6 +9,7 @@ namespace SnapshotIt.Domain.Utils;
 internal static partial class CaptureIt<T>
 {
     private static Channel<Pocket<T>> _channel = Channel.CreateUnbounded<Pocket<T>>();
+    private static Semaphore _semaphore = new Semaphore(1, 1);
 
     public static ChannelWriter<Pocket<T>> Writer
     {
@@ -39,32 +40,44 @@ internal static partial class CaptureIt<T>
     /// <returns></returns>
     public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T[] values)
     {
-
-        for (int i = 0; i < values.Length; i++)
+        try
         {
-            Type type = typeof(T);
-            var result = values[i];
+            _semaphore.WaitOne();
+            for (int i = 0; i < values.Length; i++)
+            {
+                Type type = typeof(T);
+                var result = values[i];
 
-            // Initializes the type
-            T instance = type.IsClass
-                ? Snapshot.Out.Copy<T>(result)
-                : result;
+                // Initializes the type
+                T instance = type.IsClass
+                    ? Snapshot.Out.Copy<T>(result)
+                    : result;
 
-            await Writer.WriteAsync(new Pocket<T>() { Index = index, Value = instance });
-            Interlocked.Increment(ref index);
-
-
+                await Writer.WriteAsync(new Pocket<T>() { Index = index, Value = instance });
+                Interlocked.Increment(ref index);
+            }
         }
-
-        Writer.Complete();
+        finally
+        {
+            Writer.Complete();
+            _semaphore.Release();
+        }
     }
 
     public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value)
     {
-        await Writer.WriteAsync(new Pocket<T>() { Index = index, Value = value });
-        Interlocked.Increment(ref index);
+        try
+        {
+            _semaphore.WaitOne();
+            await Writer.WriteAsync(new Pocket<T>() { Index = index, Value = value });
+            Interlocked.Increment(ref index);
 
-        Writer.Complete();
+        }
+        finally
+        {
+            Writer.Complete();
+            _semaphore.Release();
+        }
     }
 
     /// <summary>
@@ -92,27 +105,32 @@ internal static partial class CaptureIt<T>
     /// </summary>
     /// <returns></returns>
     private static async Task FillCollection()
-    { 
-
-        if (Reader.Count > 0)
+    {
+        try
         {
-            await foreach (var item in Reader.ReadAllAsync())
+            _semaphore.WaitOne();
+            if (Reader.Count > 0)
             {
-                if (item.Index > (collection.Length - 1))
+                await foreach (var item in Reader.ReadAllAsync())
                 {
-                    var array = new T[collection.Length * 2];
-                    Array.Copy(collection, array, collection.Length);
-                    collection = array;
+                    if (item.Index > (collection.Length - 1))
+                    {
+                        var array = new T[collection.Length * 2];
+                        Array.Copy(collection, array, collection.Length);
+                        collection = array;
+                    }
+
+                    Pocket<T> instance = item.GetType().IsClass
+                        ? Snapshot.Out.Copy(item)
+                        : item;
+
+                    collection[item.Index] = instance.Value;
                 }
-
-                Pocket<T> instance = item.GetType().IsClass
-                    ? Snapshot.Out.Copy(item)
-                    : item;
-
-                collection[item.Index] = instance.Value;
             }
-
-          
+        }
+        finally
+        {
+            _semaphore.Release();
         }
     }
 
