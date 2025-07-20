@@ -54,8 +54,8 @@ internal static partial class CaptureIt<T>
                     ? Snapshot.Out.Copy<T>(result)
                     : result;
 
-                await Writer.WriteAsync(new Pocket<T>() { Index = index, Value = instance },cancellationToken);
-                Interlocked.Increment(ref index);
+                var currentIndex = Interlocked.Increment(ref index) - 1;
+                await Writer.WriteAsync(new Pocket<T>() { Index = currentIndex, Value = instance },cancellationToken);
             }
         }
         finally
@@ -71,8 +71,8 @@ internal static partial class CaptureIt<T>
         try
         {
             await _semaphore.WaitAsync(cancellationToken);
-            await Writer.WriteAsync(new Pocket<T>() { Index = index, Value = value },cancellationToken);
-            Interlocked.Increment(ref index);
+            var currentIndex = Interlocked.Increment(ref index) - 1;
+            await Writer.WriteAsync(new Pocket<T>() { Index = currentIndex, Value = value },cancellationToken);
         }
         finally
         {
