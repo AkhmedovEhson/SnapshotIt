@@ -9,7 +9,7 @@ namespace SnapshotIt.Domain.Utils;
 internal static partial class CaptureIt<T>
 {
     private static Channel<Pocket<T>> _channel = Channel.CreateUnbounded<Pocket<T>>();
-    private static SemaphoreSlim _semaphore = new (1, 1);
+    private static readonly SemaphoreSlim _channelLocker = new (1, 1);
 
     public static ChannelWriter<Pocket<T>> Writer
     {
@@ -41,9 +41,11 @@ internal static partial class CaptureIt<T>
     public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T[] values,
         CancellationToken cancellationToken = default)
     {
+
+        await _channelLocker.WaitAsync(cancellationToken);
+
         try
         {
-            await _semaphore.WaitAsync(cancellationToken);
             for (int i = 0; i < values.Length; i++)
             {
                 Type type = typeof(T);
@@ -61,23 +63,24 @@ internal static partial class CaptureIt<T>
         finally
         {
             Writer.Complete();
-            _semaphore.Release();
+            _channelLocker.Release();
         }
     }
 
     public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value,
         CancellationToken cancellationToken = default)
     {
+        await _channelLocker.WaitAsync(cancellationToken);
+
         try
         {
-            await _semaphore.WaitAsync(cancellationToken);
             var currentIndex = Interlocked.Increment(ref index) - 1;
             await Writer.WriteAsync(new Pocket<T>() { Index = currentIndex, Value = value },cancellationToken);
         }
         finally
         {
             Writer.Complete();
-            _semaphore.Release();
+            _channelLocker.Release();
         }
     }
 
@@ -107,9 +110,10 @@ internal static partial class CaptureIt<T>
     /// <returns></returns>
     private static async Task FillCollection(CancellationToken cancellationToken)
     {
+        await _channelLocker.WaitAsync(cancellationToken);
+
         try
         {
-            await _semaphore.WaitAsync(cancellationToken);
             if (Reader.Count > 0)
             {
                 await foreach (var item in Reader.ReadAllAsync(cancellationToken))
@@ -131,7 +135,7 @@ internal static partial class CaptureIt<T>
         }
         finally
         {
-            _semaphore.Release();
+            _channelLocker.Release();
         }
     }
 
