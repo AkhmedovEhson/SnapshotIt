@@ -9,7 +9,6 @@ namespace SnapshotIt.Domain.Utils;
 internal static partial class CaptureIt<T>
 {
     private static Channel<Pocket<T>> _channel = Channel.CreateUnbounded<Pocket<T>>();
-    private static readonly SemaphoreSlim _channelLocker = new (1, 1);
 
     public static ChannelWriter<Pocket<T>> Writer
     {
@@ -41,9 +40,6 @@ internal static partial class CaptureIt<T>
     public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T[] values,
         CancellationToken cancellationToken = default)
     {
-
-        await _channelLocker.WaitAsync(cancellationToken);
-
         try
         {
             for (int i = 0; i < values.Length; i++)
@@ -63,15 +59,12 @@ internal static partial class CaptureIt<T>
         finally
         {
             Writer.Complete();
-            _channelLocker.Release();
         }
     }
 
     public static async Task PostAsync([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.None)] T value,
         CancellationToken cancellationToken = default)
     {
-        await _channelLocker.WaitAsync(cancellationToken);
-
         try
         {
             var currentIndex = Interlocked.Increment(ref index) - 1;
@@ -80,7 +73,6 @@ internal static partial class CaptureIt<T>
         finally
         {
             Writer.Complete();
-            _channelLocker.Release();
         }
     }
 
@@ -110,32 +102,23 @@ internal static partial class CaptureIt<T>
     /// <returns></returns>
     private static async Task FillCollection(CancellationToken cancellationToken)
     {
-        await _channelLocker.WaitAsync(cancellationToken);
-
-        try
+        if (Reader.Count > 0)
         {
-            if (Reader.Count > 0)
+            await foreach (var item in Reader.ReadAllAsync(cancellationToken))
             {
-                await foreach (var item in Reader.ReadAllAsync(cancellationToken))
+                if (item.Index > (collection.Length - 1))
                 {
-                    if (item.Index > (collection.Length - 1))
-                    {
-                        var array = new T[collection.Length * 2];
-                        Array.Copy(collection, array, collection.Length);
-                        collection = array;
-                    }
-
-                    Pocket<T> instance = item.GetType().IsClass
-                        ? Snapshot.Out.Copy(item)
-                        : item;
-
-                    collection[item.Index] = instance.Value;
+                    var array = new T[collection.Length * 2];
+                    Array.Copy(collection, array, collection.Length);
+                    collection = array;
                 }
+
+                Pocket<T> instance = item.GetType().IsClass
+                    ? Snapshot.Out.Copy(item)
+                    : item;
+
+                collection[item.Index] = instance.Value;
             }
-        }
-        finally
-        {
-            _channelLocker.Release();
         }
     }
 
