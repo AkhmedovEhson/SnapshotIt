@@ -33,6 +33,9 @@ namespace SnapshotIt
                     var instance = typeof(CaptureIt<>).MakeGenericType(item);
 
                     var @type = instance.GetMethod("Clear", BindingFlags.Public | BindingFlags.Static);
+                    
+                    ArgumentNullException.ThrowIfNull(@type,"$Method-Clear");
+
                     type.Invoke(null, null);
                 }
 
