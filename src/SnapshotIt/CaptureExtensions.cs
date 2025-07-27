@@ -26,9 +26,7 @@ namespace SnapshotIt
         /// <param name="_"></param>
         public static void Clear(this ISnapshot _)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-
-            if (Types.Any())
+            if (Types.Count > 0)
             {
                 foreach(var item in Types)
                 {
