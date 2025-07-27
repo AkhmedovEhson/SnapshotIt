@@ -96,14 +96,25 @@ namespace SnapshotIt.Domain.Utils
         /// </summary>
         public static void Clear()
         {
-            if (Reader.Count > 0)
+            try
             {
-                _channel = Channel.CreateUnbounded<Pocket<T>>();
+                _locker.Reset();
+
+                if (Reader.Count > 0)
+                {
+                    _channel = Channel.CreateUnbounded<Pocket<T>>();
+                }
+
+                collection = null;
+                size = 0;
+                index = 0;
+
+            }
+            finally
+            {
+                _locker.Set();
             }
 
-            collection = null;
-            size = 0;
-            index = 0;
         }
         /// <summary>
         /// Responds collection of captures as <seealso cref="Span{T}"/>
