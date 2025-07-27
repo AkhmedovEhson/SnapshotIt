@@ -34,7 +34,7 @@ namespace SnapshotIt
 
                     var clearMethod = captureItOfType.GetMethod("Clear", BindingFlags.Public | BindingFlags.Static);
                     
-                    ArgumentNullException.ThrowIfNull(captureItOfType, "The 'Clear' method was not found in the type.");
+                    ArgumentNullException.ThrowIfNull(clearMethod, "The 'Clear' method was not found in the type.");
 
                     clearMethod.Invoke(null, null);
                 }
