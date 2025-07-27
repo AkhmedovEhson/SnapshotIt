@@ -102,6 +102,7 @@ internal static partial class CaptureIt<T>
     /// <returns></returns>
     private static async Task FillCollection(CancellationToken cancellationToken)
     {
+
         if (Reader.Count > 0)
         {
             await foreach (var item in Reader.ReadAllAsync(cancellationToken))
@@ -120,6 +121,6 @@ internal static partial class CaptureIt<T>
                 collection[item.Index] = instance.Value;
             }
         }
-    }
 
+    }
 }
