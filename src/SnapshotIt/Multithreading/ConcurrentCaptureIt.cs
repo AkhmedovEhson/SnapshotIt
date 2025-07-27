@@ -33,6 +33,11 @@ internal static partial class CaptureIt<T>
         }
     }
 
+
+    private static void Dispose()
+    {
+        _locker.Dispose();
+    }
     /// <summary>
     /// `PostAsync` - posts object to collection of captures concurrently.
     /// </summary>

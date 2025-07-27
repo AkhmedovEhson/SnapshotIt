@@ -100,7 +100,7 @@ namespace SnapshotIt.Domain.Utils
             {
                 _locker.Reset();
 
-                if (Reader.Count > 0)
+                if (Reader?.Count > 0)
                 {
                     _channel = Channel.CreateUnbounded<Pocket<T>>();
                 }
@@ -113,6 +113,7 @@ namespace SnapshotIt.Domain.Utils
             finally
             {
                 _locker.Set();
+                Dispose();
             }
 
         }
