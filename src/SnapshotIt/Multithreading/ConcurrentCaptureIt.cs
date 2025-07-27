@@ -9,6 +9,7 @@ namespace SnapshotIt.Domain.Utils;
 internal static partial class CaptureIt<T>
 {
     private static Channel<Pocket<T>> _channel = Channel.CreateUnbounded<Pocket<T>>();
+    private static ManualResetEvent _locker = new ManualResetEvent(true); // signaled ...
 
     public static ChannelWriter<Pocket<T>> Writer
     {
@@ -32,6 +33,11 @@ internal static partial class CaptureIt<T>
         }
     }
 
+
+    private static void Dispose()
+    {
+        _locker.Dispose();
+    }
     /// <summary>
     /// `PostAsync` - posts object to collection of captures concurrently.
     /// </summary>
@@ -42,6 +48,8 @@ internal static partial class CaptureIt<T>
     {
         try
         {
+            _locker.WaitOne();
+
             for (int i = 0; i < values.Length; i++)
             {
                 Type type = typeof(T);
@@ -67,6 +75,8 @@ internal static partial class CaptureIt<T>
     {
         try
         {
+            _locker.WaitOne();
+
             var currentIndex = Interlocked.Increment(ref index) - 1;
             await Writer.WriteAsync(new Pocket<T>() { Index = currentIndex, Value = value },cancellationToken);
         }
@@ -82,6 +92,7 @@ internal static partial class CaptureIt<T>
     /// <returns>As a response, there is an instance of <seealso cref="Array"/></returns>
     public static async Task<T[]> GetAllAsync(CancellationToken cancellationToken = default)
     {
+        _locker.WaitOne();
         await FillCollection(cancellationToken);
         return collection;
     }
@@ -92,6 +103,7 @@ internal static partial class CaptureIt<T>
     /// <returns>As a response, there is an instance of captured object</returns>
     public static async Task<T> GetAsync(int ind,CancellationToken cancellationToken = default)
     {
+        _locker.WaitOne();
         await FillCollection(cancellationToken);
         return collection[ind];
     }

@@ -1,5 +1,7 @@
 ﻿
+using SnapshotIt.Multithreading;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Channels;
 
 namespace SnapshotIt.Domain.Utils
 {
@@ -29,6 +31,8 @@ namespace SnapshotIt.Domain.Utils
 
             return collection[ind];
         }
+
+        
         /// <summary>
         /// Gets captured object from captures using expressions, else throws <seealso cref="NullReferenceException"/>
         /// </summary>
@@ -59,6 +63,7 @@ namespace SnapshotIt.Domain.Utils
             index = 0;
         }
 
+
         /// <summary>
         /// Copies value and pastes in collection
         /// </summary>
@@ -84,6 +89,33 @@ namespace SnapshotIt.Domain.Utils
         public static void Reset(int? s)
         {
             collection = new T[!s.HasValue ? size : s.Value];
+        }
+
+        /// <summary>
+        /// `Clear` - clears captures ...
+        /// </summary>
+        public static void Clear()
+        {
+            try
+            {
+                _locker.Reset();
+
+                if (Reader?.Count > 0)
+                {
+                    _channel = Channel.CreateUnbounded<Pocket<T>>();
+                }
+
+                collection = null;
+                size = 0;
+                index = 0;
+
+            }
+            finally
+            {
+                _locker.Set();
+                Dispose();
+            }
+
         }
         /// <summary>
         /// Responds collection of captures as <seealso cref="Span{T}"/>
