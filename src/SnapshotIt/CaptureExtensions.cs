@@ -30,13 +30,13 @@ namespace SnapshotIt
             {
                 foreach(var item in Types)
                 {
-                    var instance = typeof(CaptureIt<>).MakeGenericType(item);
+                    var captureItOfType = typeof(CaptureIt<>).MakeGenericType(item);
 
-                    var @type = instance.GetMethod("Clear", BindingFlags.Public | BindingFlags.Static);
+                    var clearMethod = captureItOfType.GetMethod("Clear", BindingFlags.Public | BindingFlags.Static);
                     
-                    ArgumentNullException.ThrowIfNull(@type,"$Method-Clear");
+                    ArgumentNullException.ThrowIfNull(captureItOfType,"$Method-Clear");
 
-                    type.Invoke(null, null);
+                    clearMethod.Invoke(null, null);
                 }
 
             }
