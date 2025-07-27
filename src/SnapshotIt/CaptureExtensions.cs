@@ -1,5 +1,6 @@
 ﻿using SnapshotIt.Domain.Utils;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace SnapshotIt
 {
@@ -8,11 +9,39 @@ namespace SnapshotIt
     /// </summary>
     public static class CaptureExtensions
     {
+        private static HashSet<Type> Types { get; set; } = new HashSet<Type>();
+
         /// <summary>
         /// Creates new collection of captures with provided size, or recreates it 
         /// </summary>
         /// <param name="s"></param>
-        public static void Create<T>(this ISnapshot _, uint size) => CaptureIt<T>.Create(size);
+        public static void Create<T>(this ISnapshot _, uint size)
+        {
+            CaptureIt<T>.Create(size);
+            Types.Add(typeof(T));
+        }
+        /// <summary>
+        /// Clears all types created with that type .
+        /// </summary>
+        /// <param name="_"></param>
+        public static void Clear(this ISnapshot _)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+            if (Types.Any())
+            {
+                foreach(var item in Types)
+                {
+                    var instance = typeof(CaptureIt<>).MakeGenericType(item);
+
+                    var @type = instance.GetMethod("Clear", BindingFlags.Public | BindingFlags.Static);
+                    type.Invoke(null, null);
+                }
+
+            }
+ 
+            Types.Clear();
+        }
         /// <summary>
         /// Copies value and pastes in collection
         /// </summary>
