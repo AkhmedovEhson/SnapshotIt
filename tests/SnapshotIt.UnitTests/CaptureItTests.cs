@@ -54,6 +54,15 @@ namespace SnapshotIt.UnitTests
             });
         }
 
+        [Test]
+        public void Captures_ClearNotFoundType_Throws_ArgumentNullReferenceException()
+        {
+        
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                Snapshot.Out.Clear<int>();
+            });
+        }
 
         [Test]
         public void Captures_ClearAll_Successfully()
