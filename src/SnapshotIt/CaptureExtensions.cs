@@ -26,7 +26,6 @@ namespace SnapshotIt
         /// <param name="_"></param>
         public static void ClearAll(this ISnapshot _)
         {
-            
             if (Types.Count > 0)
             {
                 foreach(var item in Types)
@@ -42,7 +41,6 @@ namespace SnapshotIt
             }
             Types.Clear();
         }
-
         public static void Clear<T>(this ISnapshot _)
         {
             var @type = Types
