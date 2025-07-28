@@ -38,6 +38,22 @@ namespace SnapshotIt.UnitTests
             result.id.Should().Be(1);
         }
 
+        [Test]
+        public void Captures_ClearDefinedType_Successfully()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                Snapshot.Out.Get<o>(0);
+            });
+
+            Snapshot.Out.Clear<o>();
+
+            Assert.Throws<NullReferenceException>(() =>
+            {
+                Snapshot.Out.Get<o>(0);
+            });
+        }
+
 
         [Test]
         public void Captures_ClearAll_Successfully()
@@ -56,7 +72,7 @@ namespace SnapshotIt.UnitTests
                 Snapshot.Out.Post<short>((short)i);
             }
 
-            Snapshot.Out.Clear(); // WIP: Clears all sets ...
+            Snapshot.Out.ClearAll(); // WIP: Clears all sets ...
 
             Assert.Throws<NullReferenceException>(() =>
             {
