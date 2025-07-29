@@ -133,8 +133,7 @@ var validatedProduct = Snapshot.Out.Get<Product>(0, validator);
 
 ## 🤝 Contributing
 
-Contributions, issues and feature requests are welcome!  
-Feel free to check [issues page](https://github.com/AkhmedovEhson/SnapshotIt/issues).
+NOT ALLOWED !
 
 ---
 
