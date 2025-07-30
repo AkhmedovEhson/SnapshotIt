@@ -38,6 +38,68 @@ namespace SnapshotIt.UnitTests
             result.id.Should().Be(1);
         }
 
+        [Test]
+        public void Captures_ClearDefinedType_Successfully()
+        {
+            Assert.DoesNotThrow(() =>
+            {
+                Snapshot.Out.Get<o>(0);
+            });
+
+            Snapshot.Out.Clear<o>();
+
+            Assert.Throws<NullReferenceException>(() =>
+            {
+                Snapshot.Out.Get<o>(0);
+            });
+        }
+
+        [Test]
+        public void Captures_ClearNotFoundType_Throws_ArgumentNullReferenceException()
+        {
+        
+            Assert.Throws<ArgumentNullException>(() =>
+            {
+                Snapshot.Out.Clear<int>();
+            });
+        }
+
+        [Test]
+        public void Captures_ClearAll_Successfully()
+        {
+            Snapshot.Out.Create<decimal>(10);
+
+            for(int i = 0; i < 10; i++)
+            {
+                Snapshot.Out.Post<decimal>(i);
+            }
+
+            Snapshot.Out.Create<short>(20);
+
+            for (int i = 0; i < 20; i++)
+            {
+                Snapshot.Out.Post<short>((short)i);
+            }
+
+            Snapshot.Out.ClearAll(); // WIP: Clears all sets ...
+
+            Assert.Throws<NullReferenceException>(() =>
+            {
+                Snapshot.Out.Get<decimal>(0);
+            });
+
+      
+            Assert.Throws<NullReferenceException>(() =>
+            {
+                Snapshot.Out.Get<short>(0);
+            });
+
+
+            Assert.Throws<NullReferenceException>(() =>
+            {
+                Snapshot.Out.Get<o>(0);
+            });
+        }
 
         [Test]
         public void Captures_ClearAll_Successfully()

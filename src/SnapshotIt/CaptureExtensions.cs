@@ -24,7 +24,7 @@ namespace SnapshotIt
         /// Clears all types created with that type .
         /// </summary>
         /// <param name="_"></param>
-        public static void Clear(this ISnapshot _)
+        public static void ClearAll(this ISnapshot _)
         {
             if (Types.Count > 0)
             {
@@ -40,6 +40,22 @@ namespace SnapshotIt
                 }
             }
             Types.Clear();
+        }
+        public static void Clear<T>(this ISnapshot _)
+        {
+            var @type = Types
+                .Where(o => o.Name == typeof(T).Name)
+                .FirstOrDefault();
+
+            ArgumentNullException.ThrowIfNull(type,"Provided Type is not registered by `Snapshot.Out.Create!`");
+
+            var captureItOfType = typeof(CaptureIt<>).MakeGenericType(@type);
+
+            var clearMethod = captureItOfType.GetMethod("Clear", BindingFlags.Public | BindingFlags.Static);
+
+            ArgumentNullException.ThrowIfNull(clearMethod, "The 'Clear' method was not found in the type.");
+
+            clearMethod.Invoke(null, null);
         }
         /// <summary>
         /// Copies value and pastes in collection
