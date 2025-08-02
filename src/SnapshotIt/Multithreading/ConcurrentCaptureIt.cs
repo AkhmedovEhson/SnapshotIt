@@ -38,6 +38,34 @@ internal static partial class CaptureIt<T>
     {
         _locker.Dispose();
     }
+
+    /// <summary>
+    /// `Clear` - clears captures ...
+    /// </summary>
+    public static void Clear()
+    {
+        try
+        {
+            _locker.Reset();
+
+            if (Reader?.Count > 0)
+            {
+                _channel = Channel.CreateUnbounded<Pocket<T>>();
+            }
+
+            collection = null;
+            size = 0;
+            index = 0;
+
+        }
+        finally
+        {
+            _locker.Set();
+            Dispose();
+        }
+
+    }
+
     /// <summary>
     /// `PostAsync` - posts object to collection of captures concurrently.
     /// </summary>
