@@ -64,7 +64,7 @@ namespace SnapshotIt.UnitTests
                 Snapshot.Out.Clear<int>();
             });
         }
-
+      
         [Test]
         public void ClearAll_Successfully()
         {
