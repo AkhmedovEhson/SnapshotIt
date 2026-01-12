@@ -67,17 +67,11 @@ namespace SnapshotIt.DependencyInjection
         /// CreateScope - creates scope synchronously.
         /// </summary>
         /// <returns></returns>
-        public static IServiceScope CreateScope()
-        {
-            return _serviceProvider.CreateScope();
-        }
+        public static IServiceScope CreateScope() => _serviceProvider.CreateScope();
         /// <summary>
         /// CreateScopeAsync - creates scope asynchronously
         /// </summary>
         /// <returns></returns>
-        public static AsyncServiceScope CreateScopeAsync()
-        {
-            return _serviceProvider.CreateAsyncScope();
-        }
+        public static AsyncServiceScope CreateScopeAsync() => _serviceProvider.CreateAsyncScope();
     }
 }
