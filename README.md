@@ -19,7 +19,7 @@
 
 ## 🚦 Requirements
 
-- .NET 6 or .NET 7
+- .NET 8
 
 ---
 
